@@ -76,7 +76,7 @@ function removeLines() {
       ).replace(
         '"build": "NODE_ENV=production BABEL_ENV=production browserify ./src/entryDev.js -t [ babelify --presets [ env --targets [ electron ] react ] --plugins transform-async-to-generator ] --full-path=false --exclude electron --exclude shelljs -o ./src/entry/bundle.js",', ''
       ).replace(
-        '"postbuild": "uglifyjs --compress drop_console=true --mangle -- ./src/entry/bundle.js > ./src/react/inf.js",', ''
+        '"postbuild": "NODE_ENV=production uglifyjs --compress drop_console=true --mangle -- ./src/entry/bundle.js > ./src/react/inf.min.js",', ''
       ).replace(
         '"make": "node ./beforePackage.js && cd dist && yarn && electron-forge make && node ./afterMake.js"', ''
       ).replace(

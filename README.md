@@ -1,4 +1,8 @@
 # Infinitex
+![alt start screenshot](https://raw.githubusercontent.com/fetacore/Infinitex/blob/master/start.png)
+![alt tex screenshot](https://raw.githubusercontent.com/fetacore/Infinitex/blob/master/tex.png)
+![alt simple screenshot](https://raw.githubusercontent.com/fetacore/Infinitex/blob/master/simple.png)
+
 This is my first attempt to write a desktop app with electron and learn the fantastic reactjs library. The editor is far from complete but I use it personally and I wanted to open-source it so that others can help with it.
 
 The one part of the app is a LaTeX editor with search functionality and simplified bibliography and packages handling. The other part is a WYSIWYG editor based on quilljs. The simple part also supports encrypted documents.

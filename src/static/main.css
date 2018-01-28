@@ -1,0 +1,147 @@
+* { margin:0; padding:0; box-sizing:border-box; }
+*::selection {
+  color: #fff;
+  background-color: #454444;
+}
+@font-face {
+  font-family: TeXnormal;
+  src: url('./fonts/cmunrm.ttf');
+}
+#title-bar {
+ -webkit-app-region: drag;
+ height: 30px;
+ background-color: #fcfcfc;
+ padding: none;
+ margin: 0px;
+ border-bottom: 5px;
+ border-color: #000;
+}
+#title-bar-video {
+ -webkit-app-region: drag;
+ height: 30px;
+ background-color: #0e0e0e;
+ padding: none;
+ margin: 0px;
+ border-bottom: 5px;
+ border-color: #000;
+}
+#title-bar-simple-editor {
+ -webkit-app-region: drag;
+ position: fixed;
+ left: 85vw;
+ height: 60px;
+ width: 14vw;
+ background-color: #fcfcfc;
+ padding: none;
+ margin: 1px;
+ margin-top: 3px;
+ border-radius: 5;
+ border-color: #000;
+}
+#title {
+ position: fixed;
+ top: 0px;
+ left: 6px;
+ display: inline-block;
+}
+#title-logo {
+ position: fixed;
+ top: 0px;
+ left: 6px;
+}
+#title-name {
+ position: fixed;
+ top: 6px;
+ left: 47vw;
+}
+#title-bar-btns {
+ -webkit-app-region: no-drag;
+ position: fixed;
+ top: 2px;
+ right: 6px;
+}
+.iconMenuColor {
+  color: #fff;
+}
+.pdfPage {
+  margin-bottom: 5px;
+  background-color: #111;
+}
+.pdfPreview {
+  height: 100vh;
+}
+webview::-webkit-scrollbar{
+  width:6px;
+  height:4px;
+  background-color:#373737;
+}
+webview::-webkit-scrollbar-thumb{
+  background-color:#666565;
+  border-radius:5px;
+}
+webview::-webkit-scrollbar-thumb:hover{
+  background-color:#fff;
+  border:1px solid #403e3e;
+}
+webview::-webkit-scrollbar-thumb:active{
+  background-color:#000;
+  border:1px solid #000;
+}
+::-webkit-scrollbar{
+  width:6px;
+  height:4px;
+  background-color:#373737;
+}
+::-webkit-scrollbar-thumb{
+  background-color:#666565;
+  border-radius:5px;
+}
+::-webkit-scrollbar-thumb:hover{
+  background-color:#fff;
+  border:1px solid #403e3e;
+}
+::-webkit-scrollbar-thumb:active{
+  background-color:#000;
+  border:1px solid #000;
+}
+.katex { font-size: 1.05em; }
+.networkstuff-enter {
+   opacity: 0.01;
+}
+.networkstuff-enter.networkstuff-enter-active {
+   opacity: 1;
+   transition: opacity 450ms ease;
+}
+.networkstuff-exit {
+   opacity: 1;
+}
+.networkstuff-exit.networkstuff-exit-active {
+   opacity: 0.01;
+   transition: opacity 450ms ease;
+}
+.videostuff-enter {
+   opacity: 0.01;
+   background-color: #111;
+   width: 0;
+   height: 0;
+}
+.networkstuff-enter.networkstuff-enter-active {
+   opacity: 1;
+   background-color: #111;
+   width: 100vw;
+   height: 100vh;
+   transition: opacity background-color width height 600ms ease-in-out;
+}
+.networkstuff-exit {
+   opacity: 1;
+   background-color: #111;
+   width: 100vw;
+   height: 100vh;
+}
+.networkstuff-exit.networkstuff-exit-active {
+   opacity: 0.01;
+   background-color: #111;
+   width: 0;
+   height: 0;
+   transition: opacity background-color width height 600ms ease-in-out;
+}

@@ -3,7 +3,7 @@ const fs = require('fs');
 var json = require('./package.json')
 
 function copyPasteStuff() {
-  shelljs.mv(__dirname+'/out/make/InfiniTex_'+json.version+'_amd64.deb', __dirname+'/')
+  shelljs.mv(__dirname+'/out/make/', __dirname+'/')
   removeStuff()
 }
 

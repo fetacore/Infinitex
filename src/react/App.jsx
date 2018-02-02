@@ -10,6 +10,7 @@ import DirectionsBike from 'material-ui/svg-icons/maps/directions-bike';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Grid from './Grid.jsx';
 import SimpleEditor from './Editor.jsx';
+import path from 'path';
 
 const { remote, ipcRenderer } = require('electron');
 const { Menu } = remote;
@@ -21,6 +22,7 @@ export default class App extends React.Component {
 			width: 0,
 			height: 0,
 			component: null,
+			file: null,
 		};
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
 		this.drag = this.drag.bind(this);
@@ -29,6 +31,7 @@ export default class App extends React.Component {
 
 	componentDidMount() {
 		this.updateWindowDimensions();
+		this.openFileWithApp();
 		window.addEventListener('resize', this.updateWindowDimensions);
 		window.addEventListener('dragover', this.drag, false);
 		window.addEventListener('drop', this.drop, false);
@@ -54,6 +57,27 @@ export default class App extends React.Component {
 
 	updateWindowDimensions() {
 		this.setState({ width: window.innerWidth, height: window.innerHeight });
+	}
+
+	openFileWithApp() {
+		let d = ipcRenderer.sendSync('get-file-data')
+		if (d !== null) {
+			if (d !==  '.') {
+				if (path.extname(d) == '.tex') {
+					this.setState({
+						file: d,
+						component: 'tex'
+					})
+				} else if ((path.extname(d) == '.draft') || (path.extname(d) == '.cdraft')) {
+					this.setState({
+						file: d,
+						component: 'simple'
+					})
+				} else {
+					ipcRenderer.sendSync('notify', 'unsupportedFP')
+				}
+			}
+		}
 	}
 
 	drag(event) {
@@ -155,6 +179,7 @@ export default class App extends React.Component {
 					<Grid
 						width={this.state.width}
 						height={this.state.height}
+						fileToOpen={this.state.file}
 					/>
 				</div>
 			</CSSTransition>
@@ -169,6 +194,7 @@ export default class App extends React.Component {
 					<SimpleEditor
 						width={this.state.width}
 						height={this.state.height}
+						fileToOpen={this.state.file}
 					/>
 				</div>
 			</CSSTransition>

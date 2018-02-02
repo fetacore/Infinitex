@@ -136,7 +136,24 @@ export default class Grid extends React.Component {
   }
 
   componentDidMount() {
-    this.starterEditor();
+    if (this.props.fileToOpen !== null) {
+      let fp = this.props.fileToOpen;
+      ipcRenderer.send('openTexBibFile', fp);
+      this.setState({
+        filepath: fp,
+      }, () => {
+        if (this.state.preview) {
+          if (shelljs.test('-e', this.state.filepath.replace('.tex','.pdf'))) {
+            this.setState({
+              PDFLoading: true,
+            });
+            ipcRenderer.send('openPDF', this.state.filepath.replace('.tex','.pdf'));
+          }
+        }
+      });
+    } else {
+      this.starterEditor();
+    }
     ipcRenderer.on('texDataDummy', (event, data) => {
       this.setState({
         texfilecontent: data.slice(data.indexOf('\\begin{document}')+16, data.indexOf('\\end{document}')),

@@ -24,16 +24,39 @@ var magic = require('crypto');
 
 const Embed = Quill.import('blots/embed');
 const Module = Quill.import('core/module');
-
 class FormulaBlot extends Embed {
   static create(value) {
     let node = super.create(value);
     if (typeof value === 'string') {
-      window.katex.render(value, node, {
-        displayMode: true,
-        throwOnError: false,
-        errorColor: '#f00'
-      });
+      console.log(value.indexOf('\\\\(')==0);
+      console.log(value.lastIndexOf('\\\\)')==value.length-3);
+      console.log(value.slice(value.indexOf('\\\\(')+2, value.lastIndexOf('\\\\)')));
+      if (value.indexOf('$')==0 && value.lastIndexOf('$')==value.length-1 && value.charAt(1)!=='$' && value.charAt(value.lastIndexOf('$')-1)!=='$') {
+        window.katex.render(value.slice(value.indexOf('$')+1, value.lastIndexOf('$')), node, {
+          displayMode: false,
+          throwOnError: false,
+          errorColor: '#f00'
+        });
+      } else if (value.indexOf('$$')==0 && value.lastIndexOf('$$')==value.length-2) {
+        window.katex.render(value.slice(value.indexOf('$$')+2, value.lastIndexOf('$$')), node, {
+          displayMode: true,
+          throwOnError: false,
+          errorColor: '#f00'
+        });
+      } else if (value.indexOf('\\\\(')==0 && value.lastIndexOf('\\\\)')==value.length-3) {
+        window.katex.render(value.slice(value.indexOf('\\\\(')+3, value.lastIndexOf('\\\\)')), node, {
+          displayMode: false,
+          throwOnError: false,
+          errorColor: '#f00'
+        });
+      } else if (value.indexOf('\\\\[')==0 && value.lastIndexOf('\\\\]')==value.length-3) {
+        window.katex.render(value.slice(value.indexOf('\\\\[')+3, value.lastIndexOf('\\\\]')), node, {
+          displayMode: true,
+          throwOnError: false,
+          errorColor: '#f00'
+        });
+      }
+      // window.renderMathInElement(node, katexOptions);
       node.setAttribute('data-value', value);
     }
     return node;
@@ -69,13 +92,36 @@ export default class Editor extends React.Component {
   }
 
   componentDidMount() {
-    this.attachQuillRefs()
+    this.attachQuillRefs();
+    if (this.props.fileToOpen !== null) {
+      let fp = this.props.fileToOpen;
+      let extension = path.extname(fp);
+      if (extension=='.draft') {
+        ipcRenderer.send('openFile', ['openSimpleNoEnc', fp]);
+        ipcRenderer.on('openSimpleNoEnc', (event, data) => {
+          this.quillRef.setContents(JSON.parse(data));
+          this.setState({
+            filepath: fp
+          });
+        })
+      } else if (extension=='.cdraft'){
+        this.setState({
+          cryptoOpenProjectDialog: true,
+        });
+        this.fp = fp;
+      } else {
+        ipcRenderer.sendSync('notify', 'unsupportedFP');
+      }
+    }
     ipcRenderer.on('Save Project', (event, arg) => {
       if (arg) {
         if (this.state.filepath!==null) {
           if (path.extname(this.state.filepath)=='.cdraft') {
             this.onCreateEncryptedProjectAfterSetPassword(this.state.filepath);
           } else {
+            let cont = JSON.stringify(this.quillRef.getContents())
+            console.log(this.quillRef.getContents());
+            console.log(cont);
             ipcRenderer.send('createFile', [this.state.filepath, JSON.stringify(this.quillRef.getContents())]);
           }
         } else {
@@ -366,9 +412,9 @@ export default class Editor extends React.Component {
         zIndex: 3,
 			},
       editor: {
-        width: width*0.8,
-        marginLeft: width*0.1,
-        fontSize: 16*((width*0.8)/836),
+        width: width*0.99,
+        marginLeft: width*0.005,
+        fontSize: 16*((width*0.96)/836),
         fontFamily: 'TeXnormal',
       }
     }
@@ -384,9 +430,9 @@ export default class Editor extends React.Component {
       }
     } else {
       styles.editor = {
-        width: width*0.8,
-        marginLeft: width*0.1,
-        fontSize: 16*((width*0.8)/836),
+        width: width*0.99,
+        marginLeft: width*0.005,
+        fontSize: 16*((width*0.96)/836),
         fontFamily: 'TeXnormal',
       }
     }
@@ -807,7 +853,6 @@ export default class Editor extends React.Component {
               [{ 'align': ['right', 'center', 'justify'] }],
               [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
               ['image'],
-              ['formula'],
               ['clean']
             ]
           }}

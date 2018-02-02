@@ -1,6 +1,16 @@
 'use strict';
 
-import { app, BrowserWindow, Menu, Tray, nativeImage, ipcMain, Notification, shell ,globalShortcut, dialog } from 'electron';
+import { app,
+  BrowserWindow,
+  Menu,
+  Tray,
+  nativeImage,
+  ipcMain,
+  Notification,
+  shell,
+  globalShortcut,
+  dialog,
+} from 'electron';
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer';
 import { enableLiveReload, addBypassChecker } from 'electron-compile';
 import fs from 'fs';
@@ -149,6 +159,14 @@ ipcMain.on('notify', (event, arg) => {
     notification = new Notification({
       title: 'Error',
       body: 'You need at least 4 characters to perform a search',
+      silent: true,
+      icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png'),
+    });
+    notification.show();
+  } else if (arg=='unsupportedFP') {
+    notification = new Notification({
+      title: 'Error',
+      body: 'The file type you want to open is unsupported',
       silent: true,
       icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png'),
     });
@@ -499,4 +517,12 @@ ipcMain.on('openSimple', (event) => {
   }, (fileNames) => {
     event.sender.send('openSimpleFilename', fileNames)
   });
+})
+
+ipcMain.on('get-file-data', (event) => {
+  if (process.argv[1]) {
+    event.returnValue = process.argv[1]
+  } else {
+    event.returnValue = null
+  }
 })

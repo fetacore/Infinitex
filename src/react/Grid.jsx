@@ -163,6 +163,7 @@ export default class Grid extends React.Component {
     } else {
       this.starterEditor();
     }
+    document.getElementById('pdfContainer').addEventListener('wheel', this.onScrollPDF.bind(this))
     ipcRenderer.on('texDataDummy', (event, data) => {
       this.setState({
         texfilecontent: data.slice(data.indexOf('\\begin{document}')+16, data.indexOf('\\end{document}')),
@@ -344,6 +345,30 @@ You can refer to the graph as \\ref{figure:nickname}\n'
     })
   }
 
+  componentWillUnmount() {
+    document.getElementById('pdfContainer').removeEventListener('wheel', this.onScrollPDF.bind(this))
+  }
+
+  onScrollPDF(event) {
+    if (this.state.filepath) {
+      if (this.state.preview) {
+        if (!this.state.PDFLoading) {
+          let delta = null;
+          if (event.wheelDelta) {
+            delta = event.wheelDelta;
+          } else {
+            delta = -1 * event.deltaY;
+          }
+          if (delta < -20) {
+            this.nextPage()
+          } else if (delta > 10) {
+            this.previousPage()
+          }
+        }
+      }
+    }
+  }
+
   previousPage() {
     if (this.state.pageIndex > 0) {
       this.setState({
@@ -399,6 +424,11 @@ You can refer to the graph as \\ref{figure:nickname}\n'
         numPages: nPages,
         pageIndex: 0,
       });
+    } else if (this.state.pageIndex > nPages) {
+      this.setState({
+        numPages: nPages,
+        pageIndex: nPages-1,
+      })
     } else {
       this.setState({
         numPages: nPages,
@@ -2053,7 +2083,7 @@ note = ,\n\u007D\n';
                   renderMode="svg"
                 />
                 <FakePage
-                  pages={this.state.numPages}
+                  pages={Math.min(this.state.numPages, this.state.pageIndex+20)}
                   width={this.PDFWidth}
                 />
               </Document>

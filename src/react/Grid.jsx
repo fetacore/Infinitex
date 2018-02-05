@@ -48,7 +48,7 @@ import 'brace/ext/searchbox.js';
 import 'brace/keybinding/vim.js';
 import request from 'request';
 import JSSoup from 'jssoup';
-import { Document, Page } from './reactPdf/entry.js';
+import { Document, Page } from 'react-pdf';
 import { BlockMath } from './reactKatex';
 import './assets/ace/chaos.js';
 import './assets/ace/light.js';
@@ -74,6 +74,12 @@ const buttonStyles = {
   textAlign: 'center',
   backgroundColor: '#666666',
 };
+
+const pdfjs = require('pdfjs-dist/build/pdf.min.js');
+
+pdfjs.PDFJS.workerSrc = '../src/react/reactPdf/pdf.worker.min.js';
+pdfjs.PDFJS.cMapUrl = '../src/react/reactPdf/cmaps/';
+pdfjs.PDFJS.cMapPacked = true;
 
 let ContextMenu = new Menu();
 const codeIcon = <ActionCode />;
@@ -112,6 +118,9 @@ export default class Grid extends React.Component {
       filepath: null,
       PDFLoading: false,
       numPages: null,
+      pageIndex: null,
+      binaryPDFContent: null,
+      compilationHappenedWithoutNewPDF: false,
       networkPageIndex: 1,
       paperKeyword: '',
       literatureSearchResults: [],
@@ -206,12 +215,15 @@ export default class Grid extends React.Component {
     });
     ipcRenderer.on('getPDF', (event, b64data) => {
       if (b64data!==null) {
-        this.binary = window.atob(b64data);
-        if (this.state.PDFLoading) {
-          this.setState({
-            PDFLoading: false,
-          })
-        }
+        this.setState({
+          binaryPDFContent: window.atob(b64data),
+        }, () => {
+          if (this.state.PDFLoading) {
+            this.setState({
+              PDFLoading: false,
+            })
+          }
+        })
       } else {
         ipcRenderer.send('openPDF', this.state.filepath.replace('.tex','.pdf'))
       }
@@ -301,33 +313,51 @@ You can refer to the graph as \\ref{figure:nickname}\n'
       }
     });
     ipcRenderer.on('saveTexDialogThenCompileFilename', (event, fileName) => {
-      let fpresolver = null;
-      switch (process.platform) {
-        case 'win32':
-          fpresolver = '\\'
-          break;
-        default:
-          fpresolver = '/'
-      }
-      let filetitle = fileName.slice(fileName.lastIndexOf(fpresolver)+1,fileName.length)
-      if (fileName==null){
-        this.onNotification('FileWasNotSaved')
-        return;
-      } else if (filetitle.indexOf(' ')!==-1) {
-        this.onNotification('IncorrectFilename')
-        return;
-      } else {
-        ipcRenderer.send('createTexBibFile', [fileName, this.state.packages+'\n'+this.state.texfilecontent+'\n\\end{document}', this.state.bibfilecontent]);
-        this.setState({
-          filepath: fileName,
-          PDFLoading: true,
-          theme: 'Red',
-          preview: true,
-        }, () => {
-          this.actualCompilation();
-        });
+      if (fileName) {
+        let fpresolver = null;
+        switch (process.platform) {
+          case 'win32':
+            fpresolver = '\\'
+            break;
+          default:
+            fpresolver = '/'
+        }
+        let filetitle = fileName.slice(fileName.lastIndexOf(fpresolver)+1,fileName.length)
+        if (fileName==null){
+          this.onNotification('FileWasNotSaved')
+          return;
+        } else if (filetitle.indexOf(' ')!==-1) {
+          this.onNotification('IncorrectFilename')
+          return;
+        } else {
+          ipcRenderer.send('createTexBibFile', [fileName, this.state.packages+'\n'+this.state.texfilecontent+'\n\\end{document}', this.state.bibfilecontent]);
+          this.setState({
+            filepath: fileName,
+            PDFLoading: true,
+            theme: 'Red',
+            preview: true,
+          }, () => {
+            this.actualCompilation();
+          });
+        }
       }
     })
+  }
+
+  previousPage() {
+    if (this.state.pageIndex > 0) {
+      this.setState({
+        pageIndex: this.state.pageIndex-1
+      })
+    }
+  }
+
+  nextPage() {
+    if (this.state.pageIndex+1 < this.state.numPages) {
+      this.setState({
+        pageIndex: this.state.pageIndex+1
+      })
+    }
   }
 
   onNotification(name) {
@@ -364,9 +394,16 @@ You can refer to the graph as \\ref{figure:nickname}\n'
   }
 
   onDocumentLoadSuccess(nPages) {
-    this.setState({
-      numPages: nPages,
-    });
+    if (this.state.pageIndex==null) {
+      this.setState({
+        numPages: nPages,
+        pageIndex: 0,
+      });
+    } else {
+      this.setState({
+        numPages: nPages,
+      });
+    }
   }
 
   starterEditor() {
@@ -687,6 +724,7 @@ note = ,\n\u007D\n';
         PDFLoading: true,
         theme: 'Red',
         preview: true,
+        binaryPDFContent: null,
       }, () => {
         this.actualCompilation();
       });
@@ -695,7 +733,6 @@ note = ,\n\u007D\n';
 
 	actualCompilation() {
     this.latexError = null;
-    this.binary = null;
 		document.body.style.cursor='wait',
     ipcRenderer.send('createTexBibFile', [this.state.filepath, this.state.packages+'\n'+this.state.texfilecontent+'\n\\end{document}', this.state.bibfilecontent]);
     switch (process.platform) {
@@ -1053,6 +1090,7 @@ note = ,\n\u007D\n';
 		let width = this.props.width;
 		let height = this.props.height;
 		document.title = 'Infinitex ~TeX~ '+this.state.filepath;
+    const pagesRenderedPlusOne = Math.min(this.state.pagesRendered + 1, this.state.numPages);
 
 		let previewPDFBackgroundColor = null;
 		let generalBackgroundColor = null;
@@ -1738,12 +1776,8 @@ note = ,\n\u007D\n';
   					 label="Compile PDF"
   					 icon={rightarrow}
   					 onClick={() => {
-  						//  if(this.state.filepath) {
-  						// 	 this.state.texfilecontent.replace('\\bibliography{thesis.bib}','\\bibliography{'+this.state.filepath.slice())
-  						//  }
   						 this.compileText()
-  						}
-  					 }
+  					 }}
   					/>
   				 </BottomNavigation>
   				</Paper>
@@ -1833,13 +1867,6 @@ note = ,\n\u007D\n';
               <MenuItem value={6} primaryText="Help with LaTeX" style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
               <MenuItem value={7} primaryText="Close Project" style={{color: '#fff'}} onClick={() => this.closeProject()} />
             </IconMenu>
-					{/* //  onClick={() => {
-					// 	//  if(this.state.filepath) {
-					// 	// 	 this.state.texfilecontent.replace('\\bibliography{thesis.bib}','\\bibliography{'+this.state.filepath.slice())
-					// 	//  }
-					// 	 this.compileText()
-					// 	}
-					//  } */}
   				 </BottomNavigation>
   				</Paper>
 				}
@@ -1900,12 +1927,8 @@ note = ,\n\u007D\n';
               label="Compile PDF"
    					  icon={rightarrow}
    					  onClick={() => {
-   						 //  if(this.state.filepath) {
-   						 // 	 this.state.texfilecontent.replace('\\bibliography{thesis.bib}','\\bibliography{'+this.state.filepath.slice())
-   						 //  }
    						 this.compileText()
-   						}
-   					 }
+   						}}
 						/>
 					 </BottomNavigation>
 					</Paper>
@@ -1976,24 +1999,6 @@ note = ,\n\u007D\n';
                 <MenuItem value={6} primaryText="Help with LaTeX" style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
                 <MenuItem value={7} primaryText="Close Project" style={{color: '#fff'}} onClick={() => this.closeProject()} />
               </IconMenu>
-						{/* //  label="Compile PDF"
-						//  icon={
-            //    <img
-            //      src={compilePDFLogoSrc}
-            //      style={{
-            //        width: '25%',
-            //        marginLeft: '30%'
-            //      }}
-            //    />
-            //  }
-						//  onClick={() => {
-						// 	//  if(this.state.filepath) {
-						// 	// 	 this.state.texfilecontent.replace('\\bibliography{thesis.bib}','\\bibliography{'+this.state.filepath.slice())
-						// 	//  }
-						// 	 this.compileText()
-						// 	}
-						//  }
-						/> */}
 					 </BottomNavigation>
 					</Paper>
 				}
@@ -2004,7 +2009,7 @@ note = ,\n\u007D\n';
 		let PDFContainerHeight = null;
 		if(this.state.preview) {
 			if(this.state.filepath) {
-				PDFContainerHeight = height
+				PDFContainerHeight = height-55
 				if(this.state.PDFLoading) {
 					PreviewPDF =
 					<div style={{position: 'relative'}}>
@@ -2017,16 +2022,12 @@ note = ,\n\u007D\n';
 					</div>
 				} else {
 					if (shelljs.test('-e', this.state.filepath.replace('.tex','.pdf')) && !this.latexError){
-            let pdffp = null;
-            if (process.platform=='win32') {
-              pdffp = 'file:///'+ this.state.filepath.replace('.tex','.pdf').slice(3,this.state.filepath.length)
-            } else {
-              pdffp = this.state.filepath.replace('.tex','.pdf')
-            }
             PreviewPDF =
               <Document
-                file={{data:`data:application/pdf;base64,${this.binary}`}}
-                onLoadSuccess={(pdf) => this.onDocumentLoadSuccess(pdf.numPages)}
+                file={{data:`data:application/pdf;base64,${this.state.binaryPDFContent}`}}
+                onLoadSuccess={(pdf) => {
+                  this.onDocumentLoadSuccess(pdf.numPages)
+                }}
                 className="pdfPreview"
                 rotate={0}
                 onLoadError={() => {
@@ -2043,20 +2044,18 @@ note = ,\n\u007D\n';
                   style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
                 />}
                 >
-                {
-                  Array.from(
-                    new Array(this.state.numPages),
-                    (el, index) => (
-                      <Page
-                        key={`page_${index + 1}`}
-                        pageNumber={index + 1}
-                        width={this.PDFWidth}
-                        className="pdfPage"
-                        renderMode="svg"
-                      />
-                    ),
-                  )
-                }
+                <Page
+                  key={`page_${this.state.pageIndex + 1}`}
+                  width={this.PDFWidth}
+                  pageNumber={this.state.pageIndex + 1}
+                  renderAnnotations={true}
+                  className="pdfPage"
+                  renderMode="svg"
+                />
+                <FakePage
+                  pages={this.state.numPages}
+                  width={this.PDFWidth}
+                />
               </Document>
 					} else {
             if (this.latexError) {
@@ -2111,7 +2110,46 @@ note = ,\n\u007D\n';
 						</BottomNavigation>
 					</Paper>
 				</div>
-			}
+			} else {
+        if (!this.state.PDFLoading) {
+          if (!this.latexError) {
+            let p = this.state.pageIndex+1
+            PDFUtils =
+    				<div onContextMenu={(e) => {
+    					this.contextMenuBuilder(e,'PDFUtils');
+    				}}>
+    					<Paper
+    						style={{
+    							width: '100%',
+    						}}
+    						>
+    						<BottomNavigation
+    							style={{
+    								backgroundColor: previewPDFBackgroundColor,
+    							}}
+    							>
+                  <BottomNavigationItem
+                    icon={previousPageIcon}
+                    onClick={() => this.previousPage()}
+                  />
+    							<div
+                    style={{
+                      color:'#fff',
+                      marginTop: 19,
+                    }}
+                    dangerouslySetInnerHTML={{
+                      __html: p+'/'+this.state.numPages
+                    }}></div>
+                  <BottomNavigationItem
+                    icon={nextPageIcon}
+                    onClick={() => this.nextPage()}
+                  />
+    						</BottomNavigation>
+    					</Paper>
+    				</div>
+          }
+        }
+      }
 		}
 
 		let networkDiv = null;
@@ -2355,6 +2393,9 @@ note = ,\n\u007D\n';
         onClick={() => {
           this.setState({
             filepath: null,
+            numPages: null,
+            pageIndex: null,
+            binaryPDFContent: null,
             matheditorinput: '',
             areYouSureDialogDisplay: false,
           }, () => {
@@ -2895,7 +2936,8 @@ note = ,\n\u007D\n';
               }}
               >
               <div
-                style={{width:this.PDFWidth, height:PDFContainerHeight, overflow: 'auto'}}
+                id="pdfContainer"
+                style={{width:this.PDFWidth, height:PDFContainerHeight, overflow:'hidden'}}
                 onContextMenu={(e) => {
                   this.contextMenuBuilder(e,'PDFPage');
                 }}
@@ -2909,6 +2951,33 @@ note = ,\n\u007D\n';
 			</div>
 	  );
 	}
+}
+
+class FakePage extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+  render() {
+    return(
+      <div style={{display: 'none'}}>
+        {
+          Array.from(
+            new Array(this.props.pages),
+            (el, index) => (
+              <Page
+                key={`page_${index + 1}`}
+                width={this.props.width}
+                renderAnnotations={true}
+                className="pdfPage"
+                renderMode="svg"
+                pageNumber={index + 1}
+              />
+            ),
+          )
+        }
+      </div>
+    )
+  }
 }
 
 Grid.propTypes = {

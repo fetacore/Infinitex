@@ -905,11 +905,11 @@
 .ql-snow .ql-tooltip input[type=text] {
   display: none;
   border: 1px solid #ccc;
-  font-size: 13px;
-  height: 26px;
-  margin: 0px;
+  font-size: 16px;
+  height: 36px;
+  margin: 2px;
   padding: 3px 5px;
-  width: 170px;
+  width: 200px;
 }
 .ql-snow .ql-tooltip a.ql-preview {
   display: inline-block;
@@ -953,7 +953,10 @@
   content: "Enter link:";
 }
 .ql-snow .ql-tooltip[data-mode=formula]::before {
-  content: "Enter LaTeX:";
+  height: 20vh;
+  width: 30vw;
+  font-size: 16px;
+  content: "Write $\\LaTeX$ with $ or $$:";
 }
 .ql-snow .ql-tooltip[data-mode=video]::before {
   content: "Enter video:";

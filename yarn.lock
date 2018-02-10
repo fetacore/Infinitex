@@ -2776,7 +2776,7 @@ electron-packager@^10.1.0:
     semver "^5.3.0"
     yargs-parser "^8.0.0"
 
-electron-prebuilt-compile@^1.8.2:
+electron-prebuilt-compile@1.8.2:
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/electron-prebuilt-compile/-/electron-prebuilt-compile-1.8.2.tgz#e7fc755759e5c638d5a0ac4832effb52e5016c87"
   dependencies:
@@ -5373,9 +5373,9 @@ pdfjs-dist@^2.0.290:
     node-ensure "^0.0.0"
     worker-loader "^1.1.0"
 
-pdfjs-dist@^2.0.338:
-  version "2.0.338"
-  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.0.338.tgz#35e973fd19cbc9f289b647b945e6286c592087ed"
+pdfjs-dist@^2.0.347:
+  version "2.0.347"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.0.347.tgz#be98d374554682029086725af6e6300bba065dfc"
   dependencies:
     node-ensure "^0.0.0"
     worker-loader "^1.1.0"

@@ -20,17 +20,13 @@ compressor.minify({
   output: __dirname+'/src/static/style.min.css',
   options: {
     advanced: true,
-    aggressiveMerging: false,
+    aggressiveMerging: true,
   },
 });
 
 shelljs.cp('-R', __dirname+'/node_modules/pdfjs-dist/cmaps/', __dirname+'/src/react/reactPdf/')
 shelljs.mkdir('-p', __dirname+'/src/entry');
 
-// fs.readFile(__dirname+'/node_modules/react-pdf/build/PageAnnotations.js', 'utf-8', (err, data) => {
-//   let dataXwrisSkatila = data.replace("require('./annotation_layer_builder.css');", '');
-//   fs.writeFileSync(__dirname+'/node_modules/react-pdf/build/PageAnnotations.js', dataXwrisSkatila);
-// });
 fs.readFile(__dirname+'/node_modules/brace/ext/language_tools.js', 'utf-8', (err, data) => {
   let dataXwrisSkatila = data.replace('var completers = [snippetCompleter, textCompleter, keyWordCompleter];', 'var completers = [snippetCompleter, keyWordCompleter];')
   fs.writeFileSync(__dirname+'/node_modules/brace/ext/language_tools.js', dataXwrisSkatila)

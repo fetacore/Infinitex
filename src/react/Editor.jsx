@@ -56,7 +56,6 @@ class FormulaBlot extends Embed {
           errorColor: '#f00'
         });
       }
-      // window.renderMathInElement(node, katexOptions);
       node.setAttribute('data-value', value);
     }
     return node;
@@ -853,6 +852,7 @@ export default class Editor extends React.Component {
               [{ 'align': ['right', 'center', 'justify'] }],
               [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
               ['image'],
+              ['formula'],
               ['clean']
             ]
           }}

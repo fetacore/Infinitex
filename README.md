@@ -33,7 +33,8 @@ npm run make
 1. ~~Detect latex change and move pdf to that page.~~
 2. Better memory handling of Ace editor.
 3. ~~Open files with the app without the app being open~~
-4. Configure KaTeX to take both $math$ and $$math$$ and interpret them accordingly. (working on it)
+4. ~~Configure KaTeX to take both $math$ and $$math$$ and interpret them accordingly.~~
+5. Open formula module on math selection.
 
 ## Roadmap:
 1. Compilation and configurations for Mac and Windows.

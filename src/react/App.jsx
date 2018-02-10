@@ -38,13 +38,13 @@ export default class App extends React.Component {
 
 		ipcRenderer.on('switchToScience', (event, arg) => {
 			if (arg) {
-				this.setState({component: 'tex'});
+				this.setState({ component: 'tex', file:null });
 			}
 		});
 
 		ipcRenderer.on('switchToSimple', (event, arg) => {
 			if (arg) {
-				this.setState({component: 'simple'});
+				this.setState({ component: 'simple', file:null });
 			}
 		});
 	}

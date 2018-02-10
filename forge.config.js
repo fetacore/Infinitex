@@ -3,13 +3,14 @@ const path = require('path');
 module.exports = {
   "make_targets": {
     "win32": [
-      "squirrel"
+      "wix"
     ],
     "darwin": [
       "dmg",
     ],
     "linux": [
       "deb",
+      "rpm",
     ]
   },
   "electronPackagerConfig": {
@@ -36,6 +37,15 @@ module.exports = {
       'texlive-full',
       'libnotify4'
     ]
+  },
+  "electronInstallerRedhat": {
+    "icon": {
+      '48x48': 'src/static/Icons/Icon48.png',
+      '64x64': 'src/static/Icons/Icon64.png',
+      '128x128': 'src/static/Icons/Icon128.png',
+      '256x256': 'src/static/Icons/Icon256.png',
+      'scalable': 'src/static/Icons/Icon.svg'
+    }
   },
   "windowsStoreConfig": {
     "packageName": "",

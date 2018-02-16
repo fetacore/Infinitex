@@ -31,11 +31,12 @@ npm run dist
 
 ## Issues:
 1. Compilation and configurations for Mac (probably works, will test soon) ~~and Windows~~.
-2. ~~Detect latex change and move pdf to that page.~~
-3. Better memory handling of Ace editor.
-4. ~~Open files with the app without the app being open~~
-5. ~~Configure KaTeX to take both $math$ and $$math$$ and interpret them accordingly.~~
-6. Open formula module on math selection at simple.
+2. Configure auto-updates.
+3. ~~Detect latex change and move pdf to that page.~~
+4. Better memory handling of Ace editor.
+5. ~~Open files with the app without the app being open~~
+6. ~~Configure KaTeX to take both $math$ and $$math$$ and interpret them accordingly.~~
+7. Open formula module on math selection at simple.
 
 ## Roadmap:
 1. Integration with cloud services for collaboration.

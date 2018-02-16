@@ -21,21 +21,21 @@ The grid.jsx file has the LaTeX editor and the editor.jsx file has the WYSIWYG.
 
 To update the minified js you press
 ```
-npm run build
+npm run minify
 ```
 
 To create the executable in a dist folder run
 ```
-npm run make
+npm run dist
 ```
 
 ## Issues:
-1. ~~Detect latex change and move pdf to that page.~~
-2. Better memory handling of Ace editor.
-3. ~~Open files with the app without the app being open~~
-4. ~~Configure KaTeX to take both $math$ and $$math$$ and interpret them accordingly.~~
-5. Open formula module on math selection.
+1. Compilation and configurations for Mac (probably works, will test soon) ~~and Windows~~.
+2. ~~Detect latex change and move pdf to that page.~~
+3. Better memory handling of Ace editor.
+4. ~~Open files with the app without the app being open~~
+5. ~~Configure KaTeX to take both $math$ and $$math$$ and interpret them accordingly.~~
+6. Open formula module on math selection at simple.
 
 ## Roadmap:
-1. Compilation and configurations for Mac ~~and Windows~~.
-2. Integration with cloud services for collaboration.
+1. Integration with cloud services for collaboration.

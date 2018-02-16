@@ -55,11 +55,15 @@
         "rpm",
         "pacman"
       ],
-      "icon": "src/static/icons/48x48.png",
+      "icon": "src/static/icons/",
       "category": "Science"
     },
     "deb": {
-      "depends": [ "libnotify4", "texlive-full" ]
+      "icon": "src/static/icons/",
+      "depends": [
+        "libnotify4"
+      ],
+      "packageCategory": "Office"
     },
     "remoteBuild": false,
     "fileAssociations": {

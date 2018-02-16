@@ -1,26 +1,87 @@
 {
   "name": "InfiniTex",
   "productName": "InfiniTex",
-  "version": "0.6.4",
+  "version": "0.7.0",
   "description": "A new age editor for academics who seek freedom and people with cryptography needs in rich text environments.",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
-    "prebuild": "node ./beforeBundle.js",
-    "build": "NODE_ENV=production BABEL_ENV=production browserify ./src/entryDev.js -t [ babelify --presets [ env --targets [ electron ] react ] --plugins transform-async-to-generator ] --full-path=false --exclude electron --exclude shelljs -o ./src/entry/bundle.js",
-    "postbuild": "NODE_ENV=production uglifyjs --compress drop_console=true --mangle -- ./src/entry/bundle.js > ./src/react/inf.min.js",
-    "package": "node ./beforePackage.js && cd dist && yarn && electron-forge package",
-    "make": "node ./beforePackage.js && cd dist && yarn && electron-forge make && node ./afterMake.js"
+    "preminify": "node ./beforeBundle.js",
+    "minify": "browserify ./src/entryDev.js -g [ envify --NODE_ENV production --BABEL_ENV production ] -t [ babelify --presets [ env --targets [ electron ] react ] --plugins transform-async-to-generator ] --full-path=false --exclude electron --exclude shelljs -o ./src/entry/bundle.js",
+    "postminify": "uglifyjs --compress drop_console=true --mangle -- ./src/entry/bundle.js > ./src/react/inf.min.js",
+    "package": "node ./beforePackage.js && cd prod && yarn && electron-builder --dir",
+    "dist": "node ./beforePackage.js && cd prod && yarn && electron-builder"
   },
+  "build": {
+    "productName": "InfiniTex",
+    "copyright": "Copyright © 2018 ${author}",
+    "directories": {
+      "buildResources": "src/static/icons/"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": "dmg",
+      "icon": "src/static/icons/icon.icns"
+    },
+    "dmg": {
+      "backgroundColor": "#111",
+      "icon": "src/static/icons/icon.icns",
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "src/static/icons/icon.ico"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": true,
+      "installerIcon": "src/static/icons/icon.ico"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "rpm",
+        "pacman"
+      ],
+      "icon": "src/static/icons/48x48.png",
+      "category": "Science"
+    },
+    "deb": {
+      "depends": [ "libnotify4", "texlive-full" ]
+    },
+    "remoteBuild": false,
+    "fileAssociations": {
+      "ext": ["tex", "draft", "cdraft"]
+    },
+    "forceCodeSigning": false
+  },
+  "config": { "forge": "./forge.config.js" },
   "keywords": [],
-  "author": "fetacore",
-  "config": {
-    "forge": "./forge.config.js"
+  "author": {
+    "name": "fetacore",
+    "email": "fetacore@protonmail.com",
+    "url": "https://github.com/fetacore"
   },
-  "licenses" : [{
-    "type": "Apache",
-    "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-  }],
+  "homepage": "https://github.com/fetacore/Infinitex",
+  "repository": "https://github.com/fetacore/Infinitex",
+  "licenses": [
+    {
+      "type": "Apache",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  ],
   "dependencies": {
     "electron-compile": "^6.4.2",
     "katex": "^0.9.0-beta1",
@@ -35,30 +96,31 @@
     "babel-preset-minify": "^0.3.0",
     "babel-preset-react": "^6.24.1",
     "babelify": "^8.0.0",
-    "brace": "^0.11.0",
-    "browserify": "^16.0.0",
+    "brace": "^0.11.1",
+    "browserify": "^16.1.0",
+    "electron-builder": "^20.0.4",
     "electron-devtools-installer": "^2.2.3",
-    "electron-forge": "^5.1.0",
-    "electron-installer-debian": "^0.8.0",
+    "electron-forge": "^5.1.1",
     "electron-prebuilt-compile": "1.8.2",
     "electron-reload": "^1.2.2",
+    "envify": "^4.1.0",
     "jssoup": "0.0.6",
     "material-ui": "^0.20.0",
     "node-minify": "^2.4.1",
-    "pdfjs-dist": "^2.0.347",
+    "pdfjs-dist": "^2.0.376",
     "prop-types": "^15.6.0",
     "quill": "^1.3.5",
     "react": "^16.2.0",
     "react-ace": "^5.9.0",
     "react-color": "^2.13.8",
     "react-dom": "^16.2.0",
-    "react-grid-layout": "^0.16.3",
+    "react-grid-layout": "^0.16.4",
     "react-hot-loader": "^3.1.3",
     "react-pdf": "3.0.0-alpha.3",
-    "react-quill": "^1.2.3",
+    "react-quill": "^1.2.4",
     "react-resizable": "^1.7.5",
     "react-transition-group": "^2.2.1",
     "request": "^2.83.0",
-    "uglify-js": "^3.3.10"
+    "uglify-js": "^3.3.11"
   }
 }

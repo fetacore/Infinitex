@@ -2,38 +2,41 @@ const fs = require('fs');
 const path = require('path');
 const shelljs = require('shelljs');
 
+if (process.platform == 'win32') {
+  var fpresolver = '\\'
+} else {
+  var fpresolver = ''+fpresolver
+}
+
 function copyPasteStuff() {
-  shelljs.cp('-R', __dirname+'/src/', __dirname+'/dist/')
-  // shelljs.cp(__dirname+'/.compilerc', __dirname+'/dist/')
-  shelljs.cp(__dirname+'/afterMake.js', __dirname+'/dist/')
-  shelljs.cp(__dirname+'/forge.config.js', __dirname+'/dist/')
-  shelljs.cp(__dirname+'/package.json', __dirname+'/dist/')
-  shelljs.cp(__dirname+'/yarn.lock', __dirname+'/dist/')
+  shelljs.cp('-R', __dirname+fpresolver+'src'+fpresolver, __dirname+fpresolver+'prod'+fpresolver)
+  shelljs.cp(__dirname+fpresolver+'package.json', __dirname+fpresolver+'prod'+fpresolver)
+  shelljs.cp(__dirname+fpresolver+'yarn.lock', __dirname+fpresolver+'prod'+fpresolver)
   removeStuff()
 }
 
 function removeStuff() {
   shelljs.rm('-rf',
-    __dirname+'/dist/src/entry/',
-    __dirname+'/dist/src/entryDev.js',
-    __dirname+'/dist/src/react/assets/ace/',
-    __dirname+'/dist/src/react/assets/texstarters/',
-    __dirname+'/dist/src/react/reactPdf/entry.js',
-    __dirname+'/dist/src/react/reactKatex/',
-    __dirname+'/dist/src/react/App.jsx',
-    __dirname+'/dist/src/react/Editor.jsx',
-    __dirname+'/dist/src/react/Grid.jsx',
-    __dirname+'/dist/src/react/InfiniTex.jsx',
-    __dirname+'/dist/src/react/InfinitrConverters.js',
-    __dirname+'/dist/src/static/main.css',
-    __dirname+'/dist/src/static/style.css',
-    __dirname+'/dist/src/static/quill.snow.css',
+    __dirname+fpresolver+'prod'+fpresolver+'src'+fpresolver+'entry'+fpresolver,
+    __dirname+fpresolver+'prod'+fpresolver+'src'+fpresolver+'entryDev.js',
+    __dirname+fpresolver+'prod'+fpresolver+'src'+fpresolver+'react'+fpresolver+'assets'+fpresolver+'ace'+fpresolver,
+    __dirname+fpresolver+'prod'+fpresolver+'src'+fpresolver+'react'+fpresolver+'assets'+fpresolver+'texstarters'+fpresolver,
+    __dirname+fpresolver+'prod'+fpresolver+'src'+fpresolver+'react'+fpresolver+'reactPdf'+fpresolver+'entry.js',
+    __dirname+fpresolver+'prod'+fpresolver+'src'+fpresolver+'react'+fpresolver+'reactKatex'+fpresolver,
+    __dirname+fpresolver+'prod'+fpresolver+'src'+fpresolver+'react'+fpresolver+'App.jsx',
+    __dirname+fpresolver+'prod'+fpresolver+'src'+fpresolver+'react'+fpresolver+'Editor.jsx',
+    __dirname+fpresolver+'prod'+fpresolver+'src'+fpresolver+'react'+fpresolver+'Grid.jsx',
+    __dirname+fpresolver+'prod'+fpresolver+'src'+fpresolver+'react'+fpresolver+'InfiniTex.jsx',
+    __dirname+fpresolver+'prod'+fpresolver+'src'+fpresolver+'react'+fpresolver+'InfinitrConverters.js',
+    __dirname+fpresolver+'prod'+fpresolver+'src'+fpresolver+'static'+fpresolver+'main.css',
+    __dirname+fpresolver+'prod'+fpresolver+'src'+fpresolver+'static'+fpresolver+'style.css',
+    __dirname+fpresolver+'prod'+fpresolver+'src'+fpresolver+'static'+fpresolver+'quill.snow.css',
   )
   removeLines()
 }
 
 function removeLines() {
-  fs.readFile(__dirname+'/dist/src/index.js', 'utf-8', (err, data) => {
+  fs.readFile(__dirname+'/prod/src/index.js', 'utf-8', (err, data) => {
     if (err) {
       alert(err)
     } else {
@@ -62,32 +65,10 @@ function removeLines() {
       ).replace(
         '    mainWindow.webContents.openDevTools();}', ''
       )
-      fs.writeFileSync(__dirname+'/dist/src/index.js', indexXwrisSkata)
+      fs.writeFileSync(__dirname+'/prod/src/index.js', indexXwrisSkata)
     }
   });
-  fs.readFile(__dirname+'/dist/package.json', 'utf-8', (err, data) => {
-    if (err) {
-      alert(err)
-    } else {
-      let jsonXwrisSkata = data.replace(
-        'start",', 'start"'
-      ).replace(
-        '"prebuild": "node ./beforeBundle.js",', ''
-      ).replace(
-        '"build": "NODE_ENV=production BABEL_ENV=production browserify ./src/entryDev.js -t [ babelify --presets [ env --targets [ electron ] react ] --plugins transform-async-to-generator ] --full-path=false --exclude electron --exclude shelljs -o ./src/entry/bundle.js",', ''
-      ).replace(
-        '"postbuild": "NODE_ENV=production uglifyjs --compress drop_console=true --mangle -- ./src/entry/bundle.js > ./src/react/inf.min.js",', ''
-      ).replace(
-        '"make": "node ./beforePackage.js && cd dist && yarn && electron-forge make && node ./afterMake.js"', ''
-      ).replace(
-        '"package": "node ./beforePackage.js && cd dist && yarn && electron-forge package",', ''
-      ).replace(
-        '"electron-devtools-installer": "^2.1.0",', ''
-      )
-      fs.writeFileSync(__dirname+'/dist/package.json', jsonXwrisSkata)
-    }
-  });
-  fs.readFile(__dirname+'/dist/src/index.html', 'utf-8', (err, data) => {
+  fs.readFile(__dirname+'/prod/src/index.html', 'utf-8', (err, data) => {
     if (err) {
       alert(err)
     } else {
@@ -96,10 +77,20 @@ function removeLines() {
       ).replace(
         '<!-- <script src="entryDev.js"></script> -->', ''
       );
-      fs.writeFileSync(__dirname+'/dist/src/index.html', htmlXwrisSkata)
+      fs.writeFileSync(__dirname+'/prod/src/index.html', htmlXwrisSkata)
+    }
+  });
+  fs.readFile(__dirname+'/prod/package.json', 'utf-8', (err, data) => {
+    if (err) {
+      alert(err)
+    } else {
+      let pXwrisSkata = data.replace(
+        '"config": { "forge": "./forge.config.js" },', ''
+      )
+      fs.writeFileSync(__dirname+'/prod/package.json', pXwrisSkata)
     }
   });
 }
 
-shelljs.mkdir('-p',__dirname+'/dist/');
+shelljs.mkdir('-p',__dirname+fpresolver+'prod'+fpresolver);
 copyPasteStuff()

@@ -37,5 +37,5 @@ npm run make
 5. Open formula module on math selection.
 
 ## Roadmap:
-1. Compilation and configurations for Mac and Windows.
+1. Compilation and configurations for Mac ~~and Windows~~.
 2. Integration with cloud services for collaboration.

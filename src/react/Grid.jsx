@@ -763,20 +763,25 @@ note = ,\n\u007D\n';
 
 	actualCompilation() {
     this.latexError = null;
+    let fpresolver = null;
+    let windowsCrapCDcommand = null;
 		document.body.style.cursor='wait',
     ipcRenderer.send('createTexBibFile', [this.state.filepath, this.state.packages+'\n'+this.state.texfilecontent+'\n\\end{document}', this.state.bibfilecontent]);
     switch (process.platform) {
       case 'win32':
-        var fpresolver = '\\'
+        windowsCrapCDcommand = ' /d '
+        fpresolver = '\\'
         break;
       default:
-        var fpresolver = '/'
+        windowsCrapCDcommand = ' '
+        fpresolver = '/'
     }
-		var filetitle = this.state.filepath.slice(this.state.filepath.lastIndexOf(fpresolver)+1,this.state.filepath.length)
-		shelljs.exec('cd '+ '"' + this.state.filepath.replace(this.state.filepath.slice(this.state.filepath.lastIndexOf(fpresolver),this.state.filepath.length),'')+'"'+
-								' && pdflatex -interaction=nonstopmode -halt-on-error '+filetitle
-								+' && bibtex ' +filetitle.slice(0,filetitle.lastIndexOf('.tex'))+
-								' && pdflatex -interaction=nonstopmode -halt-on-error '+filetitle+' && pdflatex -interaction=nonstopmode -halt-on-error '+filetitle,
+		let filetitle = this.state.filepath.slice(this.state.filepath.lastIndexOf(fpresolver)+1,this.state.filepath.length)
+    shelljs.exec('cd'+windowsCrapCDcommand+ '"' + this.state.filepath.replace(this.state.filepath.slice(this.state.filepath.lastIndexOf(fpresolver),this.state.filepath.length),'')+'"'+
+								' && pdflatex -interaction=nonstopmode -halt-on-error '+filetitle+
+								' && bibtex ' +filetitle.slice(0,filetitle.lastIndexOf('.tex'))+
+								' && pdflatex -interaction=nonstopmode -halt-on-error '+filetitle+
+                ' && pdflatex -interaction=nonstopmode -halt-on-error '+filetitle,
                 { async: true },
 								(code, stdout, stderr) => {
 			if(code!==0) {
@@ -1131,7 +1136,7 @@ note = ,\n\u007D\n';
 		let editorUtilsColor = null;
 		let editorUtilsSelectedColor = null;
 		let letterColor = null;
-		if(this.state.theme=='Light') {
+		if (this.state.theme=='Light') {
 			generalBackgroundColor = '#4f4f4f';
 			loadingPDFCircleColor = '#000';
 			previewPDFBackgroundColor = '#fff';

@@ -1,9 +1,17 @@
 const path = require('path');
 
+if (process.platform == 'win32') {
+  var icon = 'src/static/icon.ico'
+} else if (process.platform == 'darwin') {
+  var icon = 'src/static/icon.icns'
+} else {
+  var icon = 'src/static/icon.png'
+}
+
 module.exports = {
   "make_targets": {
     "win32": [
-      "wix"
+      "squirrel"
     ],
     "darwin": [
       "dmg",
@@ -16,11 +24,8 @@ module.exports = {
   "electronPackagerConfig": {
     "asar": true,
     "prune": true,
-    "icon": 'src/static/icon.png',
+    "icon": icon,
     "packageManager": "yarn"
-  },
-  "electronWinstallerConfig": {
-    "name": "infinitex"
   },
   "electronInstallerDebian": {
     "icon": {
@@ -47,8 +52,11 @@ module.exports = {
       'scalable': 'src/static/Icons/Icon.svg'
     }
   },
-  "windowsStoreConfig": {
-    "packageName": "",
-    "name": "infinitex"
-  }
+  "electronWinstallerConfig": {
+    "name": "Infinitex",
+    "iconURL": 'file:\\\\'+__dirname+'/src/static/icon.ico',
+    "setupIcon": './src/static/icon.ico',
+    "setupExe": 'Infinitex_setup.exe',
+    "loadingGif": './src/static/icon.gif'
+  },
 }

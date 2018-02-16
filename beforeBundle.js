@@ -3,6 +3,12 @@ const path = require('path');
 var compressor = require('node-minify');
 var shelljs = require('shelljs');
 
+if (process.platform == 'win32') {
+  var fpresolver = '\\'
+} else {
+  var fpresolver = '/'
+}
+
 var css2 = fs.readFileSync(__dirname+'/node_modules/react-grid-layout/css/styles.css');
 var css3 = fs.readFileSync(__dirname+'/node_modules/react-resizable/css/styles.css');
 var css4 = fs.readFileSync(__dirname+'/node_modules/react-pdf/dist/Page/AnnotationLayer.css');
@@ -24,8 +30,8 @@ compressor.minify({
   },
 });
 
-shelljs.cp('-R', __dirname+'/node_modules/pdfjs-dist/cmaps/', __dirname+'/src/react/reactPdf/')
-shelljs.mkdir('-p', __dirname+'/src/entry');
+shelljs.cp('-R', __dirname+fpresolver+'node_modules'+fpresolver+'pdfjs-dist'+fpresolver+'cmaps/', __dirname+fpresolver+'src'+fpresolver+'react'+fpresolver+'reactPdf'+fpresolver)
+shelljs.mkdir('-p', __dirname+fpresolver+'src'+fpresolver+'entry');
 
 fs.readFile(__dirname+'/node_modules/brace/ext/language_tools.js', 'utf-8', (err, data) => {
   let dataXwrisSkatila = data.replace('var completers = [snippetCompleter, textCompleter, keyWordCompleter];', 'var completers = [snippetCompleter, keyWordCompleter];')

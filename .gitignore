@@ -1,4 +1,4 @@
 .git
-dist
+prod
 node_modules
 src/entry

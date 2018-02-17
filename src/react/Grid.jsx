@@ -2057,43 +2057,41 @@ note = ,\n\u007D\n';
 					</div>
 				} else {
 					if (shelljs.test('-e', this.state.filepath.replace('.tex','.pdf')) && !this.latexError){
-            if (this.state.binaryPDFContent !== null) {
-              PreviewPDF =
-                <Document
-                  file={{data:`data:application/pdf;base64,${this.state.binaryPDFContent}`}}
-                  onLoadSuccess={(pdf) => {
-                    this.onDocumentLoadSuccess(pdf.numPages)
-                  }}
-                  className="pdfPreview"
-                  rotate={0}
-                  onLoadError={() => {
-                    this.setState({
-                      PDFLoading: true,
-                    }, () => {
-                      ipcRenderer.send('openPDF', this.state.filepath.replace('.tex','.pdf'))
-                    });
-                  }}
-                  loading={<CircularProgress
-                    size={100}
-                    thickness={8}
-                    color={loaderColor}
-                    style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
-                  />}
-                  >
-                  <Page
-                    key={`page_${this.state.pageIndex + 1}`}
-                    width={this.PDFWidth}
-                    pageNumber={this.state.pageIndex + 1}
-                    renderAnnotations={true}
-                    className="pdfPage"
-                    renderMode="svg"
-                  />
-                  <FakePage
-                    pages={Math.min(this.state.numPages, this.state.pageIndex+20)}
-                    width={this.PDFWidth}
-                  />
-                </Document>
-            }
+            PreviewPDF =
+              <Document
+                file={{data:`data:application/pdf;base64,${this.state.binaryPDFContent}`}}
+                onLoadSuccess={(pdf) => {
+                  this.onDocumentLoadSuccess(pdf.numPages)
+                }}
+                className="pdfPreview"
+                rotate={0}
+                onLoadError={() => {
+                  this.setState({
+                    PDFLoading: true,
+                  }, () => {
+                    ipcRenderer.send('openPDF', this.state.filepath.replace('.tex','.pdf'))
+                  });
+                }}
+                loading={<CircularProgress
+                  size={100}
+                  thickness={8}
+                  color={loaderColor}
+                  style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
+                />}
+                >
+                <Page
+                  key={`page_${this.state.pageIndex + 1}`}
+                  width={this.PDFWidth}
+                  pageNumber={this.state.pageIndex + 1}
+                  renderAnnotations={true}
+                  className="pdfPage"
+                  renderMode="svg"
+                />
+                <FakePage
+                  pages={Math.min(this.state.numPages, this.state.pageIndex+20)}
+                  width={this.PDFWidth}
+                />
+              </Document>
 					} else {
             if (this.latexError) {
               PreviewPDF =

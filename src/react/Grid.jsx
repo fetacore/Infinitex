@@ -66,6 +66,7 @@ const {
   app,
   shell,
   Menu,
+  process,
 } = require('electron').remote;
 const { remote, ipcRenderer } = require('electron');
 const shelljs = require('shelljs');
@@ -120,14 +121,12 @@ export default class Grid extends React.Component {
       numPages: null,
       pageIndex: null,
       binaryPDFContent: null,
-      compilationHappenedWithoutNewPDF: false,
       networkPageIndex: 1,
       paperKeyword: '',
       literatureSearchResults: [],
       literatureSearchResultsDisplay: false,
       literatureSearchResultsSelectedIndex: 0,
       literatureSearchResultsSelectedDisplay: false,
-      // downloadProgress: 0,
       citationNicknameDialogDisplay: false,
       citationNickname: '',
       areYouSureDialogDisplay: false,
@@ -264,8 +263,9 @@ export default class Grid extends React.Component {
           if (shelljs.test('-e', this.state.filepath.replace('.tex','.pdf'))) {
             this.setState({
               PDFLoading: true,
+            }, () => {
+              ipcRenderer.send('openPDF', this.state.filepath.replace('.tex','.pdf'));
             });
-            ipcRenderer.send('openPDF', this.state.filepath.replace('.tex','.pdf'));
           }
         }
       });
@@ -756,28 +756,28 @@ note = ,\n\u007D\n';
         preview: true,
         binaryPDFContent: null,
       }, () => {
+        this.latexError = null;
         this.actualCompilation();
       });
 		}
 	}
 
 	actualCompilation() {
-    this.latexError = null;
     let fpresolver = null;
     let windowsCrapCDcommand = null;
 		document.body.style.cursor='wait',
     ipcRenderer.send('createTexBibFile', [this.state.filepath, this.state.packages+'\n'+this.state.texfilecontent+'\n\\end{document}', this.state.bibfilecontent]);
     switch (process.platform) {
       case 'win32':
-        windowsCrapCDcommand = ' /d '
+        windowsCrapCDcommand = 'pushd '
         fpresolver = '\\'
         break;
       default:
-        windowsCrapCDcommand = ' '
+        windowsCrapCDcommand = 'cd '
         fpresolver = '/'
     }
 		let filetitle = this.state.filepath.slice(this.state.filepath.lastIndexOf(fpresolver)+1,this.state.filepath.length)
-    shelljs.exec('cd'+windowsCrapCDcommand+ '"' + this.state.filepath.replace(this.state.filepath.slice(this.state.filepath.lastIndexOf(fpresolver),this.state.filepath.length),'')+'"'+
+    shelljs.exec(windowsCrapCDcommand+ '"' + this.state.filepath.replace(this.state.filepath.slice(this.state.filepath.lastIndexOf(fpresolver),this.state.filepath.length),'')+'"'+
 								' && pdflatex -interaction=nonstopmode -halt-on-error '+filetitle+
 								' && bibtex ' +filetitle.slice(0,filetitle.lastIndexOf('.tex'))+
 								' && pdflatex -interaction=nonstopmode -halt-on-error '+filetitle+
@@ -2057,41 +2057,43 @@ note = ,\n\u007D\n';
 					</div>
 				} else {
 					if (shelljs.test('-e', this.state.filepath.replace('.tex','.pdf')) && !this.latexError){
-            PreviewPDF =
-              <Document
-                file={{data:`data:application/pdf;base64,${this.state.binaryPDFContent}`}}
-                onLoadSuccess={(pdf) => {
-                  this.onDocumentLoadSuccess(pdf.numPages)
-                }}
-                className="pdfPreview"
-                rotate={0}
-                onLoadError={() => {
-                  this.setState({
-                    PDFLoading: true,
-                  }, () => {
-                    ipcRenderer.send('openPDF', this.state.filepath.replace('.tex','.pdf'))
-                  });
-                }}
-                loading={<CircularProgress
-                  size={100}
-                  thickness={8}
-                  color={loaderColor}
-                  style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
-                />}
-                >
-                <Page
-                  key={`page_${this.state.pageIndex + 1}`}
-                  width={this.PDFWidth}
-                  pageNumber={this.state.pageIndex + 1}
-                  renderAnnotations={true}
-                  className="pdfPage"
-                  renderMode="svg"
-                />
-                <FakePage
-                  pages={Math.min(this.state.numPages, this.state.pageIndex+20)}
-                  width={this.PDFWidth}
-                />
-              </Document>
+            if (this.state.binaryPDFContent !== null) {
+              PreviewPDF =
+                <Document
+                  file={{data:`data:application/pdf;base64,${this.state.binaryPDFContent}`}}
+                  onLoadSuccess={(pdf) => {
+                    this.onDocumentLoadSuccess(pdf.numPages)
+                  }}
+                  className="pdfPreview"
+                  rotate={0}
+                  onLoadError={() => {
+                    this.setState({
+                      PDFLoading: true,
+                    }, () => {
+                      ipcRenderer.send('openPDF', this.state.filepath.replace('.tex','.pdf'))
+                    });
+                  }}
+                  loading={<CircularProgress
+                    size={100}
+                    thickness={8}
+                    color={loaderColor}
+                    style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
+                  />}
+                  >
+                  <Page
+                    key={`page_${this.state.pageIndex + 1}`}
+                    width={this.PDFWidth}
+                    pageNumber={this.state.pageIndex + 1}
+                    renderAnnotations={true}
+                    className="pdfPage"
+                    renderMode="svg"
+                  />
+                  <FakePage
+                    pages={Math.min(this.state.numPages, this.state.pageIndex+20)}
+                    width={this.PDFWidth}
+                  />
+                </Document>
+            }
 					} else {
             if (this.latexError) {
               PreviewPDF =
@@ -2148,40 +2150,42 @@ note = ,\n\u007D\n';
 			} else {
         if (!this.state.PDFLoading) {
           if (!this.latexError) {
-            let p = this.state.pageIndex+1
-            PDFUtils =
-    				<div onContextMenu={(e) => {
-    					this.contextMenuBuilder(e,'PDFUtils');
-    				}}>
-    					<Paper
-    						style={{
-    							width: '100%',
-    						}}
-    						>
-    						<BottomNavigation
-    							style={{
-    								backgroundColor: previewPDFBackgroundColor,
-    							}}
-    							>
-                  <BottomNavigationItem
-                    icon={previousPageIcon}
-                    onClick={() => this.previousPage()}
-                  />
-    							<div
-                    style={{
-                      color:'#fff',
-                      marginTop: 19,
-                    }}
-                    dangerouslySetInnerHTML={{
-                      __html: p+'/'+this.state.numPages
-                    }}></div>
-                  <BottomNavigationItem
-                    icon={nextPageIcon}
-                    onClick={() => this.nextPage()}
-                  />
-    						</BottomNavigation>
-    					</Paper>
-    				</div>
+            if (this.state.binaryPDFContent !== null) {
+              let p = this.state.pageIndex+1
+              PDFUtils =
+      				<div onContextMenu={(e) => {
+      					this.contextMenuBuilder(e,'PDFUtils');
+      				}}>
+      					<Paper
+      						style={{
+      							width: '100%',
+      						}}
+      						>
+      						<BottomNavigation
+      							style={{
+      								backgroundColor: previewPDFBackgroundColor,
+      							}}
+      							>
+                    <BottomNavigationItem
+                      icon={previousPageIcon}
+                      onClick={() => this.previousPage()}
+                    />
+      							<div
+                      style={{
+                        color:'#fff',
+                        marginTop: 19,
+                      }}
+                      dangerouslySetInnerHTML={{
+                        __html: p+'/'+this.state.numPages
+                      }}></div>
+                    <BottomNavigationItem
+                      icon={nextPageIcon}
+                      onClick={() => this.nextPage()}
+                    />
+      						</BottomNavigation>
+      					</Paper>
+      				</div>
+            }
           }
         }
       }

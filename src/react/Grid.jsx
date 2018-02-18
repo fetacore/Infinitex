@@ -1034,13 +1034,13 @@ note = ,\n\u007D\n'
             }
           ]
         },
-				{type: 'separator'},
-				{role: 'cut'},
-				{role: 'copy'},
-				{role: 'paste'},
-				{role: 'pasteandmatchstyle'},
-				{role: 'delete'},
-				{role: 'selectall'}
+        {type: 'separator'},
+        {role: 'cut'},
+        {role: 'copy'},
+        {role: 'paste'},
+        {role: 'pasteandmatchstyle'},
+        {role: 'delete'},
+        {role: 'selectall'}
       ]
       if (!this.state.preview) {
         contextMenuTemplate.push(
@@ -1077,40 +1077,38 @@ note = ,\n\u007D\n'
       ]
     } else if (arg == 'matheditor') {
       var contextMenuTemplate = [
-				{role: 'cut'},
-				{role: 'copy'},
-				{role: 'paste'},
+        {role: 'cut'},
+        {role: 'copy'},
+        {role: 'paste'},
         {
           label: 'Math characters',
-          click: () => {
-
-      }
+          click: () => {}
         }
       ]
     } else {
       if (this.state.filepath) {
         var contextMenuTemplate = [
-      {
-        label: 'External View',
-        accelerator: 'CmdOrCtrl+P',
-        click: () => this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
-      },
-      {
-        label: 'External View Only',
-        accelerator: 'CmdOrCtrl+Shift+P',
-        click: () => {
-          this.setState({preview: false})
-          this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
-        }
-      }
-    ]
+          {
+            label: 'External View',
+            accelerator: 'CmdOrCtrl+P',
+            click: () => this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
+          },
+          {
+            label: 'External View Only',
+            accelerator: 'CmdOrCtrl+Shift+P',
+            click: () => {
+              this.setState({preview: false})
+              this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
+            }
+          }
+        ]
       } else {
         var contextMenuTemplate = [
-      {
-        label: 'Toggle PDF Preview Placeholder',
-        click: () => this.setState({preview: false})
-      }
-    ]
+          {
+            label: 'Toggle PDF Preview Placeholder',
+            click: () => this.setState({preview: false})
+          }
+        ]
       }
     }
     ContextMenu = Menu.buildFromTemplate(contextMenuTemplate)
@@ -1211,10 +1209,10 @@ note = ,\n\u007D\n'
                 labelPosition='after'
                 icon={previousPageIcon}
                 onClick={() =>
-                this.setState({literatureSearchResultsDisplay: false}, () => {
-                  this.focusEditor(this.state.textSourceBib)
-                })
-              }
+                  this.setState({literatureSearchResultsDisplay: false}, () => {
+                    this.focusEditor(this.state.textSourceBib)
+                  })
+                }
                 style={{
                   color: '#fff'
                 }}
@@ -1275,18 +1273,19 @@ note = ,\n\u007D\n'
       networkSearchOrResumeTable =
         <div>
           <RaisedButton
-            onClick={() => {
-              this.setState({networkPageIndex: 3}, () => {
-                if (this.state.filepath) {
-                  if (this.state.preview) {
-                    this.setState({
-                      preview: false
-                    })
+            onClick={
+              () => {
+                this.setState({networkPageIndex: 3}, () => {
+                  if (this.state.filepath) {
+                    if (this.state.preview) {
+                      this.setState({
+                        preview: false
+                      })
+                    }
                   }
-                }
-              })
+                })
+              }
             }
-          }
             label='Search Books'
             labelPosition='after'
             icon={searchIcon}
@@ -1298,18 +1297,21 @@ note = ,\n\u007D\n'
       networkSearchOrResumeTable =
         <div>
           <RaisedButton
-            onClick={() => {
-              this.setState({networkPageIndex: 3}, () => {
-                if (this.state.filepath) {
-                  if (this.state.preview) {
-                    this.setState({
-                      preview: false
-                    })
+            onClick={
+              () => {
+                this.setState({
+                  networkPageIndex: 3
+                }, () => {
+                  if (this.state.filepath) {
+                    if (this.state.preview) {
+                      this.setState({
+                        preview: false
+                      })
+                    }
                   }
-                }
-              })
+                })
+              }
             }
-          }
             label='Search Books'
             labelPosition='after'
             icon={searchIcon}
@@ -1360,16 +1362,18 @@ note = ,\n\u007D\n'
       <FlatButton
         label='Add Citation'
         labelStyle={{color: letterColor}}
-        onClick={() => {
-          if (this.state.filepath !== null) {
-            this.setState({
-              literatureSearchResultsSelectedDisplay: false,
-              citationNicknameDialogDisplay: true
-            })
-          } else {
-            this.createCitationFromLiterature()
+        onClick={
+          () => {
+            if (this.state.filepath !== null) {
+              this.setState({
+                literatureSearchResultsSelectedDisplay: false,
+                citationNicknameDialogDisplay: true
+              })
+            } else {
+              this.createCitationFromLiterature()
+            }
           }
-        }}
+        }
       />,
       <FlatButton
         label={downloadButtonLabel}
@@ -1388,14 +1392,16 @@ note = ,\n\u007D\n'
           open={this.state.literatureSearchResultsSelectedDisplay}
           actions={literatureAbstractActions}
           onRequestClose={
-          () => {
-            this.setState({literatureSearchResultsSelectedDisplay: false}, () => {
-              if (!this.state.literatureSearchResultsDisplay) {
-                this.focusEditor(this.state.textSourceBib)
-              }
-            })
+            () => {
+              this.setState({
+                literatureSearchResultsSelectedDisplay: false
+              }, () => {
+                if (!this.state.literatureSearchResultsDisplay) {
+                  this.focusEditor(this.state.textSourceBib)
+                }
+              })
+            }
           }
-        }
           autoScrollBodyContent
           paperStyle={{
             padding: 10
@@ -1626,28 +1632,16 @@ note = ,\n\u007D\n'
         labelStyle={{color: letterColor}}
         onClick={this.compileMathEditor.bind(this)}
       />,
-			// <FlatButton
-      //   label="Save in the Project's Database"
-			// 	labelStyle={{color:letterColor}}
-      //   onClick={
-			// 		() => {
-			// 			this.setState({
-			// 				showmatheditorbox: false,
-			// 			});
-			// 			this.focusEditor(this.state.textSourceBib);
-			// 		}
-			// 	}
-      // />,
       <FlatButton
         label='Paste to main text'
         keyboardFocused
         labelStyle={{color: letterColor}}
         onClick={
-					() => {
-  this.setState({
-    showpastematheditorbox: true
-  })
-}
+          () => {
+            this.setState({
+              showpastematheditorbox: true
+            })
+          }
 				}
       />
     ]
@@ -1675,58 +1669,58 @@ note = ,\n\u007D\n'
       }
     } else {
       if (this.state.preview) {
-  			if (this.state.networkFeatures) {
-  				layout = [
-  			    {i: 'loginchat', x: 0, y: 0, w: 3, h: 4, static: true},
-  			    {i: 'editor', x: 51, y: 0, w: 3, h: 4, static: true},
-  			    {i: 'pdf', x: 191, y: 0, w: 3, h: 4, static: true}
-  			  ]
-  			} else {
-  				layout = [
-  			    {i: 'editor', x: 0, y: 0, w: 3, h: 4, static: true},
-  			    {i: 'pdf', x: 196, y: 0, w: 3, h: 4, static: true},
-  					{i: 'loginchat', x: 300, y: 0, w: 3, h: 4, static: true}
-  			  ]
-  				divNetworkStyle = {
-  					display: 'none',
-  					width: 0,
-  					height: 0,
-  					zDepth: 0
-  				}
-  			}
-  		} else {
-  			if (this.state.networkFeatures) {
-  				layout = [
-  					{i: 'loginchat', x: 0, y: 0, w: 3, h: 4, static: true},
-  			    {i: 'editor', x: 51, y: 0, w: 3, h: 4, static: true},
-  					{i: 'pdf', x: 300, y: 0, w: 3, h: 4, static: true}
-  				]
-  				divPDFStyle = {
-  					display: 'none',
-  					width: 0,
-  					height: 0,
-  					zDepth: 0
-  				}
-  			} else {
-  				layout = [
-  			    {i: 'editor', x: 0, y: 0, w: 3, h: 4, static: true},
-  					{i: 'pdf', x: 10, y: 0, w: 3, h: 4, static: true},
-  					{i: 'loginchat', x: 300, y: 0, w: 3, h: 4, static: true}
-  				]
-  				divPDFStyle = {
-  					display: 'none',
-  					width: 0,
-  					height: 0,
-  					zDepth: 0
-  				}
-  				divNetworkStyle = {
-  					display: 'none',
-  					width: 0,
-  					height: 0,
-  					zDepth: 0
-  				}
-  			}
-  		}
+      	if (this.state.networkFeatures) {
+      		layout = [
+      	    {i: 'loginchat', x: 0, y: 0, w: 3, h: 4, static: true},
+      	    {i: 'editor', x: 51, y: 0, w: 3, h: 4, static: true},
+      	    {i: 'pdf', x: 191, y: 0, w: 3, h: 4, static: true}
+      	  ]
+      	} else {
+      		layout = [
+      	    {i: 'editor', x: 0, y: 0, w: 3, h: 4, static: true},
+      	    {i: 'pdf', x: 196, y: 0, w: 3, h: 4, static: true},
+      			{i: 'loginchat', x: 300, y: 0, w: 3, h: 4, static: true}
+      	  ]
+      		divNetworkStyle = {
+      			display: 'none',
+      			width: 0,
+      			height: 0,
+      			zDepth: 0
+      		}
+      	}
+      } else {
+    		if (this.state.networkFeatures) {
+    			layout = [
+    				{i: 'loginchat', x: 0, y: 0, w: 3, h: 4, static: true},
+    		    {i: 'editor', x: 51, y: 0, w: 3, h: 4, static: true},
+    				{i: 'pdf', x: 300, y: 0, w: 3, h: 4, static: true}
+    			]
+    			divPDFStyle = {
+    				display: 'none',
+    				width: 0,
+    				height: 0,
+    				zDepth: 0
+    			}
+    		} else {
+    			layout = [
+    		    {i: 'editor', x: 0, y: 0, w: 3, h: 4, static: true},
+    				{i: 'pdf', x: 10, y: 0, w: 3, h: 4, static: true},
+    				{i: 'loginchat', x: 300, y: 0, w: 3, h: 4, static: true}
+    			]
+    			divPDFStyle = {
+    				display: 'none',
+    				width: 0,
+    				height: 0,
+    				zDepth: 0
+    			}
+    			divNetworkStyle = {
+    				display: 'none',
+    				width: 0,
+    				height: 0,
+    				zDepth: 0
+    			}
+    		}
+    	}
     }
 
     let editorWidth = null
@@ -1750,64 +1744,73 @@ note = ,\n\u007D\n'
               <BottomNavigation
                 selectedIndex={this.state.textSourceBib}
                 style={{
-  							backgroundColor: editorUtilsColor
-  						}}
-  					>
+    							backgroundColor: editorUtilsColor
+    						}}
+    					>
                 <BottomNavigationItem
                   label='Source'
                   icon={codeIcon}
-                  onClick={() => {
-                    this.setState({
-                  textSourceBib: 0
-                }, () => {
-                  this.focusEditor(0)
-                })
-  						}}
-  					/>
+                  onClick={
+                    () => {
+                      this.setState({
+                        textSourceBib: 0
+                      }, () => {
+                        this.focusEditor(0)
+                      })
+        						}
+                  }
+      					/>
                 <BottomNavigationItem
                   label='Bibliography'
                   icon={biblioIcon}
-                  onClick={() => {
-                    this.setState({
-                  textSourceBib: 1
-                }, () => {
-                  this.focusEditor(1)
-                })
-  						}}
-  					/>
+                  onClick={
+                    () => {
+                      this.setState({
+                        textSourceBib: 1
+                      }, () => {
+                        this.focusEditor(1)
+                      })
+        						}
+                  }
+      					/>
                 <BottomNavigationItem
                   label='Math'
                   icon={<EditorFunctions />}
-                  onClick={() => {
-                    this.setState({
-                  preview: false
-                }, () => {
-                  this.setState({showmatheditorbox: true})
-                })
-  						}
-  					 }
-  					/>
+                  onClick={
+                    () => {
+                      this.setState({
+                        preview: false
+                      }, () => {
+                        this.setState({showmatheditorbox: true})
+                      })
+        						}
+        					}
+      					/>
                 <BottomNavigationItem
                   label='Internal'
                   icon={previewIcon}
-                  onClick={() => {
-  							this.setState({preview: false}, () => {
-  								this.focusEditor(0)
-  								if (this.state.filepath !== null) {
-    if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
-      this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
-    }
-  								}
-  							})
-  						}}
-  					/>
+                  onClick={
+                    () => {
+        							this.setState({
+                        preview: false
+                      }, () => {
+        								this.focusEditor(0)
+        								if (this.state.filepath !== null) {
+                          if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
+                            this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
+                          }
+        								}
+          						})
+        						}
+                  }
+      					/>
                 <BottomNavigationItem
                   label='Compile PDF'
                   icon={rightarrow}
                   onClick={() => {
-  						 this.compileText()
-  					 }}
-  					/>
+      						  this.compileText()
+      					  }}
+      					/>
               </BottomNavigation>
             </Paper>
         } else {
@@ -1822,71 +1825,80 @@ note = ,\n\u007D\n'
               <BottomNavigation
                 selectedIndex={this.state.textSourceBib}
                 style={{
-  							backgroundColor: editorUtilsColor
-  						}}
-  					>
+    							backgroundColor: editorUtilsColor
+    						}}
+    					>
                 <BottomNavigationItem
                   label='Source'
                   icon={codeIcon}
                   onClick={() => {
                     this.setState({
-                  textSourceBib: 0
-                }, () => {
-                  this.focusEditor(0)
-                })
-  						}}
-  					/>
+                      textSourceBib: 0
+                    }, () => {
+                      this.focusEditor(0)
+                    })
+      						}}
+      					/>
                 <BottomNavigationItem
                   label='Bibliography'
                   icon={biblioIcon}
-                  onClick={() => {
-                    this.setState({
-                  textSourceBib: 1
-                }, () => {
-                  this.focusEditor(1)
-                })
-  						}}
-  					/>
+                  onClick={
+                    () => {
+                      this.setState({
+                        textSourceBib: 1
+                      }, () => {
+                        this.focusEditor(1)
+                      })
+        						}
+                  }
+      					/>
                 <BottomNavigationItem
                   label='Math'
                   icon={<EditorFunctions />}
-                  onClick={() => {
-                    this.setState({
-                  preview: false
-                }, () => {
-                  this.setState({showmatheditorbox: true})
-                })
-  						}
-  					 }
-  					/>
+                  onClick={
+                    () => {
+                      this.setState({
+                        preview: false
+                      }, () => {
+                        this.setState({
+                          showmatheditorbox: true
+                        })
+                      })
+        						}
+        					}
+      					/>
                 <BottomNavigationItem
                   label='Internal'
                   icon={previewIcon}
-                  onClick={() => {
-  							this.setState({preview: false}, () => {
-  								this.refs.mainEditor.editor.focus()
-  								if (this.state.filepath !== null) {
-    if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
-      this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
-    }
-  								}
-  							})
-  						}}
-  					/>
+                  onClick={
+                    () => {
+        							this.setState({
+                        preview: false
+                      }, () => {
+        								this.refs.mainEditor.editor.focus()
+        								if (this.state.filepath !== null) {
+                           if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
+                             this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
+                           }
+        								}
+        							})
+        						}
+                  }
+      					/>
                 <IconMenu
                   iconButtonElement={
                     <img
-                  src={compilePDFLogoSrc}
-                  style={{
-                    width: '3vw',
-                    marginLeft: '30%'
-                  }}
-                />
-              }
+                      src={compilePDFLogoSrc}
+                      style={{
+                        width: '3vw',
+                        marginLeft: '30%'
+                      }}
+                    />
+                  }
                   anchorOrigin={{horizontal: 'left', vertical: 'top'}}
                   targetOrigin={{horizontal: 'left', vertical: 'top'}}
                   value={0}
-            >
+                >
                   <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
                   <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
                   <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
@@ -1914,51 +1926,56 @@ note = ,\n\u007D\n'
                 style={{
                   backgroundColor: editorUtilsColor
                 }}
-						>
+  						>
                 <BottomNavigationItem
                   label='Source'
                   icon={codeIcon}
-                  onClick={() => {
-                    this.setState({
-                  textSourceBib: 0
-                }, () => {
-                  this.focusEditor(0)
-                })
-  						}}
-						/>
+                  onClick={
+                    () => {
+                      this.setState({
+                        textSourceBib: 0
+                      }, () => {
+                        this.focusEditor(0)
+                      })
+        						}
+                  }
+    						/>
                 <BottomNavigationItem
                   label='Bibliography'
                   icon={biblioIcon}
-                  onClick={() => {
-                    this.setState({
-                  textSourceBib: 1
-                }, () => {
-                  this.focusEditor(1)
-                })
-  						}}
-						/>
+                  onClick={
+                    () => {
+                      this.setState({
+                        textSourceBib: 1
+                      }, () => {
+                        this.focusEditor(1)
+                      })
+        						}
+                  }
+    						/>
                 <BottomNavigationItem
                   label='Math'
                   icon={<EditorFunctions />}
-                  onClick={() => {
-                    this.setState({showmatheditorbox: !this.state.showmatheditorbox})
-                  }
-						 }
-						/>
+                  onClick={
+                    () => {
+                      this.setState({showmatheditorbox: !this.state.showmatheditorbox})
+                    }
+      						}
+    						/>
                 <BottomNavigationItem
                   label='External'
                   icon={previewNotIcon}
                   onClick={() => {
                     this.setState({preview: true})
                   }}
-						/>
+    						/>
                 <BottomNavigationItem
                   label='Compile PDF'
                   icon={rightarrow}
                   onClick={() => {
-   						 this.compileText()
-   						}}
-						/>
+       						 this.compileText()
+       						}}
+    						/>
               </BottomNavigation>
             </Paper>
         } else {
@@ -1974,51 +1991,50 @@ note = ,\n\u007D\n'
                 style={{
                   backgroundColor: editorUtilsColor
                 }}
-						>
+  						>
                 <BottomNavigationItem
                   label='Source'
                   icon={codeIcon}
                   onClick={() => {
                     this.setState({
-                  textSourceBib: 0
-                }, () => {
-                  this.focusEditor(0)
-                })
-  						}}
-						/>
+                      textSourceBib: 0
+                    }, () => {
+                      this.focusEditor(0)
+                    })
+      						}}
+    						/>
                 <BottomNavigationItem
                   label='Bibliography'
                   icon={biblioIcon}
                   onClick={() => {
                     this.setState({
-                  textSourceBib: 1
-                }, () => {
-                  this.focusEditor(1)
-                })
-  						}}
-						/>
+                      textSourceBib: 1
+                    }, () => {
+                      this.focusEditor(1)
+                    })
+      						}}
+    						/>
                 <BottomNavigationItem
                   label='Math'
                   icon={<EditorFunctions />}
                   onClick={() => {
                     this.setState({showmatheditorbox: true})
-                  }
-						 }
-						/>
+                  }}
+    						/>
                 <IconMenu
                   iconButtonElement={
                     <img
-                  src={compilePDFLogoSrc}
-                  style={{
-                    width: '3vw',
-                    marginLeft: '10%'
-                  }}
-                  />
-                }
+                    src={compilePDFLogoSrc}
+                    style={{
+                      width: '3vw',
+                      marginLeft: '10%'
+                    }}
+                    />
+                  }
                   anchorOrigin={{horizontal: 'left', vertical: 'top'}}
                   targetOrigin={{horizontal: 'left', vertical: 'top'}}
                   value={0}
-              >
+                >
                   <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
                   <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
                   <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
@@ -2047,7 +2063,7 @@ note = ,\n\u007D\n'
                 thickness={8}
                 color='#fff'
                 style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
-						/>
+  						/>
             </div>
         } else {
           if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf')) && !this.latexError) {
@@ -2066,12 +2082,14 @@ note = ,\n\u007D\n'
                     ipcRenderer.send('openPDF', this.state.filepath.replace('.tex', '.pdf'))
                   })
                 }}
-                loading={<CircularProgress
-                  size={100}
-                  thickness={8}
-                  color={loaderColor}
-                  style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
-                />}
+                loading={
+                  <CircularProgress
+                    size={100}
+                    thickness={8}
+                    color={loaderColor}
+                    style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
+                  />
+                }
                 >
                 <Page
                   key={`page_${this.state.pageIndex + 1}`}
@@ -2089,10 +2107,20 @@ note = ,\n\u007D\n'
           } else {
             if (this.latexError) {
               PreviewPDF =
-                <div style={{width: this.PDFWidth, height: '100%', backgroundColor: '#811414', color: '#fff', textAlign: 'left'}}>
-                  <article dangerouslySetInnerHTML={{
-                    __html: this.latexError
-                  }} />
+                <div
+                  style={{
+                    width: this.PDFWidth,
+                    height: '100%',
+                    backgroundColor: '#811414',
+                    color: '#fff',
+                    textAlign: 'left'
+                  }}
+                  >
+                  <article
+                    dangerouslySetInnerHTML={{
+                      __html: this.latexError
+                    }}
+                  />
                 </div>
             }
           }
@@ -2133,7 +2161,7 @@ note = ,\n\u007D\n'
                   onClick={() => {
                     this.onOpenProjectClick()
                   }}
-							/>
+  							/>
               </BottomNavigation>
             </Paper>
           </div>
@@ -2148,33 +2176,34 @@ note = ,\n\u007D\n'
       				}}>
                   <Paper
                     style={{
-      							width: '100%'
-      						}}
+        							width: '100%'
+        						}}
       						>
                     <BottomNavigation
-                  style={{
-      								backgroundColor: previewPDFBackgroundColor
-      							}}
+                      style={{
+        								backgroundColor: previewPDFBackgroundColor
+        							}}
       							>
-                  <BottomNavigationItem
-                    icon={previousPageIcon}
-                    onClick={() => this.previousPage()}
+                    <BottomNavigationItem
+                      icon={previousPageIcon}
+                      onClick={() => this.previousPage()}
                     />
-                  <div
-                    style={{
-                    color: '#fff',
-                    marginTop: 19
-                  }}
-                    dangerouslySetInnerHTML={{
-                    __html: p + '/' + this.state.numPages
-                  }} />
-                  <BottomNavigationItem
-                    icon={nextPageIcon}
-                    onClick={() => this.nextPage()}
+                    <div
+                      style={{
+                        color: '#fff',
+                        marginTop: 19
+                      }}
+                      dangerouslySetInnerHTML={{
+                        __html: p + '/' + this.state.numPages
+                      }}
                     />
-                </BottomNavigation>
-                  </Paper>
-                </div>
+                    <BottomNavigationItem
+                      icon={nextPageIcon}
+                      onClick={() => this.nextPage()}
+                    />
+                  </BottomNavigation>
+                </Paper>
+              </div>
             }
           }
         }
@@ -2189,11 +2218,11 @@ note = ,\n\u007D\n'
         <IconMenu
           iconButtonElement={
             <img style={{width: 130, marginTop: 30, cursor: 'pointer'}} src={logosrc} />
-        }
+          }
           anchorOrigin={{horizontal: 'left', vertical: 'top'}}
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
           value={0}
-      >
+        >
           <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
           <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
           <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.networkDivClickWithLiteratureDisplay(infIconPageNavigation)} />
@@ -2207,11 +2236,11 @@ note = ,\n\u007D\n'
         <IconMenu
           iconButtonElement={
             <img style={{width: 130, marginTop: 30, cursor: 'pointer'}} src={logosrc} />
-        }
+          }
           anchorOrigin={{horizontal: 'left', vertical: 'top'}}
           targetOrigin={{horizontal: 'left', vertical: 'top'}}
           value={0}
-      >
+        >
           <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
           <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
           <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.networkDivClickWithoutLiteratureDisplay(infIconPageNavigation)} />
@@ -2256,32 +2285,17 @@ note = ,\n\u007D\n'
                   this.focusEditor(0)
                 })
               }}
-					/>
+  					/>
             <BottomNavigationItem
               label='Packages'
               icon={extensionIcon}
               onClick={() => this.setState({packageDialog: true})}
-					/>
+  					/>
             <BottomNavigationItem
               label='Add Figure'
               icon={addIcon}
               onClick={() => this.onAddFigureClick()}
-					/>
-            {/* <BottomNavigationItem
-						label="Replace Text"
-						icon={replaceTextIcon}
-						onClick={() => this.selectEditorAction(3)}
-					/>
-					<BottomNavigationItem
-						label="Remove Text"
-						icon={removeIcon}
-						onClick={() => this.selectEditorAction(4)}
-					/>
-					<BottomNavigationItem
-						label="Approve Text"
-						icon={doneIcon}
-						// onClick={() => this.selectEditorAction(5)}
-					/> */}
+  					/>
           </BottomNavigation>
         </Paper>
     } else {
@@ -2307,17 +2321,17 @@ note = ,\n\u007D\n'
                     this.focusEditor(0)
                   })
                 }}
-						/>
+  						/>
               <BottomNavigationItem
                 label='Packages'
                 icon={extensionIcon}
                 onClick={() => this.setState({packageDialog: true})}
-  					/>
+    					/>
               <BottomNavigationItem
                 label='Add Figure'
                 icon={addIcon}
                 onClick={() => this.onAddFigureClick()}
-  					/>
+    					/>
             </BottomNavigation>
           </Paper>
       } else {
@@ -2342,14 +2356,14 @@ note = ,\n\u007D\n'
                     this.focusEditor(0)
                   })
                 }}
-						/>
+  						/>
               <BottomNavigationItem
                 label='External'
                 icon={previewNotIcon}
                 onClick={() => {
                   this.setState({preview: true})
                 }}
-						/>
+  						/>
               <BottomNavigationItem
                 label='Show All'
                 icon={openAll}
@@ -2359,17 +2373,17 @@ note = ,\n\u007D\n'
                     networkFeatures: true
                   })
                 }}
-						/>
+  						/>
               <BottomNavigationItem
                 label='Packages'
                 icon={extensionIcon}
                 onClick={() => this.setState({packageDialog: true})}
-  					/>
+    					/>
               <BottomNavigationItem
                 label='Add Figure'
                 icon={addIcon}
                 onClick={() => this.onAddFigureClick()}
-  					/>
+    					/>
             </BottomNavigation>
           </Paper>
       }
@@ -2474,101 +2488,101 @@ note = ,\n\u007D\n'
     }
 
 	  return (
-  <div style={{width: width - 20, height: height, backgroundColor: generalBackgroundColor}}>
-    <Dialog
-      title='Math Editor'
-      actions={matheditorboxbuttons}
-      modal={false}
-      open={this.state.showmatheditorbox}
-      onRequestClose={
+      <div style={{width: width - 20, height: height, backgroundColor: generalBackgroundColor}}>
+        <Dialog
+          title='Math Editor'
+          actions={matheditorboxbuttons}
+          modal={false}
+          open={this.state.showmatheditorbox}
+          onRequestClose={
 						() => {
-  this.setState({showmatheditorbox: false}, () => {
-    if (!this.state.filepath) {
-      this.setState({
-        preview: true
-      })
-    }
-  })
-  this.focusEditor(this.state.textSourceBib)
-}
+              this.setState({showmatheditorbox: false}, () => {
+                if (!this.state.filepath) {
+                  this.setState({
+                    preview: true
+                  })
+                }
+              })
+              this.focusEditor(this.state.textSourceBib)
+            }
 					}
-      bodyStyle={{
-        backgroundColor: previewPDFBackgroundColor,
-        color: letterColor
-      }}
-      actionsContainerStyle={{
-        backgroundColor: previewPDFBackgroundColor,
-        color: letterColor
-      }}
-      titleStyle={{
-        backgroundColor: previewPDFBackgroundColor,
-        color: letterColor
-      }}
-        	>
-      <div onContextMenu={(e) => {
-        this.contextMenuBuilder(e, 'matheditor')
-      }}>
-        <AceEditor
-          mode='tex'
-          theme={aceEditorTheme}
-          snippets='tex'
-          name='mathEditor'
-          ref='mathEditor'
-          editorProps={{
-            $blockScrolling: Infinity
+          bodyStyle={{
+            backgroundColor: previewPDFBackgroundColor,
+            color: letterColor
           }}
-          fontSize={15}
-          value={this.state.matheditorinput}
-          setOptions={{
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
-            enableSnippets: true,
-            cursorStyle: 'smooth',
-            useSoftTabs: true
+          actionsContainerStyle={{
+            backgroundColor: previewPDFBackgroundColor,
+            color: letterColor
           }}
-          onChange={this.updateMathEditorInput.bind(this)}
+          titleStyle={{
+            backgroundColor: previewPDFBackgroundColor,
+            color: letterColor
+          }}
+        >
+        <div onContextMenu={(e) => {
+          this.contextMenuBuilder(e, 'matheditor')
+        }}>
+          <AceEditor
+            mode='tex'
+            theme={aceEditorTheme}
+            snippets='tex'
+            name='mathEditor'
+            ref='mathEditor'
+            editorProps={{
+              $blockScrolling: Infinity
+            }}
+            fontSize={15}
+            value={this.state.matheditorinput}
+            setOptions={{
+              enableBasicAutocompletion: true,
+              enableLiveAutocompletion: true,
+              enableSnippets: true,
+              cursorStyle: 'smooth',
+              useSoftTabs: true
+            }}
+            onChange={this.updateMathEditorInput.bind(this)}
 						/>
-      </div>
-    </Dialog>
-    <Dialog
-      title='Edit Packages'
-      actions={packageEditorButtons}
-      modal={false}
-      open={this.state.packageDialog}
-      onRequestClose={
-						() => {
-  this.setState({packageDialog: false}, () => {
-    if (!this.state.filepath) {
-      this.setState({
-        preview: true
-      })
-    }
-    if (!this.state.preview) {
-      this.focusEditor(this.state.textSourceBib)
-    }
-  })
-}
-					}
-      bodyStyle={{
-        backgroundColor: previewPDFBackgroundColor,
-        color: letterColor
-      }}
-      actionsContainerStyle={{
-        backgroundColor: previewPDFBackgroundColor,
-        color: letterColor
-      }}
-      titleStyle={{
-        backgroundColor: previewPDFBackgroundColor,
-        color: letterColor
-      }}
-      contentStyle={{
-        width: '70%',
-        maxWidth: 'none',
-        height: '70%',
-        maxHeight: 'none',
-        textAlign: 'center'
-      }}
-        	>
+        </div>
+      </Dialog>
+      <Dialog
+        title='Edit Packages'
+        actions={packageEditorButtons}
+        modal={false}
+        open={this.state.packageDialog}
+        onRequestClose={
+  				() => {
+            this.setState({packageDialog: false}, () => {
+              if (!this.state.filepath) {
+                this.setState({
+                  preview: true
+                })
+              }
+              if (!this.state.preview) {
+                this.focusEditor(this.state.textSourceBib)
+              }
+            })
+          }
+				}
+        bodyStyle={{
+          backgroundColor: previewPDFBackgroundColor,
+          color: letterColor
+        }}
+        actionsContainerStyle={{
+          backgroundColor: previewPDFBackgroundColor,
+          color: letterColor
+        }}
+        titleStyle={{
+          backgroundColor: previewPDFBackgroundColor,
+          color: letterColor
+        }}
+        contentStyle={{
+          width: '70%',
+          maxWidth: 'none',
+          height: '70%',
+          maxHeight: 'none',
+          textAlign: 'center'
+        }}
+      >
       <AceEditor
         mode='tex'
         theme={aceEditorTheme}
@@ -2591,20 +2605,20 @@ note = ,\n\u007D\n'
           useSoftTabs: true
         }}
         onChange={this.updatePackages.bind(this)}
-					/>
+			/>
     </Dialog>
     <Dialog
       modal={false}
       open={this.state.showmathpreviewbox}
       onRequestClose={
-						() => {
-  this.setState({showmathpreviewbox: false})
-  this.focusEditor(this.state.textSourceBib)
-}
-					}
+				() => {
+          this.setState({showmathpreviewbox: false})
+          this.focusEditor(this.state.textSourceBib)
+        }
+			}
       autoScrollBodyContent
       bodyStyle={{backgroundColor: previewPDFBackgroundColor, color: letterColor}}
-					>
+		>
       <BlockMath>
         {this.state.matheditorinput}
       </BlockMath>
@@ -2615,10 +2629,10 @@ note = ,\n\u007D\n'
       modal={false}
       open={this.state.showpastematheditorbox}
       onRequestClose={
-						() => {
-  this.setState({showpastematheditorbox: false})
-}
-					}
+  			() => {
+          this.setState({showpastematheditorbox: false})
+        }
+			}
       bodyStyle={{
         backgroundColor: previewPDFBackgroundColor,
         color: letterColor
@@ -2632,64 +2646,64 @@ note = ,\n\u007D\n'
         color: letterColor
       }}
       autoScrollBodyContent
-        	>
+    >
       <RadioButtonGroup
         name='PasteMethods'
         defaultSelected='not_light'
         onChange={
-							(event) => {
-  event.persist()
-  this.setState({
-    matheditorinput: mathOneLiner(this.state.matheditorinput)
-  }, () => {
-    let cursor = this.refs.mainEditor.editor.selection.getCursor()
-    if (event.target.value === 'Inline') {
-      this.setState({
-        showmatheditorbox: false,
-        showpastematheditorbox: false
-      }, () => {
-        this.refs.mainEditor.editor.insert(' $' + this.state.matheditorinput + '$ \n')
-        this.setState({
-          texRow: cursor.row + 1,
-          texColumn: cursor.column,
-          matheditorinput: reverseMathOneLiner(this.state.matheditorinput)
-        }, () => {
-          this.focusEditor(0)
-        })
-      })
-    } else if (event.target.value === 'NewLine') {
-      this.setState({
-        showmatheditorbox: false,
-        showpastematheditorbox: false
-      }, () => {
-        this.refs.mainEditor.editor.insert('\n$$\n\t' + this.state.matheditorinput + '\n$$\n')
-        this.setState({
-          texRow: cursor.row + 4,
-          texColumn: cursor.column,
-          matheditorinput: reverseMathOneLiner(this.state.matheditorinput)
-        }, () => {
-          this.focusEditor(0)
-        })
-      })
-    } else {
-      this.setState({
-        showmatheditorbox: false,
-        showpastematheditorbox: false
-      }, () => {
-        this.refs.mainEditor.editor.insert('\n\\begin{equation}\n\t' + this.state.matheditorinput + '\n\\end{equation}\n')
-        this.setState({
-          texRow: cursor.row + 4,
-          texColumn: cursor.column,
-          matheditorinput: reverseMathOneLiner(this.state.matheditorinput)
-        }, () => {
-          this.focusEditor(0)
-        })
-      })
-    }
-  })
-}
-						}
-						>
+					(event) => {
+              event.persist()
+              this.setState({
+                matheditorinput: mathOneLiner(this.state.matheditorinput)
+              }, () => {
+                let cursor = this.refs.mainEditor.editor.selection.getCursor()
+                if (event.target.value === 'Inline') {
+                  this.setState({
+                    showmatheditorbox: false,
+                    showpastematheditorbox: false
+                  }, () => {
+                    this.refs.mainEditor.editor.insert(' $' + this.state.matheditorinput + '$ \n')
+                    this.setState({
+                      texRow: cursor.row + 1,
+                      texColumn: cursor.column,
+                      matheditorinput: reverseMathOneLiner(this.state.matheditorinput)
+                    }, () => {
+                      this.focusEditor(0)
+                    })
+                  })
+                } else if (event.target.value === 'NewLine') {
+                  this.setState({
+                    showmatheditorbox: false,
+                    showpastematheditorbox: false
+                  }, () => {
+                    this.refs.mainEditor.editor.insert('\n$$\n\t' + this.state.matheditorinput + '\n$$\n')
+                    this.setState({
+                      texRow: cursor.row + 4,
+                      texColumn: cursor.column,
+                      matheditorinput: reverseMathOneLiner(this.state.matheditorinput)
+                    }, () => {
+                      this.focusEditor(0)
+                    })
+                  })
+                } else {
+                  this.setState({
+                    showmatheditorbox: false,
+                    showpastematheditorbox: false
+                  }, () => {
+                    this.refs.mainEditor.editor.insert('\n\\begin{equation}\n\t' + this.state.matheditorinput + '\n\\end{equation}\n')
+                    this.setState({
+                      texRow: cursor.row + 4,
+                      texColumn: cursor.column,
+                      matheditorinput: reverseMathOneLiner(this.state.matheditorinput)
+                    }, () => {
+                      this.focusEditor(0)
+                    })
+                  })
+                }
+              })
+            }
+					}
+				>
         <RadioButton
           label='Inline Paste'
           value='Inline'
@@ -2699,7 +2713,7 @@ note = ,\n\u007D\n'
           inputStyle={{
             color: letterColor
           }}
-						/>
+				/>
         <RadioButton
           label='New Line Paste'
           value='NewLine'
@@ -2709,7 +2723,7 @@ note = ,\n\u007D\n'
           inputStyle={{
             color: letterColor
           }}
-						/>
+				/>
         <RadioButton
           label='Paste as Enumerated Equation'
           value='EnumeratedEquation'
@@ -2719,7 +2733,7 @@ note = ,\n\u007D\n'
           inputStyle={{
             color: letterColor
           }}
-						/>
+				/>
       </RadioButtonGroup>
     </Dialog>
 
@@ -2731,13 +2745,13 @@ note = ,\n\u007D\n'
       open={this.state.citationNicknameDialogDisplay}
       actions={citationNicknameDialogActions}
       onRequestClose={
-            () => {
-              this.setState({
-                citationNicknameDialogDisplay: false,
-                literatureSearchResultsSelectedDisplay: true
-              })
-            }
-          }
+        () => {
+          this.setState({
+            citationNicknameDialogDisplay: false,
+            literatureSearchResultsSelectedDisplay: true
+          })
+        }
+      }
       autoScrollBodyContent
       bodyStyle={{
         backgroundColor: previewPDFBackgroundColor,
@@ -2757,7 +2771,7 @@ note = ,\n\u007D\n'
         backgroundColor: previewPDFBackgroundColor,
         color: letterColor
       }}
-          >
+    >
       <div>
             Write the nickname by which you will refer to this piece of literature.
             Whenever you want to cite this, you can write {'\n'}\citep{'\u007B' + this.state.citationNickname + '\u007D '}
@@ -2789,7 +2803,7 @@ note = ,\n\u007D\n'
           style={{
             width: '90%'
           }}
-            />
+        />
       </div>
     </Dialog>
 
@@ -2799,12 +2813,12 @@ note = ,\n\u007D\n'
       open={this.state.areYouSureTemplateDialogDisplay}
       actions={RUSTemplateDialogActions}
       onRequestClose={
-            () => {
-              this.setState({
-                areYouSureTemplateDialogDisplay: false
-              })
-            }
-          }
+        () => {
+          this.setState({
+            areYouSureTemplateDialogDisplay: false
+          })
+        }
+      }
       autoScrollBodyContent
       bodyStyle={{
         backgroundColor: previewPDFBackgroundColor,
@@ -2824,10 +2838,10 @@ note = ,\n\u007D\n'
         backgroundColor: previewPDFBackgroundColor,
         color: letterColor
       }}
-          >
-            By choosing a template you will leave the current working directory.
-            If this is what you want, please make sure you have saved all your work.
-        </Dialog>
+      >
+        By choosing a template you will leave the current working directory.
+        If this is what you want, please make sure you have saved all your work.
+    </Dialog>
 
     <Dialog
       modal
@@ -2835,12 +2849,12 @@ note = ,\n\u007D\n'
       open={this.state.areYouSureDialogDisplay}
       actions={RUSDialogActions}
       onRequestClose={
-            () => {
-              this.setState({
-                areYouSureDialogDisplay: false
-              })
-            }
-          }
+        () => {
+          this.setState({
+            areYouSureDialogDisplay: false
+          })
+        }
+      }
       autoScrollBodyContent
       bodyStyle={{
         backgroundColor: previewPDFBackgroundColor,
@@ -2860,10 +2874,10 @@ note = ,\n\u007D\n'
         backgroundColor: previewPDFBackgroundColor,
         color: letterColor
       }}
-          >
-            Are you sure you want to quit the project? Before you do, make sure you have
-            saved everything or your changes will be lost!
-        </Dialog>
+      >
+        Are you sure you want to quit the project? Before you do, make sure you have
+        saved everything or your changes will be lost!
+    </Dialog>
 
     <ReactGridLayout
       className='layout'
@@ -2920,7 +2934,7 @@ note = ,\n\u007D\n'
                 onChange={this.updateTexInput.bind(this)}
                 onFocus={this.onFocusMainEditor.bind(this)}
                 />
-              <div style={{height: separateTexBibHeight, backgroundColor: '#fff'}} />
+              <div style={{height: separateTexBibHeight, backgroundColor: '#fff'}}></div>
               <AceEditor
                 mode='latex'
                 theme={aceEditorTheme}
@@ -2945,7 +2959,7 @@ note = ,\n\u007D\n'
                 }}
                 onChange={this.updateBibInput.bind(this)}
                 onFocus={this.onFocusBibEditor.bind(this)}
-                />
+              />
             </div>
           </Paper>
         </div>
@@ -2960,25 +2974,24 @@ note = ,\n\u007D\n'
           style={{
             height: height,
             width: this.PDFWidth,
-            backgroundColor: {previewPDFBackgroundColor},
+            backgroundColor: previewPDFBackgroundColor,
             textAlign: 'center'
           }}
-              >
+        >
           <div
             id='pdfContainer'
             style={{width: this.PDFWidth, height: PDFContainerHeight, overflow: 'hidden'}}
             onContextMenu={(e) => {
               this.contextMenuBuilder(e, 'PDFPage')
             }}
-                >
+          >
             {PreviewPDF}
           </div>
           {PDFUtils}
         </Paper>
       </div>
     </ReactGridLayout>
-  </div>
-	  )
+  </div>)
   }
 }
 

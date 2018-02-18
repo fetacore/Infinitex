@@ -15,11 +15,3 @@ export function reverseMathOneLiner (string) {
   }
   return string
 }
-
-export function betterVerticalSpacing (string) {
-  var i = 0
-  for (i; i < string.length; i++) {
-    string = string.replace('\\', '\\\\')
-  }
-  return string
-}

@@ -147,6 +147,6 @@ Academic references can be made available upon request.\n\
 \n\
 \n\
 \n\
-\\end{document}';
+\\end{document}'
 
-export const cvBib = '';
+export const cvBib = ''

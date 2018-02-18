@@ -1,8 +1,7 @@
-ace.define("ace/theme/light",["require","exports","module","ace/lib/dom"], function(acequire, exports, module) {
-
-exports.isDark = true;
-exports.cssClass = "ace-light";
-exports.cssText = ".ace-light .ace_gutter {\
+ace.define('ace/theme/light', ['require', 'exports', 'module', 'ace/lib/dom'], function (acequire, exports, module) {
+  exports.isDark = true
+  exports.cssClass = 'ace-light'
+  exports.cssText = ".ace-light .ace_gutter {\
 background: #fff;\
 color: #3c3c3c;\
 border-right: 1px solid #000;\
@@ -148,9 +147,8 @@ border: none; \
 background: #CCC; \
 color: #000;\
 }\
-";
+"
 
-var dom = acequire("../lib/dom");
-dom.importCssString(exports.cssText, exports.cssClass);
-
-});
+  var dom = acequire('../lib/dom')
+  dom.importCssString(exports.cssText, exports.cssClass)
+})

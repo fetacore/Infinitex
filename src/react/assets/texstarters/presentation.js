@@ -155,6 +155,6 @@ $$ |G(x) - f(x)| < \\varepsilon$$\n\
 \\end{itemize}\n\
 \\end{frame}\n\
 \n\
-\\end{document}';
+\\end{document}'
 
-export const presentationBib = '';
+export const presentationBib = ''

@@ -21,7 +21,7 @@ brackets before saving the file and always keep them last.\n\
 To change paragraph simply keep a gap line. Enjoy!\n\
 \n\
 % \\bibliography{NameOfTheProjectWithoutExtension}\
-\\end{document}';
+\\end{document}'
 
 export const startBib = '@article{stone1977consistent,\n\
   title={Consistent nonparametric regression},\n\
@@ -30,4 +30,4 @@ export const startBib = '@article{stone1977consistent,\n\
   pages={595--620},\n\
   year={1977},\n\
   publisher={JSTOR}\n\
-}';
+}'

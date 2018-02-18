@@ -1,8 +1,7 @@
-ace.define("ace/theme/purple",["require","exports","module","ace/lib/dom"], function(acequire, exports, module) {
-
-exports.isDark = true;
-exports.cssClass = "ace-purple";
-exports.cssText = ".ace-purple .ace_gutter {\
+ace.define('ace/theme/purple', ['require', 'exports', 'module', 'ace/lib/dom'], function (acequire, exports, module) {
+  exports.isDark = true
+  exports.cssClass = 'ace-purple'
+  exports.cssText = ".ace-purple .ace_gutter {\
 background: #320f27;\
 color: #ede8e8;\
 border-right: 1px solid #a18f8f;\
@@ -148,9 +147,8 @@ border: none; \
 background: #CCC; \
 color: #000;\
 }\
-";
+"
 
-var dom = acequire("../lib/dom");
-dom.importCssString(exports.cssText, exports.cssClass);
-
-});
+  var dom = acequire('../lib/dom')
+  dom.importCssString(exports.cssText, exports.cssClass)
+})

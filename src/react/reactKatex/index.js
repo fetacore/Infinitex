@@ -1,1 +1,1 @@
-export { default as BlockMath } from './BlockMath';
+export { default as BlockMath } from './BlockMath'

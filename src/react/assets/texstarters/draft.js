@@ -83,6 +83,6 @@ export const draftTex = '\\documentclass[12pt,a4paper]{article}\n\
 % AT THE TOP AND BOTTOM OF YOUR TEXT\n\
 \\begin{document}\
 Write something here...\
-\\end{document}';
+\\end{document}'
 
-export const draftBib = '';
+export const draftBib = ''

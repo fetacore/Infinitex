@@ -1,25 +1,25 @@
-import fs from 'fs';
+import fs from 'fs'
 
-export function mathOneLiner(string) {
-  var i = 0;
-  for(i; i < string.length; i++) {
-    string = string.replace("\n", "  ");
+export function mathOneLiner (string) {
+  var i = 0
+  for (i; i < string.length; i++) {
+    string = string.replace('\n', '  ')
   }
-  return string;
+  return string
 }
 
-export function reverseMathOneLiner(string) {
-  var i = 0;
-  for(i; i < string.length; i++) {
-    string = string.replace("  ", "\n");
+export function reverseMathOneLiner (string) {
+  var i = 0
+  for (i; i < string.length; i++) {
+    string = string.replace('  ', '\n')
   }
-  return string;
+  return string
 }
 
-export function betterVerticalSpacing(string) {
-  var i = 0;
-  for(i; i < string.length; i++) {
-    string = string.replace('\\','\\\\');
+export function betterVerticalSpacing (string) {
+  var i = 0
+  for (i; i < string.length; i++) {
+    string = string.replace('\\', '\\\\')
   }
-  return string;
+  return string
 }

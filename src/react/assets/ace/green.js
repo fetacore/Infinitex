@@ -1,8 +1,7 @@
-ace.define("ace/theme/darkGreen",["require","exports","module","ace/lib/dom"], function(acequire, exports, module) {
-
-exports.isDark = true;
-exports.cssClass = "ace-darkGreen";
-exports.cssText = ".ace-darkGreen .ace_gutter {\
+ace.define('ace/theme/darkGreen', ['require', 'exports', 'module', 'ace/lib/dom'], function (acequire, exports, module) {
+  exports.isDark = true
+  exports.cssClass = 'ace-darkGreen'
+  exports.cssText = ".ace-darkGreen .ace_gutter {\
 background: #062106;\
 color: #fefefe;\
 border-right: 1px solid #bababa;\
@@ -148,9 +147,8 @@ border: none; \
 background: #CCC; \
 color: #000;\
 }\
-";
+"
 
-var dom = acequire("../lib/dom");
-dom.importCssString(exports.cssText, exports.cssClass);
-
-});
+  var dom = acequire('../lib/dom')
+  dom.importCssString(exports.cssText, exports.cssClass)
+})

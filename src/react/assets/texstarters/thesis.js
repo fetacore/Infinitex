@@ -219,7 +219,7 @@ and that the Fourier transform of $\\mu$ is equal to zero will prove that $\\mu=
 \n\
 \\bibliography{thesis}\n\
 \\addcontentsline{toc}{chapter}{Bibliography}\n\
-\\end{document}';
+\\end{document}'
 
 export const thesisBib = '@article{light1992ridge,\n\
   title={Ridge functions, sigmoidal functions and neural networks},\n\
@@ -276,4 +276,4 @@ export const thesisBib = '@article{light1992ridge,\n\
   pages={359--366},\n\
   year={1989},\n\
   publisher={Elsevier}\n\
-}';
+}'

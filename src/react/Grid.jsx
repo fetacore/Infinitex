@@ -775,97 +775,97 @@ note = ,\n\u007D\n'
     }
     let filetitle = this.state.filepath.slice(this.state.filepath.lastIndexOf(fpresolver) + 1, this.state.filepath.length)
     shelljs.exec(windowsCrapCDcommand + '"' + this.state.filepath.replace(this.state.filepath.slice(this.state.filepath.lastIndexOf(fpresolver), this.state.filepath.length), '') + '"' +
-								' && pdflatex -interaction=nonstopmode -halt-on-error ' + filetitle +
-								' && bibtex ' + filetitle.slice(0, filetitle.lastIndexOf('.tex')) +
-								' && pdflatex -interaction=nonstopmode -halt-on-error ' + filetitle +
-                ' && pdflatex -interaction=nonstopmode -halt-on-error ' + filetitle,
-                { async: true },
-								(code, stdout, stderr) => {
-  if (code !== 0) {
-    switch (stdout.indexOf('! LaTeX Error') !== -1 || stdout.indexOf('! Undefined control sequence') !== -1 ||
-          stdout.indexOf('! Too many }\'s') !== -1 || stdout.indexOf('! Paragraph ended before') !== -1 ||
-          stdout.indexOf('! Missing $ inserted') !== -1 || stdout.indexOf('Runaway argument') !== -1 ||
-          stdout.indexOf('! Argument of \\frame has an extra }') !== -1 || stdout.indexOf('! ') !== -1) {
-      case stdout.indexOf('! LaTeX Error') !== -1:
-        this.latexError = stdout.slice(
-              stdout.indexOf('! LaTeX Error'), stdout.indexOf('Transcript written on')
-            ).replace(
-              'See the LaTeX manual or LaTeX Companion for explanation.', ''
-            ).replace(
-              'Type  H <return>  for immediate help.', '\n'
-            ).replace(
-              '...', '\n'
-            ).replace(
-              '==> Fatal error occurred, no output PDF file produced!', ''
-            ).replace(
-              'l.', 'line: '
-            )
-        break
-      case stdout.indexOf('! Undefined control sequence') !== -1:
-        this.latexError = stdout.slice(
-              stdout.indexOf('! Undefined control sequence'), stdout.indexOf('Fatal error occurred')
-            ).replace(
-              'l.', 'line: '
-            ) + '\n Command is wrong (probably typo)'
-        break
-      case stdout.indexOf('! Too many }\'s') !== -1:
-        this.latexError = stdout.slice(
-              stdout.indexOf('! Too many }\'s'), stdout.indexOf('Here is how much of')
-            ).replace(
-              'l.', 'line: '
-            )
-        break
-      case stdout.indexOf('! Paragraph ended before') !== -1:
-        this.latexError = stdout.slice(
-              stdout.indexOf('! Paragraph ended before'), stdout.indexOf('Here is how much of')
-            ).replace(
-              'l.', 'line: '
-            ) + '\n Missing }'
-        break
-      case stdout.indexOf('! Missing $ inserted') !== -1:
-        this.latexError = stdout.slice(
-              stdout.indexOf('! Missing $ inserted'), stdout.indexOf('Here is how much of')
-            ).replace(
-              'l.', 'line: '
-            ) + '\n You used $ without writing math. If you want the symbol then use \$'
-        break
-      case stdout.indexOf('Runaway argument') !== -1:
-        this.latexError = stdout.slice(
-              stdout.indexOf('Runaway argument'), stdout.indexOf('Here is how much of')
-            ).replace(
-              'l.', 'line: '
-            ) + '\n You need an extra }'
-        break
-      case stdout.indexOf('! Argument of \\frame has an extra }') !== -1:
-        this.latexError = stdout.slice(
-              stdout.indexOf('! Argument of \\frame has an extra }'), stdout.indexOf('==> Fatal error occurred')
-            ).replace(
-              'l.', 'line: '
-            )
-        break
-      default:
-        this.latexError = stdout.slice(
-              stdout.indexOf('! '), stdout.indexOf('==> Fatal error occurred')
-            ).replace(
-              'l.', 'line: '
-            )
-        break
-    }
-    this.setState({
-      PDFLoading: false,
-      theme: 'Default'
+  		' && pdflatex -interaction=nonstopmode -halt-on-error ' + filetitle +
+  		' && bibtex ' + filetitle.slice(0, filetitle.lastIndexOf('.tex')) +
+  		' && pdflatex -interaction=nonstopmode -halt-on-error ' + filetitle +
+      ' && pdflatex -interaction=nonstopmode -halt-on-error ' + filetitle,
+      { async: true },
+  		(code, stdout, stderr) => {
+      if (code !== 0) {
+        switch (stdout.indexOf('! LaTeX Error') !== -1 || stdout.indexOf('! Undefined control sequence') !== -1 ||
+              stdout.indexOf('! Too many }\'s') !== -1 || stdout.indexOf('! Paragraph ended before') !== -1 ||
+              stdout.indexOf('! Missing $ inserted') !== -1 || stdout.indexOf('Runaway argument') !== -1 ||
+              stdout.indexOf('! Argument of \\frame has an extra }') !== -1 || stdout.indexOf('! ') !== -1) {
+          case stdout.indexOf('! LaTeX Error') !== -1:
+            this.latexError = stdout.slice(
+                  stdout.indexOf('! LaTeX Error'), stdout.indexOf('Transcript written on')
+                ).replace(
+                  'See the LaTeX manual or LaTeX Companion for explanation.', ''
+                ).replace(
+                  'Type  H <return>  for immediate help.', '\n'
+                ).replace(
+                  '...', '\n'
+                ).replace(
+                  '==> Fatal error occurred, no output PDF file produced!', ''
+                ).replace(
+                  'l.', 'line: '
+                )
+            break
+          case stdout.indexOf('! Undefined control sequence') !== -1:
+            this.latexError = stdout.slice(
+                  stdout.indexOf('! Undefined control sequence'), stdout.indexOf('Fatal error occurred')
+                ).replace(
+                  'l.', 'line: '
+                ) + '\n Command is wrong (probably typo)'
+            break
+          case stdout.indexOf('! Too many }\'s') !== -1:
+            this.latexError = stdout.slice(
+                  stdout.indexOf('! Too many }\'s'), stdout.indexOf('Here is how much of')
+                ).replace(
+                  'l.', 'line: '
+                )
+            break
+          case stdout.indexOf('! Paragraph ended before') !== -1:
+            this.latexError = stdout.slice(
+                  stdout.indexOf('! Paragraph ended before'), stdout.indexOf('Here is how much of')
+                ).replace(
+                  'l.', 'line: '
+                ) + '\n Missing }'
+            break
+          case stdout.indexOf('! Missing $ inserted') !== -1:
+            this.latexError = stdout.slice(
+                  stdout.indexOf('! Missing $ inserted'), stdout.indexOf('Here is how much of')
+                ).replace(
+                  'l.', 'line: '
+                ) + '\n You used $ without writing math. If you want the symbol then use \$'
+            break
+          case stdout.indexOf('Runaway argument') !== -1:
+            this.latexError = stdout.slice(
+                  stdout.indexOf('Runaway argument'), stdout.indexOf('Here is how much of')
+                ).replace(
+                  'l.', 'line: '
+                ) + '\n You need an extra }'
+            break
+          case stdout.indexOf('! Argument of \\frame has an extra }') !== -1:
+            this.latexError = stdout.slice(
+                  stdout.indexOf('! Argument of \\frame has an extra }'), stdout.indexOf('==> Fatal error occurred')
+                ).replace(
+                  'l.', 'line: '
+                )
+            break
+          default:
+            this.latexError = stdout.slice(
+                  stdout.indexOf('! '), stdout.indexOf('==> Fatal error occurred')
+                ).replace(
+                  'l.', 'line: '
+                )
+            break
+        }
+        this.setState({
+          PDFLoading: false,
+          theme: 'Default'
+        })
+        document.body.style.cursor = 'default'
+      } else {
+        this.setState({
+          theme: 'Default'
+        })
+        if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
+          ipcRenderer.send('openPDF', this.state.filepath.replace('.tex', '.pdf'))
+        }
+      			document.body.style.cursor = 'default'
+      }
     })
-    document.body.style.cursor = 'default'
-  } else {
-    this.setState({
-      theme: 'Default'
-    })
-    if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
-      ipcRenderer.send('openPDF', this.state.filepath.replace('.tex', '.pdf'))
-    }
-  			document.body.style.cursor = 'default'
-  }
-})
   }
 
   openLatexHelp () {
@@ -1202,27 +1202,26 @@ note = ,\n\u007D\n'
     if (this.state.literatureSearchResults !== []) {
       if (this.state.literatureSearchResultsDisplay) {
         literatureSearchResultsHeader =
-          <TableRow>
-            <TableHeaderColumn colSpan={2}>
-              <FlatButton
-                label='Shrink Display'
-                labelPosition='after'
-                icon={previousPageIcon}
-                onClick={() =>
-                  this.setState({literatureSearchResultsDisplay: false}, () => {
-                    this.focusEditor(this.state.textSourceBib)
-                  })
-                }
-                style={{
-                  color: '#fff'
-                }}
+        <TableRow>
+          <TableHeaderColumn colSpan={2}>
+            <FlatButton
+              label='Shrink Display'
+              labelPosition='after'
+              icon={previousPageIcon}
+              onClick={() =>
+                this.setState({literatureSearchResultsDisplay: false}, () => {
+                  this.focusEditor(this.state.textSourceBib)
+                })
+              }
+              style={{
+                color: '#fff'
+              }}
             />
-            </TableHeaderColumn>
-            <TableHeaderColumn colSpan={3}>
+          </TableHeaderColumn>
+          <TableHeaderColumn colSpan={3}>
             Title/Author
           </TableHeaderColumn>
-          </TableRow>
-
+        </TableRow>
         columnWidth = {
           title: '20%',
           authors: '20%',
@@ -1271,63 +1270,63 @@ note = ,\n\u007D\n'
     let networkSearchOrResumeTable = null
     if (this.state.literatureSearchResults.length == 0) {
       networkSearchOrResumeTable =
-        <div>
-          <RaisedButton
-            onClick={
-              () => {
-                this.setState({networkPageIndex: 3}, () => {
-                  if (this.state.filepath) {
-                    if (this.state.preview) {
-                      this.setState({
-                        preview: false
-                      })
-                    }
+      <div>
+        <RaisedButton
+          onClick={
+            () => {
+              this.setState({networkPageIndex: 3}, () => {
+                if (this.state.filepath) {
+                  if (this.state.preview) {
+                    this.setState({
+                      preview: false
+                    })
                   }
-                })
-              }
+                }
+              })
             }
-            label='Search Books'
-            labelPosition='after'
-            icon={searchIcon}
-            buttonStyle={buttonStyles}
-            style={{width: '90%', marginTop: '30%'}}
-        />
-        </div>
+          }
+          label='Search Books'
+          labelPosition='after'
+          icon={searchIcon}
+          buttonStyle={buttonStyles}
+          style={{width: '90%', marginTop: '30%'}}
+      />
+      </div>
     } else {
       networkSearchOrResumeTable =
-        <div>
-          <RaisedButton
-            onClick={
-              () => {
-                this.setState({
-                  networkPageIndex: 3
-                }, () => {
-                  if (this.state.filepath) {
-                    if (this.state.preview) {
-                      this.setState({
-                        preview: false
-                      })
-                    }
+      <div>
+        <RaisedButton
+          onClick={
+            () => {
+              this.setState({
+                networkPageIndex: 3
+              }, () => {
+                if (this.state.filepath) {
+                  if (this.state.preview) {
+                    this.setState({
+                      preview: false
+                    })
                   }
-                })
-              }
+                }
+              })
             }
-            label='Search Books'
-            labelPosition='after'
-            icon={searchIcon}
-            buttonStyle={buttonStyles}
-            style={{width: '90%', marginTop: '30%'}}
+          }
+          label='Search Books'
+          labelPosition='after'
+          icon={searchIcon}
+          buttonStyle={buttonStyles}
+          style={{width: '90%', marginTop: '30%'}}
         />
-          <RaisedButton
-            onClick={() => this.setState({networkPageIndex: 4})}
-            label='Last Book Search'
-            labelPosition='after'
-            icon={previousPageIcon}
-            keyboardFocused
-            buttonStyle={buttonStyles}
-            style={{width: '90%', marginTop: '10%'}}
+        <RaisedButton
+          onClick={() => this.setState({networkPageIndex: 4})}
+          label='Last Book Search'
+          labelPosition='after'
+          icon={previousPageIcon}
+          keyboardFocused
+          buttonStyle={buttonStyles}
+          style={{width: '90%', marginTop: '10%'}}
         />
-        </div>
+      </div>
     }
     let literatureDialog = null
     let downloadButtonLabel = null
@@ -1492,14 +1491,14 @@ note = ,\n\u007D\n'
       // Loading Screen
       infIconPageNavigation = 0
       networkstuff =
-        <div>
-          <CircularProgress
-            size={80}
-            thickness={9}
-            color={loaderColor}
-            style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
-        />
-        </div>
+      <div>
+        <CircularProgress
+          size={80}
+          thickness={9}
+          color={loaderColor}
+          style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
+      />
+      </div>
     } else if (this.state.networkPageIndex == 1) {
       infIconPageNavigation = 2
       // Starter Icon
@@ -1507,123 +1506,123 @@ note = ,\n\u007D\n'
       // Citation or Literature
       infIconPageNavigation = 1
       networkstuff =
-        <div>
-          {networkSearchOrResumeTable}
-        </div>
+      <div>
+        {networkSearchOrResumeTable}
+      </div>
     } else if (this.state.networkPageIndex == 3) {
       // Download
       infIconPageNavigation = 2
       networkstuff =
-        <div style={{marginTop: '50%'}}>
-          <TextField
-            value={this.state.paperKeyword}
-            autoFocus
-            onChange={(e) => this.setState({paperKeyword: e.target.value})}
-            onKeyPress={(e) => {
-              if (e.key == 'Enter') {
-                this.setState({networkPageIndex: 0})
-                this.onSearchDownloadBook()
-              }
-            }}
-            onBlur={() => this.setState({networkPageIndex: 2})}
-            hintText={'Library Genesis'}
-            hintStyle={{ width: '90%', color: letterColor}}
-            inputStyle={{
-              fontSize: '12pt',
-              color: letterColor
-            }}
-            style={{
-              width: '90%'
-            }}
+      <div style={{marginTop: '50%'}}>
+        <TextField
+          value={this.state.paperKeyword}
+          autoFocus
+          onChange={(e) => this.setState({paperKeyword: e.target.value})}
+          onKeyPress={(e) => {
+            if (e.key == 'Enter') {
+              this.setState({networkPageIndex: 0})
+              this.onSearchDownloadBook()
+            }
+          }}
+          onBlur={() => this.setState({networkPageIndex: 2})}
+          hintText={'Library Genesis'}
+          hintStyle={{ width: '90%', color: letterColor}}
+          inputStyle={{
+            fontSize: '12pt',
+            color: letterColor
+          }}
+          style={{
+            width: '90%'
+          }}
         />
-        </div>
+      </div>
     } else if (this.state.networkPageIndex == 4) {
       infIconPageNavigation = 1
       networkstuff =
-        <div>
-          <Table
-            height={(height - 230).toString() + 'px'}
-            width={tableWidth}
-            fixedHeader
-            selectable
-            multiSelectable={false}
-            style={{
-              tableLayout: 'auto'
-            }}
-            onRowSelection={(rows) => this.setState({
-              literatureSearchResultsSelectedIndex: rows,
-              literatureSearchResultsSelectedDisplay: true
-            })}
+      <div>
+        <Table
+          height={(height - 230).toString() + 'px'}
+          width={tableWidth}
+          fixedHeader
+          selectable
+          multiSelectable={false}
+          style={{
+            tableLayout: 'auto'
+          }}
+          onRowSelection={(rows) => this.setState({
+            literatureSearchResultsSelectedIndex: rows,
+            literatureSearchResultsSelectedDisplay: true
+          })}
+        >
+          <TableHeader
+            displaySelectAll={false}
+            adjustForCheckbox={false}
+            enableSelectAll={false}
           >
-            <TableHeader
-              displaySelectAll={false}
-              adjustForCheckbox={false}
-              enableSelectAll={false}
+            {literatureSearchResultsHeader}
+          </TableHeader>
+          <TableBody
+            displayRowCheckbox={false}
+            deselectOnClickaway
+            showRowHover
+            stripedRows={false}
           >
-              {literatureSearchResultsHeader}
-            </TableHeader>
-            <TableBody
-              displayRowCheckbox={false}
-              deselectOnClickaway
-              showRowHover
-              stripedRows={false}
-          >
-              {literatureSearchResultsData}
-            </TableBody>
-          </Table>
-        </div>
+            {literatureSearchResultsData}
+          </TableBody>
+        </Table>
+      </div>
     } else if (this.state.networkPageIndex == 5) {
       infIconPageNavigation = 2
       networkstuff =
-        <div style={{marginTop: '50%'}}>
-          <TextField
-            value={this.state.paperKeyword}
-            autoFocus
-            onChange={(e) => this.setState({paperKeyword: e.target.value})}
-            onKeyPress={(e) => {
-              if (e.key == 'Enter') {
-                this.setState({networkPageIndex: 1})
-                this.onSearchDownloadPaper()
-              }
-            }}
-            onBlur={() => this.setState({networkPageIndex: 5})}
-            hintText={'SciMag'}
-            hintStyle={{ width: '90%', color: letterColor}}
-            inputStyle={{
-              fontSize: '12pt',
-              color: letterColor
-            }}
-            style={{
-              width: '90%'
-            }}
+      <div style={{marginTop: '50%'}}>
+        <TextField
+          value={this.state.paperKeyword}
+          autoFocus
+          onChange={(e) => this.setState({paperKeyword: e.target.value})}
+          onKeyPress={(e) => {
+            if (e.key == 'Enter') {
+              this.setState({networkPageIndex: 1})
+              this.onSearchDownloadPaper()
+            }
+          }}
+          onBlur={() => this.setState({networkPageIndex: 5})}
+          hintText={'SciMag'}
+          hintStyle={{ width: '90%', color: letterColor}}
+          inputStyle={{
+            fontSize: '12pt',
+            color: letterColor
+          }}
+          style={{
+            width: '90%'
+          }}
         />
-        </div>
+      </div>
     } else {
       infIconPageNavigation = 3
       networkstuff =
-        <div>
-          <LinearProgress
-            mode='determinate'
-            value={this.state.downloadProgress}
-            min={0}
-            max={100}
-            color={loaderColor}
-            style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
+      <div>
+        <LinearProgress
+          mode='determinate'
+          value={this.state.downloadProgress}
+          min={0}
+          max={100}
+          color={loaderColor}
+          style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
         />
-          <TextField
-            value={'downloading...'}
-            id='Pare ta arxidia Material UI'
-            disabled
-            inputStyle={{
-              fontSize: '12pt',
-              textAlign: 'center',
-              color: letterColor
-            }}
-            style={{
-              width: '90%'
-            }}
+        <TextField
+          value={'downloading...'}
+          id='Pare ta arxidia Material UI'
+          disabled
+          inputStyle={{
+            fontSize: '12pt',
+            textAlign: 'center',
+            color: letterColor
+          }}
+          style={{
+            width: '90%'
+          }}
         />
-        </div>
+      </div>
     }
 
     const matheditorboxbuttons = [
@@ -1670,55 +1669,55 @@ note = ,\n\u007D\n'
     } else {
       if (this.state.preview) {
       	if (this.state.networkFeatures) {
-      		layout = [
-      	    {i: 'loginchat', x: 0, y: 0, w: 3, h: 4, static: true},
-      	    {i: 'editor', x: 51, y: 0, w: 3, h: 4, static: true},
-      	    {i: 'pdf', x: 191, y: 0, w: 3, h: 4, static: true}
-      	  ]
+          layout = [
+            {i: 'loginchat', x: 0, y: 0, w: 3, h: 4, static: true},
+            {i: 'editor', x: 51, y: 0, w: 3, h: 4, static: true},
+            {i: 'pdf', x: 191, y: 0, w: 3, h: 4, static: true}
+          ]
       	} else {
-      		layout = [
-      	    {i: 'editor', x: 0, y: 0, w: 3, h: 4, static: true},
-      	    {i: 'pdf', x: 196, y: 0, w: 3, h: 4, static: true},
-      			{i: 'loginchat', x: 300, y: 0, w: 3, h: 4, static: true}
-      	  ]
-      		divNetworkStyle = {
-      			display: 'none',
-      			width: 0,
-      			height: 0,
-      			zDepth: 0
-      		}
+          layout = [
+            {i: 'editor', x: 0, y: 0, w: 3, h: 4, static: true},
+            {i: 'pdf', x: 196, y: 0, w: 3, h: 4, static: true},
+          	{i: 'loginchat', x: 300, y: 0, w: 3, h: 4, static: true}
+          ]
+          divNetworkStyle = {
+          	display: 'none',
+          	width: 0,
+          	height: 0,
+          	zDepth: 0
+          }
       	}
       } else {
     		if (this.state.networkFeatures) {
-    			layout = [
-    				{i: 'loginchat', x: 0, y: 0, w: 3, h: 4, static: true},
-    		    {i: 'editor', x: 51, y: 0, w: 3, h: 4, static: true},
-    				{i: 'pdf', x: 300, y: 0, w: 3, h: 4, static: true}
-    			]
-    			divPDFStyle = {
-    				display: 'none',
-    				width: 0,
-    				height: 0,
-    				zDepth: 0
-    			}
+          layout = [
+          	{i: 'loginchat', x: 0, y: 0, w: 3, h: 4, static: true},
+            {i: 'editor', x: 51, y: 0, w: 3, h: 4, static: true},
+          	{i: 'pdf', x: 300, y: 0, w: 3, h: 4, static: true}
+          ]
+          divPDFStyle = {
+          	display: 'none',
+          	width: 0,
+          	height: 0,
+          	zDepth: 0
+          }
     		} else {
-    			layout = [
-    		    {i: 'editor', x: 0, y: 0, w: 3, h: 4, static: true},
-    				{i: 'pdf', x: 10, y: 0, w: 3, h: 4, static: true},
-    				{i: 'loginchat', x: 300, y: 0, w: 3, h: 4, static: true}
-    			]
-    			divPDFStyle = {
-    				display: 'none',
-    				width: 0,
-    				height: 0,
-    				zDepth: 0
-    			}
-    			divNetworkStyle = {
-    				display: 'none',
-    				width: 0,
-    				height: 0,
-    				zDepth: 0
-    			}
+          layout = [
+            {i: 'editor', x: 0, y: 0, w: 3, h: 4, static: true},
+          	{i: 'pdf', x: 10, y: 0, w: 3, h: 4, static: true},
+          	{i: 'loginchat', x: 300, y: 0, w: 3, h: 4, static: true}
+          ]
+          divPDFStyle = {
+          	display: 'none',
+          	width: 0,
+          	height: 0,
+          	zDepth: 0
+          }
+          divNetworkStyle = {
+          	display: 'none',
+          	width: 0,
+          	height: 0,
+          	zDepth: 0
+          }
     		}
     	}
     }
@@ -1738,15 +1737,15 @@ note = ,\n\u007D\n'
           editorUtilities =
             <Paper
               style={{
-  						width: editorWidth + 5
-  					}}
-  					>
+    						width: editorWidth + 5
+    					}}
+    				>
               <BottomNavigation
                 selectedIndex={this.state.textSourceBib}
                 style={{
-    							backgroundColor: editorUtilsColor
-    						}}
-    					>
+              		backgroundColor: editorUtilsColor
+              	}}
+              >
                 <BottomNavigationItem
                   label='Source'
                   icon={codeIcon}
@@ -1757,9 +1756,9 @@ note = ,\n\u007D\n'
                       }, () => {
                         this.focusEditor(0)
                       })
-        						}
+              			}
                   }
-      					/>
+              	/>
                 <BottomNavigationItem
                   label='Bibliography'
                   icon={biblioIcon}
@@ -1770,9 +1769,9 @@ note = ,\n\u007D\n'
                       }, () => {
                         this.focusEditor(1)
                       })
-        						}
+              			}
                   }
-      					/>
+              	/>
                 <BottomNavigationItem
                   label='Math'
                   icon={<EditorFunctions />}
@@ -1783,269 +1782,269 @@ note = ,\n\u007D\n'
                       }, () => {
                         this.setState({showmatheditorbox: true})
                       })
-        						}
-        					}
-      					/>
+              			}
+              		}
+              	/>
                 <BottomNavigationItem
                   label='Internal'
                   icon={previewIcon}
                   onClick={
                     () => {
-        							this.setState({
+              				this.setState({
                         preview: false
                       }, () => {
-        								this.focusEditor(0)
-        								if (this.state.filepath !== null) {
+              					this.focusEditor(0)
+              					if (this.state.filepath !== null) {
                           if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
                             this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
                           }
-        								}
-          						})
-        						}
+              					}
+              				})
+              			}
                   }
-      					/>
+              	/>
                 <BottomNavigationItem
                   label='Compile PDF'
                   icon={rightarrow}
                   onClick={() => {
-      						  this.compileText()
-      					  }}
-      					/>
+              		  this.compileText()
+              	  }}
+              	/>
               </BottomNavigation>
             </Paper>
         } else {
           editorWidth = (1.32 * width / 2)
           this.PDFWidth = (0.669 * width / 2)
           editorUtilities =
-            <Paper
-              style={{
+          <Paper
+            style={{
   						width: editorWidth + 5
   					}}
+          >
+            <BottomNavigation
+              selectedIndex={this.state.textSourceBib}
+              style={{
+  							backgroundColor: editorUtilsColor
+  						}}
   					>
-              <BottomNavigation
-                selectedIndex={this.state.textSourceBib}
-                style={{
-    							backgroundColor: editorUtilsColor
+              <BottomNavigationItem
+                label='Source'
+                icon={codeIcon}
+                onClick={() => {
+                  this.setState({
+                    textSourceBib: 0
+                  }, () => {
+                    this.focusEditor(0)
+                  })
     						}}
-    					>
-                <BottomNavigationItem
-                  label='Source'
-                  icon={codeIcon}
-                  onClick={() => {
+    					/>
+              <BottomNavigationItem
+                label='Bibliography'
+                icon={biblioIcon}
+                onClick={
+                  () => {
                     this.setState({
-                      textSourceBib: 0
+                      textSourceBib: 1
                     }, () => {
-                      this.focusEditor(0)
+                      this.focusEditor(1)
                     })
-      						}}
-      					/>
-                <BottomNavigationItem
-                  label='Bibliography'
-                  icon={biblioIcon}
-                  onClick={
-                    () => {
+      						}
+                }
+    					/>
+              <BottomNavigationItem
+                label='Math'
+                icon={<EditorFunctions />}
+                onClick={
+                  () => {
+                    this.setState({
+                      preview: false
+                    }, () => {
                       this.setState({
-                        textSourceBib: 1
-                      }, () => {
-                        this.focusEditor(1)
+                        showmatheditorbox: true
                       })
-        						}
-                  }
-      					/>
-                <BottomNavigationItem
-                  label='Math'
-                  icon={<EditorFunctions />}
-                  onClick={
-                    () => {
-                      this.setState({
-                        preview: false
-                      }, () => {
-                        this.setState({
-                          showmatheditorbox: true
-                        })
-                      })
-        						}
-        					}
-      					/>
-                <BottomNavigationItem
-                  label='Internal'
-                  icon={previewIcon}
-                  onClick={
-                    () => {
-        							this.setState({
-                        preview: false
-                      }, () => {
-        								this.refs.mainEditor.editor.focus()
-        								if (this.state.filepath !== null) {
-                           if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
-                             this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
-                           }
-        								}
-        							})
-        						}
-                  }
-      					/>
-                <IconMenu
-                  iconButtonElement={
-                    <img
-                      src={compilePDFLogoSrc}
-                      style={{
-                        width: '3vw',
-                        marginLeft: '30%'
-                      }}
-                    />
-                  }
-                  anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                  targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                  value={0}
-                >
-                  <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
-                  <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
-                  <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
-                  <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 4, networkFeatures: true})} />
-                  <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true})} />
-                  <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
-                  <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
-                  <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
-                </IconMenu>
-              </BottomNavigation>
-            </Paper>
+                    })
+      						}
+      					}
+    					/>
+              <BottomNavigationItem
+                label='Internal'
+                icon={previewIcon}
+                onClick={
+                  () => {
+      							this.setState({
+                      preview: false
+                    }, () => {
+      								this.refs.mainEditor.editor.focus()
+      								if (this.state.filepath !== null) {
+                         if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
+                           this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
+                         }
+      								}
+      							})
+      						}
+                }
+    					/>
+              <IconMenu
+                iconButtonElement={
+                  <img
+                    src={compilePDFLogoSrc}
+                    style={{
+                      width: '3vw',
+                      marginLeft: '30%'
+                    }}
+                  />
+                }
+                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                value={0}
+              >
+                <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
+                <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
+                <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
+                <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 4, networkFeatures: true})} />
+                <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true})} />
+                <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
+                <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
+                <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
+              </IconMenu>
+            </BottomNavigation>
+          </Paper>
         }
       } else {
         if (this.state.networkFeatures) {
           editorWidth = (4.117 * width) / 5
           networkWidth = width / 5.9
           editorUtilities =
-            <Paper
+          <Paper
+            style={{
+              width: editorWidth + 5
+            }}
+					>
+            <BottomNavigation
+              selectedIndex={this.state.textSourceBib}
               style={{
-                width: editorWidth + 5
+                backgroundColor: editorUtilsColor
               }}
 						>
-              <BottomNavigation
-                selectedIndex={this.state.textSourceBib}
-                style={{
-                  backgroundColor: editorUtilsColor
-                }}
-  						>
-                <BottomNavigationItem
-                  label='Source'
-                  icon={codeIcon}
-                  onClick={
-                    () => {
-                      this.setState({
-                        textSourceBib: 0
-                      }, () => {
-                        this.focusEditor(0)
-                      })
-        						}
-                  }
-    						/>
-                <BottomNavigationItem
-                  label='Bibliography'
-                  icon={biblioIcon}
-                  onClick={
-                    () => {
-                      this.setState({
-                        textSourceBib: 1
-                      }, () => {
-                        this.focusEditor(1)
-                      })
-        						}
-                  }
-    						/>
-                <BottomNavigationItem
-                  label='Math'
-                  icon={<EditorFunctions />}
-                  onClick={
-                    () => {
-                      this.setState({showmatheditorbox: !this.state.showmatheditorbox})
-                    }
-      						}
-    						/>
-                <BottomNavigationItem
-                  label='External'
-                  icon={previewNotIcon}
-                  onClick={() => {
-                    this.setState({preview: true})
-                  }}
-    						/>
-                <BottomNavigationItem
-                  label='Compile PDF'
-                  icon={rightarrow}
-                  onClick={() => {
-       						 this.compileText()
-       						}}
-    						/>
-              </BottomNavigation>
-            </Paper>
-        } else {
-          editorWidth = width - 5
-          editorUtilities =
-            <Paper
-              style={{
-                width: editorWidth + 5
-              }}
-						>
-              <BottomNavigation
-                selectedIndex={this.state.textSourceBib}
-                style={{
-                  backgroundColor: editorUtilsColor
-                }}
-  						>
-                <BottomNavigationItem
-                  label='Source'
-                  icon={codeIcon}
-                  onClick={() => {
+              <BottomNavigationItem
+                label='Source'
+                icon={codeIcon}
+                onClick={
+                  () => {
                     this.setState({
                       textSourceBib: 0
                     }, () => {
                       this.focusEditor(0)
                     })
-      						}}
-    						/>
-                <BottomNavigationItem
-                  label='Bibliography'
-                  icon={biblioIcon}
-                  onClick={() => {
+      						}
+                }
+  						/>
+              <BottomNavigationItem
+                label='Bibliography'
+                icon={biblioIcon}
+                onClick={
+                  () => {
                     this.setState({
                       textSourceBib: 1
                     }, () => {
                       this.focusEditor(1)
                     })
-      						}}
-    						/>
-                <BottomNavigationItem
-                  label='Math'
-                  icon={<EditorFunctions />}
-                  onClick={() => {
-                    this.setState({showmatheditorbox: true})
-                  }}
-    						/>
-                <IconMenu
-                  iconButtonElement={
-                    <img
+      						}
+                }
+  						/>
+              <BottomNavigationItem
+                label='Math'
+                icon={<EditorFunctions />}
+                onClick={
+                  () => {
+                    this.setState({showmatheditorbox: !this.state.showmatheditorbox})
+                  }
+    						}
+  						/>
+              <BottomNavigationItem
+                label='External'
+                icon={previewNotIcon}
+                onClick={() => {
+                  this.setState({preview: true})
+                }}
+  						/>
+              <BottomNavigationItem
+                label='Compile PDF'
+                icon={rightarrow}
+                onClick={() => {
+     						 this.compileText()
+     						}}
+  						/>
+            </BottomNavigation>
+          </Paper>
+        } else {
+          editorWidth = width - 5
+          editorUtilities =
+          <Paper
+            style={{
+              width: editorWidth + 5
+            }}
+					>
+            <BottomNavigation
+              selectedIndex={this.state.textSourceBib}
+              style={{
+                backgroundColor: editorUtilsColor
+              }}
+						>
+              <BottomNavigationItem
+                label='Source'
+                icon={codeIcon}
+                onClick={() => {
+                  this.setState({
+                    textSourceBib: 0
+                  }, () => {
+                    this.focusEditor(0)
+                  })
+    						}}
+  						/>
+              <BottomNavigationItem
+                label='Bibliography'
+                icon={biblioIcon}
+                onClick={() => {
+                  this.setState({
+                    textSourceBib: 1
+                  }, () => {
+                    this.focusEditor(1)
+                  })
+    						}}
+  						/>
+              <BottomNavigationItem
+                label='Math'
+                icon={<EditorFunctions />}
+                onClick={() => {
+                  this.setState({showmatheditorbox: true})
+                }}
+  						/>
+              <IconMenu
+                iconButtonElement={
+                  <img
                     src={compilePDFLogoSrc}
                     style={{
                       width: '3vw',
                       marginLeft: '10%'
                     }}
-                    />
-                  }
-                  anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                  targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                  value={0}
-                >
-                  <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
-                  <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
-                  <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
-                  <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 4, networkFeatures: true})} />
-                  <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true})} />
-                  <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
-                  <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
-                  <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
-                </IconMenu>
-              </BottomNavigation>
-            </Paper>
+                  />
+                }
+                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                value={0}
+              >
+                <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
+                <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
+                <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
+                <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 4, networkFeatures: true})} />
+                <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true})} />
+                <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
+                <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
+                <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
+              </IconMenu>
+            </BottomNavigation>
+          </Paper>
         }
       }
     }
@@ -2107,35 +2106,35 @@ note = ,\n\u007D\n'
           } else {
             if (this.latexError) {
               PreviewPDF =
-                <div
-                  style={{
-                    width: this.PDFWidth,
-                    height: '100%',
-                    backgroundColor: '#811414',
-                    color: '#fff',
-                    textAlign: 'left'
+              <div
+                style={{
+                  width: this.PDFWidth,
+                  height: '100%',
+                  backgroundColor: '#811414',
+                  color: '#fff',
+                  textAlign: 'left'
+                }}
+                >
+                <article
+                  dangerouslySetInnerHTML={{
+                    __html: this.latexError
                   }}
-                  >
-                  <article
-                    dangerouslySetInnerHTML={{
-                      __html: this.latexError
-                    }}
-                  />
-                </div>
+                />
+              </div>
             }
           }
         }
       } else {
         PDFContainerHeight = height - 55
         PreviewPDF =
-          <Paper
-            style={{
-              height: height - 55,
-              width: this.PDFWidth,
-              backgroundColor: previewPDFBackgroundColor,
-              padding: 5
-            }}
-				 />
+        <Paper
+          style={{
+            height: height - 55,
+            width: this.PDFWidth,
+            backgroundColor: previewPDFBackgroundColor,
+            padding: 5
+          }}
+			  />
       }
     }
 
@@ -2143,67 +2142,67 @@ note = ,\n\u007D\n'
     if (this.state.preview) {
       if (!this.state.filepath) {
         PDFUtils =
-          <div onContextMenu={(e) => {
-            this.contextMenuBuilder(e, 'PDFUtils')
-          }}>
-            <Paper
+        <div onContextMenu={(e) => {
+          this.contextMenuBuilder(e, 'PDFUtils')
+        }}>
+          <Paper
+            style={{
+              width: '100%'
+            }}
+					>
+            <BottomNavigation
               style={{
-                width: '100%'
+                backgroundColor: previewPDFBackgroundColor
               }}
 						>
-              <BottomNavigation
-                style={{
-                  backgroundColor: previewPDFBackgroundColor
+              <BottomNavigationItem
+                icon={openProjectIcon}
+                onClick={() => {
+                  this.onOpenProjectClick()
                 }}
-							>
-                <BottomNavigationItem
-                  icon={openProjectIcon}
-                  onClick={() => {
-                    this.onOpenProjectClick()
-                  }}
-  							/>
-              </BottomNavigation>
-            </Paper>
-          </div>
+							/>
+            </BottomNavigation>
+          </Paper>
+        </div>
       } else {
         if (!this.state.PDFLoading) {
           if (!this.latexError) {
             if (this.state.binaryPDFContent !== null) {
               let p = this.state.pageIndex + 1
               PDFUtils =
-                <div onContextMenu={(e) => {
+              <div onContextMenu={(e) => {
       					this.contextMenuBuilder(e, 'PDFUtils')
       				}}>
-                  <Paper
+                <Paper
+                  style={{
+      							width: '100%'
+      						}}
+    						>
+                  <BottomNavigation
                     style={{
-        							width: '100%'
-        						}}
-      						>
-                    <BottomNavigation
-                      style={{
-        								backgroundColor: previewPDFBackgroundColor
-        							}}
-      							>
-                    <BottomNavigationItem
-                      icon={previousPageIcon}
-                      onClick={() => this.previousPage()}
-                    />
-                    <div
-                      style={{
-                        color: '#fff',
-                        marginTop: 19
-                      }}
-                      dangerouslySetInnerHTML={{
-                        __html: p + '/' + this.state.numPages
-                      }}
-                    />
-                    <BottomNavigationItem
-                      icon={nextPageIcon}
-                      onClick={() => this.nextPage()}
-                    />
-                  </BottomNavigation>
-                </Paper>
-              </div>
+      								backgroundColor: previewPDFBackgroundColor
+      							}}
+    							>
+                  <BottomNavigationItem
+                    icon={previousPageIcon}
+                    onClick={() => this.previousPage()}
+                  />
+                  <div
+                    style={{
+                      color: '#fff',
+                      marginTop: 19
+                    }}
+                    dangerouslySetInnerHTML={{
+                      __html: p + '/' + this.state.numPages
+                    }}
+                  />
+                  <BottomNavigationItem
+                    icon={nextPageIcon}
+                    onClick={() => this.nextPage()}
+                  />
+                </BottomNavigation>
+              </Paper>
+            </div>
             }
           }
         }
@@ -2215,60 +2214,96 @@ note = ,\n\u007D\n'
     let logoIconDiv = null
     if (this.state.literatureSearchResultsDisplay) {
       logoIconDiv =
-        <IconMenu
-          iconButtonElement={
-            <img style={{width: 130, marginTop: 30, cursor: 'pointer'}} src={logosrc} />
-          }
-          anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          value={0}
-        >
-          <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
-          <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
-          <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.networkDivClickWithLiteratureDisplay(infIconPageNavigation)} />
-          <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5})} />
-          <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
-          <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
-          <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
-        </IconMenu>
+      <IconMenu
+        iconButtonElement={
+          <img style={{width: 130, marginTop: 30, cursor: 'pointer'}} src={logosrc} />
+        }
+        anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+        targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        value={0}
+      >
+        <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
+        <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
+        <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.networkDivClickWithLiteratureDisplay(infIconPageNavigation)} />
+        <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5})} />
+        <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
+        <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
+        <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
+      </IconMenu>
     } else {
       logoIconDiv =
-        <IconMenu
-          iconButtonElement={
-            <img style={{width: 130, marginTop: 30, cursor: 'pointer'}} src={logosrc} />
-          }
-          anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          value={0}
-        >
-          <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
-          <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
-          <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.networkDivClickWithoutLiteratureDisplay(infIconPageNavigation)} />
-          <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5})} />
-          <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
-          <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
-          <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
-        </IconMenu>
+      <IconMenu
+        iconButtonElement={
+          <img style={{width: 130, marginTop: 30, cursor: 'pointer'}} src={logosrc} />
+        }
+        anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+        targetOrigin={{horizontal: 'left', vertical: 'top'}}
+        value={0}
+      >
+        <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
+        <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
+        <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.networkDivClickWithoutLiteratureDisplay(infIconPageNavigation)} />
+        <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5})} />
+        <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
+        <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
+        <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
+      </IconMenu>
     }
     if (this.state.networkFeatures) {
       networkDiv =
-        <Paper
-          style={{
-            height: height,
-            width: networkWidth,
-            textAlign: 'center',
-            backgroundColor: networkDivBackgroundColor
-          }}
-          zDepth={1}>
-          <div>
-            {logoIconDiv}
-            {networkstuff}
-          </div>
-        </Paper>
+      <Paper
+        style={{
+          height: height,
+          width: networkWidth,
+          textAlign: 'center',
+          backgroundColor: networkDivBackgroundColor
+        }}
+        zDepth={1}>
+        <div>
+          {logoIconDiv}
+          {networkstuff}
+        </div>
+      </Paper>
       networkBottomDiv =
+      <Paper
+        style={{
+          width: editorWidth,
+          textAlign: 'right'
+        }}>
+        <BottomNavigation
+          style={{
+            width: editorWidth + 5,
+            backgroundColor: networkBottomDivBackgroundColor
+          }}
+				>
+          <BottomNavigationItem
+            label='Expansion On'
+            icon={networkOnIcon}
+            onClick={() => {
+              this.setState({networkFeatures: false}, () => {
+                this.focusEditor(0)
+              })
+            }}
+					/>
+          <BottomNavigationItem
+            label='Packages'
+            icon={extensionIcon}
+            onClick={() => this.setState({packageDialog: true})}
+					/>
+          <BottomNavigationItem
+            label='Add Figure'
+            icon={addIcon}
+            onClick={() => this.onAddFigureClick()}
+					/>
+        </BottomNavigation>
+      </Paper>
+    } else {
+      if (this.state.preview) {
+        networkBottomDiv =
         <Paper
           style={{
             width: editorWidth,
+            backgroundColor: networkBottomDivBackgroundColor,
             textAlign: 'right'
           }}>
           <BottomNavigation
@@ -2278,14 +2313,14 @@ note = ,\n\u007D\n'
             }}
 					>
             <BottomNavigationItem
-              label='Expansion On'
-              icon={networkOnIcon}
+              label='Expansion Off'
+              icon={networkOffIcon}
               onClick={() => {
-                this.setState({networkFeatures: false}, () => {
+                this.setState({networkFeatures: true}, () => {
                   this.focusEditor(0)
                 })
               }}
-  					/>
+						/>
             <BottomNavigationItem
               label='Packages'
               icon={extensionIcon}
@@ -2298,94 +2333,58 @@ note = ,\n\u007D\n'
   					/>
           </BottomNavigation>
         </Paper>
-    } else {
-      if (this.state.preview) {
-        networkBottomDiv =
-          <Paper
-            style={{
-              width: editorWidth,
-              backgroundColor: networkBottomDivBackgroundColor,
-              textAlign: 'right'
-            }}>
-            <BottomNavigation
-              style={{
-                width: editorWidth + 5,
-                backgroundColor: networkBottomDivBackgroundColor
-              }}
-						>
-              <BottomNavigationItem
-                label='Expansion Off'
-                icon={networkOffIcon}
-                onClick={() => {
-                  this.setState({networkFeatures: true}, () => {
-                    this.focusEditor(0)
-                  })
-                }}
-  						/>
-              <BottomNavigationItem
-                label='Packages'
-                icon={extensionIcon}
-                onClick={() => this.setState({packageDialog: true})}
-    					/>
-              <BottomNavigationItem
-                label='Add Figure'
-                icon={addIcon}
-                onClick={() => this.onAddFigureClick()}
-    					/>
-            </BottomNavigation>
-          </Paper>
       } else {
         networkBottomDiv =
-          <Paper
+        <Paper
+          style={{
+            width: editorWidth,
+            backgroundColor: networkBottomDivBackgroundColor,
+            textAlign: 'right'
+          }}>
+          <BottomNavigation
             style={{
-              width: editorWidth,
-              backgroundColor: networkBottomDivBackgroundColor,
-              textAlign: 'right'
-            }}>
-            <BottomNavigation
-              style={{
-                width: editorWidth + 5,
-                backgroundColor: networkBottomDivBackgroundColor
+              width: editorWidth + 5,
+              backgroundColor: networkBottomDivBackgroundColor
+            }}
+					>
+            <BottomNavigationItem
+              label='Expansion Off'
+              icon={networkOffIcon}
+              onClick={() => {
+                this.setState({networkFeatures: true}, () => {
+                  this.focusEditor(0)
+                })
               }}
-						>
-              <BottomNavigationItem
-                label='Expansion Off'
-                icon={networkOffIcon}
-                onClick={() => {
-                  this.setState({networkFeatures: true}, () => {
-                    this.focusEditor(0)
-                  })
-                }}
-  						/>
-              <BottomNavigationItem
-                label='External'
-                icon={previewNotIcon}
-                onClick={() => {
-                  this.setState({preview: true})
-                }}
-  						/>
-              <BottomNavigationItem
-                label='Show All'
-                icon={openAll}
-                onClick={() => {
-                  this.setState({
-                    preview: true,
-                    networkFeatures: true
-                  })
-                }}
-  						/>
-              <BottomNavigationItem
-                label='Packages'
-                icon={extensionIcon}
-                onClick={() => this.setState({packageDialog: true})}
-    					/>
-              <BottomNavigationItem
-                label='Add Figure'
-                icon={addIcon}
-                onClick={() => this.onAddFigureClick()}
-    					/>
-            </BottomNavigation>
-          </Paper>
+						/>
+            <BottomNavigationItem
+              label='External'
+              icon={previewNotIcon}
+              onClick={() => {
+                this.setState({preview: true})
+              }}
+						/>
+            <BottomNavigationItem
+              label='Show All'
+              icon={openAll}
+              onClick={() => {
+                this.setState({
+                  preview: true,
+                  networkFeatures: true
+                })
+              }}
+						/>
+            <BottomNavigationItem
+              label='Packages'
+              icon={extensionIcon}
+              onClick={() => this.setState({packageDialog: true})}
+  					/>
+            <BottomNavigationItem
+              label='Add Figure'
+              icon={addIcon}
+              onClick={() => this.onAddFigureClick()}
+  					/>
+          </BottomNavigation>
+        </Paper>
       }
     }
 

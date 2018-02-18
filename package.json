@@ -6,7 +6,6 @@
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
-    "prettify": "standard --fix",
     "preminify": "node ./beforeBundle.js",
     "minify": "browserify ./src/entryDev.js -g [ envify --NODE_ENV production --BABEL_ENV production ] -t [ babelify --presets [ env --targets [ electron ] react ] --plugins transform-async-to-generator ] --full-path=false --exclude electron --exclude shelljs -o ./src/entry/bundle.js",
     "postminify": "uglifyjs --compress drop_console=true --mangle -- ./src/entry/bundle.js > ./src/react/inf.min.js",
@@ -127,7 +126,6 @@
     "react-resizable": "^1.7.5",
     "react-transition-group": "^2.2.1",
     "request": "^2.83.0",
-    "standard": "^10.0.3",
     "uglify-js": "^3.3.11"
   }
 }

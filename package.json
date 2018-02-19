@@ -51,10 +51,7 @@
     },
     "linux": {
       "target": [
-        "AppImage",
-        "deb",
-        "rpm",
-        "pacman"
+        "AppImage"
       ],
       "icon": "src/static/icons/",
       "category": "Science"
@@ -62,9 +59,45 @@
     "deb": {
       "icon": "src/static/icons/",
       "depends": [
-        "libnotify4"
+        "libnotify4",
+        "texlive-base",
+        "texlive-latex-recommended",
+        "texlive-latex-extra",
+        "texlive-fonts-recommended",
+        "texlive-fonts-extra",
+        "texlive-latex-base",
+        "texlive-font-utils",
+        "make"
       ],
-      "packageCategory": "Office"
+      "packageCategory": "Science"
+    },
+    "rpm": {
+      "icon": "src/static/icons/",
+      "depends": [
+        "libnotify4",
+        "texlive-base",
+        "texlive-latex-recommended",
+        "texlive-latex-extra",
+        "texlive-fonts-recommended",
+        "texlive-fonts-extra",
+        "texlive-latex-base",
+        "texlive-font-utils",
+        "make"
+      ]
+    },
+    "pacman": {
+      "icon": "src/static/icons/",
+      "depends": [
+        "libnotify4",
+        "texlive-base",
+        "texlive-latex-recommended",
+        "texlive-latex-extra",
+        "texlive-fonts-recommended",
+        "texlive-fonts-extra",
+        "texlive-latex-base",
+        "texlive-font-utils",
+        "make"
+      ]
     },
     "remoteBuild": false,
     "fileAssociations": {
@@ -112,7 +145,7 @@
     "babelify": "^8.0.0",
     "brace": "^0.11.1",
     "browserify": "^16.1.0",
-    "electron-builder": "^20.0.5",
+    "electron-builder": "^20.0.6",
     "electron-devtools-installer": "^2.2.3",
     "electron-forge": "^5.1.1",
     "electron-prebuilt-compile": "1.8.2",

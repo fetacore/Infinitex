@@ -148,25 +148,17 @@ app.on('activate', () => {
   }
 })
 
-autoUpdater.on('checking-for-update', () => {
-  notification = new Notification({
-    title: 'Updater',
-    body: 'Checking for updates...',
-    icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
-  })
-  notification.show()
-})
 autoUpdater.on('update-available', (info) => {
   notification = new Notification({
-    title: 'Updater',
-    body: 'There exists available update. Working on it...',
+    title: 'InfiniTex',
+    body: 'There exist available updates. Working on it...',
     icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
   })
   notification.show()
 })
 autoUpdater.on('update-not-available', (info) => {
   notification = new Notification({
-    title: 'Updater',
+    title: 'InfiniTex',
     body: 'Your software is up to date!',
     icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
   })
@@ -174,11 +166,15 @@ autoUpdater.on('update-not-available', (info) => {
 })
 autoUpdater.on('error', (err) => {
   notification = new Notification({
-    title: 'Updater',
-    body: 'Error in autoupdater:'+err,
+    title: 'InfiniTex',
+    body: 'Error. Please file the issue written on your desktop! Click me!',
     icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
   })
   notification.show()
+  notification.on('click', () => {
+    shell.openItem('https://github.com/fetacore/Infinitex/issues')
+    fs.writeFileSync(app.getPath('desktop')+'/infinitex-error.txt', err, 'utf-8')
+  })
 })
 // autoUpdater.on('download-progress', (progressObj) => {
 //   let log_message = "Download speed: " + progressObj.bytesPerSecond;

@@ -1,6 +1,7 @@
 'use strict'
 
-import { app,
+import {
+  app,
   BrowserWindow,
   Menu,
   Tray,
@@ -13,6 +14,7 @@ import { app,
 } from 'electron'
 import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer'
 import { enableLiveReload, addBypassChecker } from 'electron-compile'
+import { autoUpdater } from 'electron-updater'
 import fs from 'fs'
 import path from 'path'
 
@@ -78,8 +80,7 @@ const isDevMode = process.execPath.match(/[\\/]electron/)
 
 if (isDevMode) {
   enableLiveReload({strategy: 'react-hmr'})
-  require('electron-reload')(__dirname)
-}
+  require('electron-reload')(__dirname)}
 
 const createWindow = async () => {
   // Create the browser window.
@@ -106,8 +107,7 @@ const createWindow = async () => {
   // Open the DevTools.
   if (isDevMode) {
     await installExtension(REACT_DEVELOPER_TOOLS)
-    mainWindow.webContents.openDevTools()
-  }
+    mainWindow.webContents.openDevTools()}
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
@@ -119,6 +119,7 @@ const createWindow = async () => {
 
   mainWindow.on('focus', registerShortcuts)
   mainWindow.on('blur', unregisterShortcuts)
+  if (!isDevMode && (process.platform == 'win32' || process.platform == 'darwin')) {autoUpdater.checkForUpdates()}
 }
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -143,6 +144,61 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+autoUpdater.on('checking-for-update', () => {
+  notification = new Notification({
+    title: 'Updater',
+    body: 'Checking for updates...',
+    silent: true,
+    icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
+  })
+  notification.show()
+})
+autoUpdater.on('update-available', (info) => {
+  notification = new Notification({
+    title: 'Updater',
+    body: 'There exists available update. Working on it...',
+    silent: true,
+    icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
+  })
+  notification.show()
+})
+autoUpdater.on('update-not-available', (info) => {
+  notification = new Notification({
+    title: 'Updater',
+    body: 'Your software is up to date!',
+    silent: true,
+    icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
+  })
+  notification.show()
+})
+autoUpdater.on('error', (err) => {
+  notification = new Notification({
+    title: 'Updater',
+    body: 'Error in autoupdater:'+err,
+    silent: true,
+    icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
+  })
+  notification.show()
+})
+// autoUpdater.on('download-progress', (progressObj) => {
+//   let log_message = "Download speed: " + progressObj.bytesPerSecond;
+//   log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+//   log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+//   sendStatusToWindow(log_message);
+// })
+autoUpdater.on('update-downloaded', (info) => {
+  notification = new Notification({
+    title: 'Updater',
+    body: 'Update downloaded. Press here to quit and install!',
+    silent: true,
+    icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
+  })
+  notification.show()
+  notification.on('click', () => {
+    autoUpdater.quitAndInstall();
+  })
+});
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

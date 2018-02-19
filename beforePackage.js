@@ -41,29 +41,29 @@ function removeLines () {
       alert(err)
     } else {
       let indexXwrisSkata = data.replace(
-        '\'use strict\';', ''
+        '\'use strict\'', ''
       ).replace(
-        '\nimport { app, BrowserWindow, Menu, Tray, nativeImage, ipcMain, Notification, shell ,globalShortcut } from \'electron\';', 'import { app, BrowserWindow, Menu, Tray, nativeImage, ipcMain, Notification, shell ,globalShortcut } from \'electron\';'
+        'import installExtension, { REACT_DEVELOPER_TOOLS } from \'electron-devtools-installer\'', ''
       ).replace(
-        'import installExtension, { REACT_DEVELOPER_TOOLS } from \'electron-devtools-installer\';', ''
-      ).replace(
-        '\nimport { enableLiveReload, addBypassChecker } from \'electron-compile\';', 'import { enableLiveReload, addBypassChecker } from \'electron-compile\';'
-      ).replace(
-        'const isDevMode = process.execPath.match(/[\\\\/]electron/);', ''
-      ).replace(
+        '\nimport { enableLiveReload, addBypassChecker } from \'electron-compile\'', 'import { enableLiveReload, addBypassChecker } from \'electron-compile\''
+      )
+      // .replace(
+      //   'const isDevMode = process.execPath.match(/[\\\\/]electron/);', ''
+      // )
+      .replace(
         '\nif (isDevMode) {', ''
       ).replace(
-        '  enableLiveReload({strategy: \'react-hmr\'});', ''
+        'enableLiveReload({strategy: \'react-hmr\'})', ''
       ).replace(
-        '  require(\'electron-reload\')(__dirname);}', ''
+        'require(\'electron-reload\')(__dirname)}', ''
       ).replace(
         '// Open the DevTools.', ''
       ).replace(
         'if (isDevMode) {', ''
       ).replace(
-        '    await installExtension(REACT_DEVELOPER_TOOLS);', ''
+        'await installExtension(REACT_DEVELOPER_TOOLS)', ''
       ).replace(
-        '    mainWindow.webContents.openDevTools();}', ''
+        'mainWindow.webContents.openDevTools()}', ''
       )
       fs.writeFileSync(__dirname + '/prod/src/index.js', indexXwrisSkata)
     }

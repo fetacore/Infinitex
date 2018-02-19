@@ -75,7 +75,6 @@ export default class App extends React.Component {
           })
         } else {
           ipcRenderer.sendSync('notify', 'unsupportedFP')
-          remote.getCurrentWindow().close()
         }
       }
     }

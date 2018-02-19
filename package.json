@@ -107,14 +107,7 @@
         "cdraft"
       ]
     },
-    "forceCodeSigning": false,
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "fetacore",
-        "repo": "Infinitex"
-      }
-    ]
+    "forceCodeSigning": false
   },
   "config": {
     "forge": "./forge.config.js"

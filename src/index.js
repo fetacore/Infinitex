@@ -120,6 +120,9 @@ const createWindow = async () => {
   mainWindow.on('focus', registerShortcuts)
   mainWindow.on('blur', unregisterShortcuts)
   if (!isDevMode) {autoUpdater.checkForUpdates()}
+  if (process.platform == 'win32') {
+    app.setAppUserModelId('com.fetacore.Infinitex')
+  }
 }
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -149,7 +152,6 @@ autoUpdater.on('checking-for-update', () => {
   notification = new Notification({
     title: 'Updater',
     body: 'Checking for updates...',
-    silent: true,
     icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
   })
   notification.show()
@@ -158,7 +160,6 @@ autoUpdater.on('update-available', (info) => {
   notification = new Notification({
     title: 'Updater',
     body: 'There exists available update. Working on it...',
-    silent: true,
     icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
   })
   notification.show()
@@ -167,7 +168,6 @@ autoUpdater.on('update-not-available', (info) => {
   notification = new Notification({
     title: 'Updater',
     body: 'Your software is up to date!',
-    silent: true,
     icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
   })
   notification.show()
@@ -176,7 +176,6 @@ autoUpdater.on('error', (err) => {
   notification = new Notification({
     title: 'Updater',
     body: 'Error in autoupdater:'+err,
-    silent: true,
     icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
   })
   notification.show()

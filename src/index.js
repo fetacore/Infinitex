@@ -119,7 +119,7 @@ const createWindow = async () => {
 
   mainWindow.on('focus', registerShortcuts)
   mainWindow.on('blur', unregisterShortcuts)
-  if (!isDevMode && (process.platform == 'win32' || process.platform == 'darwin')) {autoUpdater.checkForUpdates()}
+  if (!isDevMode) {autoUpdater.checkForUpdates()}
 }
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

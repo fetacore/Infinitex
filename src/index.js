@@ -160,6 +160,7 @@ autoUpdater.on('update-not-available', (info) => {
   notification = new Notification({
     title: 'InfiniTex',
     body: 'Your software is up to date!',
+    silent: true,
     icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
   })
   notification.show()
@@ -186,7 +187,6 @@ autoUpdater.on('update-downloaded', (info) => {
   notification = new Notification({
     title: 'Updater',
     body: 'Update downloaded. Press here to quit and install!',
-    silent: true,
     icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
   })
   notification.show()

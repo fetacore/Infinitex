@@ -1285,8 +1285,8 @@ note = ,\n\u007D\n'
       <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
       <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
       <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
-      <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 4, networkFeatures: true})} />
-      <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true})} />
+      <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 2, networkFeatures: true, split: false})} />
+      <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true, split: false})} />
       <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
       <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
       <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
@@ -1529,7 +1529,10 @@ note = ,\n\u007D\n'
           style={{width: '90%', marginTop: '30%'}}
         />
         <RaisedButton
-          onClick={() => this.setState({networkPageIndex: 4})}
+          onClick={() => this.setState({
+            networkPageIndex: 4,
+            literatureSearchResultsDisplay: true
+          })}
           label='Last Book Search'
           labelPosition='after'
           icon={previousPageIcon}

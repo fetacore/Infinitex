@@ -1,7 +1,7 @@
 {
   "name": "InfiniTex",
   "productName": "InfiniTex",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "A new age editor for academics who seek freedom and people with cryptography needs in rich text environments.",
   "main": "src/index.js",
   "scripts": {
@@ -138,7 +138,7 @@
     "babelify": "^8.0.0",
     "brace": "^0.11.1",
     "browserify": "^16.1.0",
-    "electron-builder": "^20.0.6",
+    "electron-builder": "^20.0.7",
     "electron-devtools-installer": "^2.2.3",
     "electron-forge": "^5.1.1",
     "electron-prebuilt-compile": "1.8.2",

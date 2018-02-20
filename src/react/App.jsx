@@ -22,7 +22,7 @@ export default class App extends React.Component {
       width: 0,
       height: 0,
       component: null,
-      file: null
+      file: null,
     }
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
     this.drag = this.drag.bind(this)
@@ -139,73 +139,73 @@ export default class App extends React.Component {
     let content = null
     if (this.state.component == null) {
       content =
-        <CSSTransition
-          key={0}
-          classNames='networkstuff'
-          timeout={{ enter: 450, exit: 450 }}
-		    >
-          <div>
-            <div style={{textAlign: 'center'}}>
-              <object type='image/svg+xml' style={styles.logo} data='../src/static/infty_white.svg' />
-            </div>
-            <div style={styles.buttonArea}>
-              <RaisedButton
-                label='Science'
-                labelPosition='after'
-                icon={<Edit />}
-                style={styles.buttons}
-                primary
-                onClick={() => this.onButtonClick('tex')}
-					    />
-              <RaisedButton
-                label='Non-Science'
-                labelPosition='after'
-                icon={<DirectionsBike />}
-                style={styles.buttons}
-                primary
-                onClick={() => this.onButtonClick('simple')}
-					    />
-            </div>
+      <CSSTransition
+        key={0}
+        classNames='networkstuff'
+        timeout={{ enter: 450, exit: 450 }}
+	    >
+        <div>
+          <div style={{textAlign: 'center'}}>
+            <object type='image/svg+xml' style={styles.logo} data='../src/static/infty_white.svg' />
           </div>
-        </CSSTransition>
+          <div style={styles.buttonArea}>
+            <RaisedButton
+              label='Science'
+              labelPosition='after'
+              icon={<Edit />}
+              style={styles.buttons}
+              primary
+              onClick={() => this.onButtonClick('tex')}
+				    />
+            <RaisedButton
+              label='Non-Science'
+              labelPosition='after'
+              icon={<DirectionsBike />}
+              style={styles.buttons}
+              primary
+              onClick={() => this.onButtonClick('simple')}
+				    />
+          </div>
+        </div>
+      </CSSTransition>
     } else if (this.state.component == 'tex') {
       content =
-        <CSSTransition
-          key={1}
-          classNames='networkstuff'
-          timeout={{ enter: 450, exit: 450 }}
+      <CSSTransition
+        key={1}
+        classNames='networkstuff'
+        timeout={{ enter: 450, exit: 450 }}
 	    >
-          <div>
-            <Grid
-              width={this.state.width}
-              height={this.state.height}
-              fileToOpen={this.state.file}
+        <div>
+          <Grid
+            width={this.state.width}
+            height={this.state.height}
+            fileToOpen={this.state.file}
 					/>
-          </div>
-        </CSSTransition>
+        </div>
+      </CSSTransition>
     } else {
       content =
-        <CSSTransition
-          key={2}
-          classNames='networkstuff'
-          timeout={{ enter: 450, exit: 450 }}
+      <CSSTransition
+        key={2}
+        classNames='networkstuff'
+        timeout={{ enter: 450, exit: 450 }}
 	    >
-          <div>
-            <SimpleEditor
-              width={this.state.width}
-              height={this.state.height}
-              fileToOpen={this.state.file}
+        <div>
+          <SimpleEditor
+            width={this.state.width}
+            height={this.state.height}
+            fileToOpen={this.state.file}
 					/>
-          </div>
-        </CSSTransition>
+        </div>
+      </CSSTransition>
     }
 	  return (
-  <div>
-    <TransitionGroup>
-      {content}
-    </TransitionGroup>
-  </div>
-  )
+      <div>
+        <TransitionGroup>
+          {content}
+        </TransitionGroup>
+      </div>
+    )
   }
 }
 

@@ -1122,6 +1122,7 @@ note = ,\n\u007D\n'
     document.title = 'Infinitex ~TeX~ ' + this.state.filepath
     const pagesRenderedPlusOne = Math.min(this.state.pagesRendered + 1, this.state.numPages)
 
+    // Color themes /////////////////////////
     let previewPDFBackgroundColor = null
     let generalBackgroundColor = null
     let loadingPDFCircleColor = null
@@ -1184,6 +1185,7 @@ note = ,\n\u007D\n'
       letterColor = '#fff'
     }
 
+    // Logo color and source///////////////////////
     let logosrc = null
     let loaderColor = null
     let compilePDFLogoSrc = null
@@ -1196,6 +1198,212 @@ note = ,\n\u007D\n'
       loaderColor = '#000'
       compilePDFLogoSrc = '../src/static/infty_black.svg'
     }
+
+    // The navigation buttons ///////////////////
+    const topButton1 = <BottomNavigationItem
+      label='Source'
+      icon={codeIcon}
+      key='t1'
+      onClick={() => {
+        this.setState({
+          textSourceBib: 0
+        }, () => {
+          this.focusEditor(0)
+        })
+      }}
+    />
+    const topButton2 = <BottomNavigationItem
+      label='Bibliography'
+      icon={biblioIcon}
+      key='t2'
+      onClick={() => {
+        this.setState({
+          textSourceBib: 1
+        }, () => {
+          this.focusEditor(1)
+        })
+      }}
+    />
+    const topButton3 = <BottomNavigationItem
+      label='Math'
+      icon={<EditorFunctions />}
+      key='t3'
+      onClick={() => {
+        this.setState({showmatheditorbox: true})
+      }}
+    />
+    const topButton4Preview = <BottomNavigationItem
+      label='Internal'
+      icon={previewIcon}
+      key='t4P'
+      onClick={
+        () => {
+          this.setState({
+            preview: false
+          }, () => {
+            this.refs.mainEditor.editor.focus()
+            if (this.state.filepath !== null) {
+               if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
+                 this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
+               }
+            }
+          })
+        }
+      }
+    />
+    const topButton4NoPreview = <BottomNavigationItem
+      label='External'
+      icon={previewNotIcon}
+      key='t4NP'
+      onClick={() => {
+        this.setState({preview: true})
+      }}
+    />
+    const topButton5 = <BottomNavigationItem
+      label='Compile PDF'
+      icon={rightarrow}
+      key='t5'
+      onClick={() => {
+        this.compileText()
+      }}
+    />
+    const topButton5NoNetwork = <IconMenu
+      iconButtonElement={
+        <img
+          src={compilePDFLogoSrc}
+          style={{
+            width: '3vw',
+            marginLeft: '10%'
+          }}
+        />
+      }
+      anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+      targetOrigin={{horizontal: 'left', vertical: 'top'}}
+      value={0}
+      key='t5NN'
+    >
+      <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
+      <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
+      <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
+      <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 4, networkFeatures: true})} />
+      <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true})} />
+      <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
+      <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
+      <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
+    </IconMenu>
+    const bottomButton1 = <BottomNavigationItem
+      label='Expansion On'
+      icon={networkOnIcon}
+      key='b1'
+      onClick={() => {
+        this.setState({
+          networkFeatures: false
+        }, () => {
+          this.focusEditor(0)
+        })
+      }}
+    />
+    const bottomButton1NoNetwork = <BottomNavigationItem
+      label='Expansion Off'
+      icon={networkOffIcon}
+      key='b1NN'
+      onClick={() => {
+        this.setState({
+          networkFeatures: true
+        }, () => {
+          this.focusEditor(0)
+        })
+      }}
+    />
+    const bottomButton1NoNetworkSplit = <BottomNavigationItem
+      label='Expansion Off'
+      icon={networkOffIcon}
+      key='b1NNS'
+      onClick={() => {
+        this.setState({
+          networkFeatures: true,
+          split: false,
+        }, () => {
+          this.focusEditor(0)
+        })
+      }}
+    />
+    const bottomButton2 = <BottomNavigationItem
+      label='Split View'
+      icon={splitIcon}
+      key='b2'
+      onClick={() => this.setState({
+        split: true,
+        networkFeatures: false,
+      }, () => {
+        setTimeout(() => {
+          let skata = this.state.packages.split(/\r\n|\r|\n/).length
+          this.refs.splitEditor.editor.setOption(
+            'firstLineNumber', skata + 1
+          )
+          let splitSession = this.refs.splitEditor.editor.getSession()
+          let splitUndoManager = splitSession.getUndoManager()
+          splitUndoManager.reset()
+          splitSession.setUndoManager(splitUndoManager)
+          this.focusEditor(2)
+        }, 5)
+      })}
+    />
+    const bottomButton2WildCard = <BottomNavigationItem
+      label='Split View'
+      icon={splitIcon}
+      key='b2'
+      onClick={() => this.setState({
+        preview: true,
+        split: true,
+        networkFeatures: false,
+      }, () => {
+        setTimeout(() => {
+          let skata = this.state.packages.split(/\r\n|\r|\n/).length
+          this.refs.splitEditor.editor.setOption(
+            'firstLineNumber', skata + 1
+          )
+          let splitSession = this.refs.splitEditor.editor.getSession()
+          let splitUndoManager = splitSession.getUndoManager()
+          splitUndoManager.reset()
+          splitSession.setUndoManager(splitUndoManager)
+          this.focusEditor(2)
+        }, 5)
+      })}
+    />
+    const bottomButton2Split = <BottomNavigationItem
+      label='No Split'
+      icon={splitNotIcon}
+      key='b2S'
+      onClick={() => this.setState({
+        split: false,
+      })}
+    />
+    const bottomButton3 = <BottomNavigationItem
+      label='Packages'
+      icon={extensionIcon}
+      key='b3Packages'
+      onClick={() => this.setState({
+        packageDialog: true
+      })}
+    />
+    const bottomButton4 = <BottomNavigationItem
+      label='Add Figure'
+      icon={addIcon}
+      key='b4figs'
+      onClick={() => this.onAddFigureClick()}
+    />
+    const bottomButtonWildCard = <BottomNavigationItem
+      label='Show All'
+      icon={openAll}
+      key='b5'
+      onClick={() => {
+        this.setState({
+          preview: true,
+          networkFeatures: true
+        })
+      }}
+    />
     let literatureSearchResultsHeader = null
     let literatureSearchResultsData = null
     let columnWidth = {}
@@ -1230,7 +1438,7 @@ note = ,\n\u007D\n'
           size: '10%',
           year: '10%'
         }
-        tableWidth = '100%'
+        tableWidth = width-8
         literatureSearchResultsData =
         this.state.literatureSearchResults.map((row, index) => (
           <TableRow key={index}>
@@ -1255,14 +1463,16 @@ note = ,\n\u007D\n'
                 style={{
                   color: '#fff'
                 }}
-            />
+              />
             </TableHeaderColumn>
           </TableRow>
-        tableWidth = (width / 5.9).toString()
+        tableWidth = width / 5.9
         // literatureSearchResultsData =
         // this.state.literatureSearchResults.map((row, index) => (
         //   <TableRow key={index}>
-        //     <TableRowColumn>{this.state.literatureSearchResults[index].title}</TableRowColumn>
+        //     <TableRowColumn>
+        //       {this.state.literatureSearchResults[index].title}
+        //     </TableRowColumn>
         //   </TableRow>
         // ))
       }
@@ -1291,7 +1501,7 @@ note = ,\n\u007D\n'
           icon={searchIcon}
           buttonStyle={buttonStyles}
           style={{width: '90%', marginTop: '30%'}}
-      />
+        />
       </div>
     } else {
       networkSearchOrResumeTable =
@@ -1386,79 +1596,79 @@ note = ,\n\u007D\n'
     ]
     if (this.state.literatureSearchResultsSelectedDisplay) {
       literatureDialog =
-        <Dialog
-          modal={false}
-          title={this.state.literatureSearchResults[this.state.literatureSearchResultsSelectedIndex].title}
-          open={this.state.literatureSearchResultsSelectedDisplay}
-          actions={literatureAbstractActions}
-          onRequestClose={
-            () => {
-              this.setState({
-                literatureSearchResultsSelectedDisplay: false
-              }, () => {
-                if (!this.state.literatureSearchResultsDisplay) {
-                  this.focusEditor(this.state.textSourceBib)
-                }
-              })
-            }
+      <Dialog
+        modal={false}
+        title={this.state.literatureSearchResults[this.state.literatureSearchResultsSelectedIndex].title}
+        open={this.state.literatureSearchResultsSelectedDisplay}
+        actions={literatureAbstractActions}
+        onRequestClose={
+          () => {
+            this.setState({
+              literatureSearchResultsSelectedDisplay: false
+            }, () => {
+              if (!this.state.literatureSearchResultsDisplay) {
+                this.focusEditor(this.state.textSourceBib)
+              }
+            })
           }
-          autoScrollBodyContent
-          paperStyle={{
-            padding: 10
-          }}
-          bodyStyle={{
-            backgroundColor: previewPDFBackgroundColor,
-            color: letterColor
-          }}
-          contentStyle={{
-            maxWidth: 'none',
-            width: '100%',
-            maxHeight: '90%',
-            height: '80%'
-          }}
-          actionsContainerStyle={{
-            backgroundColor: previewPDFBackgroundColor,
-            color: letterColor
-          }}
-          titleStyle={{
-            backgroundColor: previewPDFBackgroundColor,
-            color: letterColor
-          }}
-        >
-          <div style={{display: 'inline-flex', justifyContent: 'space-around'}}>
-            <div style={{display: 'block'}}>
-              <img
-                src={'http://gen.lib.rus.ec/covers/' + this.state.literatureSearchResults[this.state.literatureSearchResultsSelectedIndex].coverurl}
-                alt={'Cover Image'}
-                style={{
-                  maxWidth: width * 0.25,
-                  maxHeight: height * 0.4,
-                  marginRight: 30
-                }}
-              />
-              <div
-                dangerouslySetInnerHTML={{
-                  __html:
-                    'Pages: ' + this.state.literatureSearchResults[this.state.literatureSearchResultsSelectedIndex].pagesinfile
-                }} />
-              <div
-                dangerouslySetInnerHTML={{
-                  __html:
-                    'Size: ' + ((this.state.literatureSearchResults[this.state.literatureSearchResultsSelectedIndex].filesize) / (1024 * 1024)).toFixed(2) + ' MB\n'
-                }} />
-              <div
-                dangerouslySetInnerHTML={{
-                  __html:
-                    'Year: ' + this.state.literatureSearchResults[this.state.literatureSearchResultsSelectedIndex].year
-                }} />
-            </div>
+        }
+        autoScrollBodyContent
+        paperStyle={{
+          padding: 10
+        }}
+        bodyStyle={{
+          backgroundColor: previewPDFBackgroundColor,
+          color: letterColor
+        }}
+        contentStyle={{
+          maxWidth: 'none',
+          width: '100%',
+          maxHeight: '90%',
+          height: '80%'
+        }}
+        actionsContainerStyle={{
+          backgroundColor: previewPDFBackgroundColor,
+          color: letterColor
+        }}
+        titleStyle={{
+          backgroundColor: previewPDFBackgroundColor,
+          color: letterColor
+        }}
+      >
+        <div style={{display: 'inline-flex', justifyContent: 'space-around'}}>
+          <div style={{display: 'block'}}>
+            <img
+              src={'http://gen.lib.rus.ec/covers/' + this.state.literatureSearchResults[this.state.literatureSearchResultsSelectedIndex].coverurl}
+              alt={'Cover Image'}
+              style={{
+                maxWidth: width * 0.25,
+                maxHeight: height * 0.4,
+                marginRight: 30
+              }}
+            />
             <div
               dangerouslySetInnerHTML={{
                 __html:
-                  this.state.literatureSearchResults[this.state.literatureSearchResultsSelectedIndex].descr
+                  'Pages: ' + this.state.literatureSearchResults[this.state.literatureSearchResultsSelectedIndex].pagesinfile
+              }} />
+            <div
+              dangerouslySetInnerHTML={{
+                __html:
+                  'Size: ' + ((this.state.literatureSearchResults[this.state.literatureSearchResultsSelectedIndex].filesize) / (1024 * 1024)).toFixed(2) + ' MB\n'
+              }} />
+            <div
+              dangerouslySetInnerHTML={{
+                __html:
+                  'Year: ' + this.state.literatureSearchResults[this.state.literatureSearchResultsSelectedIndex].year
               }} />
           </div>
-        </Dialog>
+          <div
+            dangerouslySetInnerHTML={{
+              __html:
+                this.state.literatureSearchResults[this.state.literatureSearchResultsSelectedIndex].descr
+            }} />
+        </div>
+      </Dialog>
     }
     let citationNicknameDialogActions = [
       <FlatButton
@@ -1542,13 +1752,15 @@ note = ,\n\u007D\n'
       networkstuff =
       <div>
         <Table
-          height={(height - 230).toString() + 'px'}
-          width={tableWidth}
           fixedHeader
           selectable
           multiSelectable={false}
           style={{
             tableLayout: 'auto'
+          }}
+          bodyStyle={{
+            width: tableWidth,
+            height: height-230,
           }}
           onRowSelection={(rows) => this.setState({
             literatureSearchResultsSelectedIndex: rows,
@@ -1611,7 +1823,7 @@ note = ,\n\u007D\n'
           style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
         />
         <TextField
-          value={'downloading...'}
+          value={'Downloading Updates'}
           id='Pare ta arxidia Material UI'
           disabled
           inputStyle={{
@@ -1626,11 +1838,35 @@ note = ,\n\u007D\n'
       </div>
     }
 
+
+    let texEditorHeight = null
+    let separateTexBibHeight = 0
+    let bibEditorHeight = 0
+    if (this.state.textSourceBib == 0) {
+      texEditorHeight = height
+    } else {
+      texEditorHeight = height - 202
+      separateTexBibHeight = 3
+      bibEditorHeight = 200
+    }
+
     let layout = []
     let divEditorStyle = {}
     let divPDFStyle = {}
     let divNetworkStyle = {}
+
+    let editorWidth = null
+    let networkWidth = null
+    let editorLeft = null
+    let editorUpUtilities = null
+    let editorDownUtilities = null
+    let logoIconDiv = null
+    let PreviewPDF = null
+    let PDFContainerHeight = null
+    let PDFUtils = null
+
     if (this.state.literatureSearchResultsDisplay) {
+      networkWidth = width - 8
       layout = [
         {i: 'loginchat', x: 0, y: 0, w: 3, h: 4, static: true},
         {i: 'editor', x: 300, y: 0, w: 3, h: 4, static: true},
@@ -1648,98 +1884,6 @@ note = ,\n\u007D\n'
         height: 0,
         zDepth: 0
       }
-    } else {
-      if (this.state.preview) {
-        if (this.state.split) {
-          layout = [
-            {i: 'editor', x: 0, y: 0, w: 3, h: 4, static: true},
-            {i: 'pdf', x: 148, y: 0, w: 3, h: 4, static: true},
-            {i: 'loginchat', x: 300, y: 0, w: 3, h: 4, static: true}
-          ]
-          divNetworkStyle = {
-            display: 'none',
-            width: 0,
-            height: 0,
-            zDepth: 0
-          }
-        } else {
-          if (this.state.networkFeatures) {
-            layout = [
-              {i: 'loginchat', x: 0, y: 0, w: 3, h: 4, static: true},
-              {i: 'editor', x: 51, y: 0, w: 3, h: 4, static: true},
-              {i: 'pdf', x: 191, y: 0, w: 3, h: 4, static: true}
-            ]
-        	} else {
-            layout = [
-              {i: 'editor', x: 0, y: 0, w: 3, h: 4, static: true},
-              {i: 'pdf', x: 196, y: 0, w: 3, h: 4, static: true},
-            	{i: 'loginchat', x: 300, y: 0, w: 3, h: 4, static: true}
-            ]
-            divNetworkStyle = {
-            	display: 'none',
-            	width: 0,
-            	height: 0,
-            	zDepth: 0
-            }
-        	}
-        }
-      } else {
-    		if (this.state.networkFeatures) {
-          layout = [
-          	{i: 'loginchat', x: 0, y: 0, w: 3, h: 4, static: true},
-            {i: 'editor', x: 51, y: 0, w: 3, h: 4, static: true},
-          	{i: 'pdf', x: 300, y: 0, w: 3, h: 4, static: true}
-          ]
-          divPDFStyle = {
-          	display: 'none',
-          	width: 0,
-          	height: 0,
-          	zDepth: 0
-          }
-    		} else {
-          layout = [
-            {i: 'editor', x: 0, y: 0, w: 3, h: 4, static: true},
-          	{i: 'pdf', x: 10, y: 0, w: 3, h: 4, static: true},
-          	{i: 'loginchat', x: 300, y: 0, w: 3, h: 4, static: true}
-          ]
-          divPDFStyle = {
-          	display: 'none',
-          	width: 0,
-          	height: 0,
-          	zDepth: 0
-          }
-          divNetworkStyle = {
-          	display: 'none',
-          	width: 0,
-          	height: 0,
-          	zDepth: 0
-          }
-    		}
-    	}
-    }
-
-    let texEditorHeight = null
-    let separateTexBibHeight = 0
-    let bibEditorHeight = 0
-    if (this.state.textSourceBib == 0) {
-      texEditorHeight = height
-    } else {
-      texEditorHeight = height - 202
-      separateTexBibHeight = 3
-      bibEditorHeight = 200
-    }
-
-    let editorWidth = null
-    let networkWidth = null
-    let editorLeft = null
-    let editorUpUtilities = null
-    let editorDownUtilities = null
-    let logoIconDiv = null
-    let PreviewPDF = null
-    let PDFContainerHeight = null
-    let PDFUtils = null
-    if (this.state.literatureSearchResultsDisplay) {
-      networkWidth = width - 8
       logoIconDiv =
       <IconMenu
         iconButtonElement={
@@ -1757,6 +1901,20 @@ note = ,\n\u007D\n'
         <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
         <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
       </IconMenu>
+      editorLeft =
+      <Paper
+        style={{
+          height: height,
+          width: networkWidth,
+          textAlign: 'center',
+          backgroundColor: editorLeftBackgroundColor
+        }}
+        zDepth={1}>
+        <div>
+          {logoIconDiv}
+          {networkstuff}
+        </div>
+      </Paper>
     } else {
       logoIconDiv =
       <IconMenu
@@ -1777,6 +1935,17 @@ note = ,\n\u007D\n'
       </IconMenu>
       if (this.state.preview) {
         if (this.state.split) {
+          layout = [
+            {i: 'editor', x: 0, y: 0, w: 3, h: 4, static: true},
+            {i: 'pdf', x: 148, y: 0, w: 3, h: 4, static: true},
+            {i: 'loginchat', x: 300, y: 0, w: 3, h: 4, static: true}
+          ]
+          divNetworkStyle = {
+            display: 'none',
+            width: 0,
+            height: 0,
+            zDepth: 0
+          }
           editorWidth = (0.99 * width / 2)
           this.PDFWidth = (0.99 * width / 2)
           PDFContainerHeight = height-55
@@ -1818,86 +1987,15 @@ note = ,\n\u007D\n'
                 backgroundColor: editorUtilsColor
               }}
             >
-              <BottomNavigationItem
-                label='Source'
-                icon={codeIcon}
-                onClick={() => {
-                  this.setState({
-                    textSourceBib: 0
-                  }, () => {
-                    this.focusEditor(0)
-                  })
-                }}
-              />
-              <BottomNavigationItem
-                label='Bibliography'
-                icon={biblioIcon}
-                onClick={
-                  () => {
-                    this.setState({
-                      textSourceBib: 1
-                    }, () => {
-                      this.focusEditor(1)
-                    })
-                  }
-                }
-              />
-              <BottomNavigationItem
-                label='Math'
-                icon={<EditorFunctions />}
-                onClick={
-                  () => {
-                    this.setState({
-                      preview: false
-                    }, () => {
-                      this.setState({
-                        showmatheditorbox: true
-                      })
-                    })
-                  }
-                }
-              />
-              <BottomNavigationItem
-                label='Internal'
-                icon={previewIcon}
-                onClick={
-                  () => {
-                    this.setState({
-                      preview: false
-                    }, () => {
-                      this.refs.mainEditor.editor.focus()
-                      if (this.state.filepath !== null) {
-                         if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
-                           this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
-                         }
-                      }
-                    })
-                  }
-                }
-              />
-              <IconMenu
-                iconButtonElement={
-                  <img
-                    src={compilePDFLogoSrc}
-                    style={{
-                      width: '3vw',
-                      marginLeft: '30%'
-                    }}
-                  />
-                }
-                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                value={0}
-              >
-                <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
-                <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
-                <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
-                <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 4, networkFeatures: true})} />
-                <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true})} />
-                <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
-                <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
-                <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
-              </IconMenu>
+              {
+                [
+                  topButton1,
+                  topButton2,
+                  topButton3,
+                  topButton4Preview,
+                  topButton5NoNetwork
+                ]
+              }
             </BottomNavigation>
           </Paper>
           editorDownUtilities =
@@ -1912,41 +2010,23 @@ note = ,\n\u007D\n'
                 backgroundColor: editorDownUtilitiesBackgroundColor
               }}
     				>
-              <BottomNavigationItem
-                label='Expansion Off'
-                icon={networkOffIcon}
-                onClick={() => {
-                  this.setState({
-                    networkFeatures: true,
-                    split: false,
-                  }, () => {
-                    this.focusEditor(0)
-                  })
-                }}
-    					/>
-              <BottomNavigationItem
-                label='No Split'
-                icon={splitNotIcon}
-                onClick={() => this.setState({
-                  split: false,
-                })}
-    					/>
-              <BottomNavigationItem
-                label='Packages'
-                icon={extensionIcon}
-                onClick={() => this.setState({
-                  packageDialog: true
-                })}
-    					/>
-              <BottomNavigationItem
-                label='Add Figure'
-                icon={addIcon}
-                onClick={() => this.onAddFigureClick()}
-    					/>
+              {
+                [
+                  bottomButton1NoNetworkSplit,
+                  bottomButton2Split,
+                  bottomButton3,
+                  bottomButton4
+                ]
+              }
             </BottomNavigation>
           </Paper>
         } else {
           if (this.state.networkFeatures) {
+            layout = [
+              {i: 'loginchat', x: 0, y: 0, w: 3, h: 4, static: true},
+              {i: 'editor', x: 51, y: 0, w: 3, h: 4, static: true},
+              {i: 'pdf', x: 191, y: 0, w: 3, h: 4, static: true}
+            ]
             editorWidth = width / 2.13
             this.PDFWidth = width / 2.85
             networkWidth = width / 5.9
@@ -1962,70 +2042,15 @@ note = ,\n\u007D\n'
                 		backgroundColor: editorUtilsColor
                 	}}
                 >
-                  <BottomNavigationItem
-                    label='Source'
-                    icon={codeIcon}
-                    onClick={
-                      () => {
-                        this.setState({
-                          textSourceBib: 0
-                        }, () => {
-                          this.focusEditor(0)
-                        })
-                			}
-                    }
-                	/>
-                  <BottomNavigationItem
-                    label='Bibliography'
-                    icon={biblioIcon}
-                    onClick={
-                      () => {
-                        this.setState({
-                          textSourceBib: 1
-                        }, () => {
-                          this.focusEditor(1)
-                        })
-                			}
-                    }
-                	/>
-                  <BottomNavigationItem
-                    label='Math'
-                    icon={<EditorFunctions />}
-                    onClick={
-                      () => {
-                        this.setState({
-                          preview: false
-                        }, () => {
-                          this.setState({showmatheditorbox: true})
-                        })
-                			}
-                		}
-                	/>
-                  <BottomNavigationItem
-                    label='Internal'
-                    icon={previewIcon}
-                    onClick={
-                      () => {
-                				this.setState({
-                          preview: false
-                        }, () => {
-                					this.focusEditor(0)
-                					if (this.state.filepath !== null) {
-                            if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
-                              this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
-                            }
-                					}
-                				})
-                			}
-                    }
-                	/>
-                  <BottomNavigationItem
-                    label='Compile PDF'
-                    icon={rightarrow}
-                    onClick={() => {
-                		  this.compileText()
-                	  }}
-                	/>
+                  {
+                    [
+                      topButton1,
+                      topButton2,
+                      topButton3,
+                      topButton4Preview,
+                      topButton5
+                    ]
+                  }
                 </BottomNavigation>
               </Paper>
               editorLeft =
@@ -2054,50 +2079,28 @@ note = ,\n\u007D\n'
                     backgroundColor: editorDownUtilitiesBackgroundColor
                   }}
         				>
-                  <BottomNavigationItem
-                    label='Expansion On'
-                    icon={networkOnIcon}
-                    onClick={() => {
-                      this.setState({
-                        networkFeatures: false
-                      }, () => {
-                        this.focusEditor(0)
-                      })
-                    }}
-        					/>
-                  <BottomNavigationItem
-                    label='Split View'
-                    icon={splitIcon}
-                    onClick={() => this.setState({
-                      split: true,
-                      networkFeatures: false,
-                    }, () => {
-                      let skata = this.state.packages.split(/\r\n|\r|\n/).length
-                      this.refs.splitEditor.editor.setOption(
-                        'firstLineNumber', skata + 1
-                      )
-                      let splitSession = this.refs.splitEditor.editor.getSession()
-                      let splitUndoManager = splitSession.getUndoManager()
-                      splitUndoManager.reset()
-                      splitSession.setUndoManager(splitUndoManager)
-                      this.focusEditor(2)
-                    })}
-        					/>
-                  <BottomNavigationItem
-                    label='Packages'
-                    icon={extensionIcon}
-                    onClick={() => this.setState({
-                      packageDialog: true
-                    })}
-        					/>
-                  <BottomNavigationItem
-                    label='Add Figure'
-                    icon={addIcon}
-                    onClick={() => this.onAddFigureClick()}
-        					/>
+                  {
+                    [
+                      bottomButton1,
+                      bottomButton2,
+                      bottomButton3,
+                      bottomButton4
+                    ]
+                  }
                 </BottomNavigation>
               </Paper>
           } else {
+            layout = [
+              {i: 'editor', x: 0, y: 0, w: 3, h: 4, static: true},
+              {i: 'pdf', x: 196, y: 0, w: 3, h: 4, static: true},
+            	{i: 'loginchat', x: 300, y: 0, w: 3, h: 4, static: true}
+            ]
+            divNetworkStyle = {
+            	display: 'none',
+            	width: 0,
+            	height: 0,
+            	zDepth: 0
+            }
             editorWidth = (1.32 * width / 2)
             this.PDFWidth = (0.669 * width / 2)
             editorUpUtilities =
@@ -2112,86 +2115,15 @@ note = ,\n\u007D\n'
     							backgroundColor: editorUtilsColor
     						}}
     					>
-                <BottomNavigationItem
-                  label='Source'
-                  icon={codeIcon}
-                  onClick={() => {
-                    this.setState({
-                      textSourceBib: 0
-                    }, () => {
-                      this.focusEditor(0)
-                    })
-      						}}
-      					/>
-                <BottomNavigationItem
-                  label='Bibliography'
-                  icon={biblioIcon}
-                  onClick={
-                    () => {
-                      this.setState({
-                        textSourceBib: 1
-                      }, () => {
-                        this.focusEditor(1)
-                      })
-        						}
-                  }
-      					/>
-                <BottomNavigationItem
-                  label='Math'
-                  icon={<EditorFunctions />}
-                  onClick={
-                    () => {
-                      this.setState({
-                        preview: false
-                      }, () => {
-                        this.setState({
-                          showmatheditorbox: true
-                        })
-                      })
-        						}
-        					}
-      					/>
-                <BottomNavigationItem
-                  label='Internal'
-                  icon={previewIcon}
-                  onClick={
-                    () => {
-        							this.setState({
-                        preview: false
-                      }, () => {
-        								this.refs.mainEditor.editor.focus()
-        								if (this.state.filepath !== null) {
-                           if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
-                             this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
-                           }
-        								}
-        							})
-        						}
-                  }
-      					/>
-                <IconMenu
-                  iconButtonElement={
-                    <img
-                      src={compilePDFLogoSrc}
-                      style={{
-                        width: '3vw',
-                        marginLeft: '30%'
-                      }}
-                    />
-                  }
-                  anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                  targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                  value={0}
-                >
-                  <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
-                  <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
-                  <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
-                  <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 4, networkFeatures: true})} />
-                  <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true})} />
-                  <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
-                  <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
-                  <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
-                </IconMenu>
+                {
+                  [
+                    topButton1,
+                    topButton2,
+                    topButton3,
+                    topButton4Preview,
+                    topButton5NoNetwork
+                  ]
+                }
               </BottomNavigation>
             </Paper>
             editorDownUtilities =
@@ -2207,44 +2139,14 @@ note = ,\n\u007D\n'
                   backgroundColor: editorDownUtilitiesBackgroundColor
                 }}
     					>
-                <BottomNavigationItem
-                  label='Expansion Off'
-                  icon={networkOffIcon}
-                  onClick={() => {
-                    this.setState({
-                      networkFeatures: true
-                    }, () => {
-                      this.focusEditor(0)
-                    })
-                  }}
-    						/>
-                <BottomNavigationItem
-                  label='Split View'
-                  icon={splitIcon}
-                  onClick={() => this.setState({
-                    split: true
-                  }, () => {
-                    let skata = this.state.packages.split(/\r\n|\r|\n/).length
-                    this.refs.splitEditor.editor.setOption(
-                      'firstLineNumber', skata + 1
-                    )
-                    let splitSession = this.refs.splitEditor.editor.getSession()
-                    let splitUndoManager = splitSession.getUndoManager()
-                    splitUndoManager.reset()
-                    splitSession.setUndoManager(splitUndoManager)
-                    this.focusEditor(2)
-                  })}
-      					/>
-                <BottomNavigationItem
-                  label='Packages'
-                  icon={extensionIcon}
-                  onClick={() => this.setState({packageDialog: true})}
-      					/>
-                <BottomNavigationItem
-                  label='Add Figure'
-                  icon={addIcon}
-                  onClick={() => this.onAddFigureClick()}
-      					/>
+                {
+                  [
+                    bottomButton1NoNetwork,
+                    bottomButton2,
+                    bottomButton3,
+                    bottomButton4
+                  ]
+                }
               </BottomNavigation>
             </Paper>
           }
@@ -2393,6 +2295,17 @@ note = ,\n\u007D\n'
         }
       } else {
         if (this.state.networkFeatures) {
+          layout = [
+          	{i: 'loginchat', x: 0, y: 0, w: 3, h: 4, static: true},
+            {i: 'editor', x: 51, y: 0, w: 3, h: 4, static: true},
+          	{i: 'pdf', x: 300, y: 0, w: 3, h: 4, static: true}
+          ]
+          divPDFStyle = {
+          	display: 'none',
+          	width: 0,
+          	height: 0,
+          	zDepth: 0
+          }
           editorWidth = (4.117 * width) / 5
           networkWidth = width / 5.9
           editorUpUtilities =
@@ -2407,55 +2320,15 @@ note = ,\n\u007D\n'
                 backgroundColor: editorUtilsColor
               }}
 						>
-              <BottomNavigationItem
-                label='Source'
-                icon={codeIcon}
-                onClick={
-                  () => {
-                    this.setState({
-                      textSourceBib: 0
-                    }, () => {
-                      this.focusEditor(0)
-                    })
-      						}
-                }
-  						/>
-              <BottomNavigationItem
-                label='Bibliography'
-                icon={biblioIcon}
-                onClick={
-                  () => {
-                    this.setState({
-                      textSourceBib: 1
-                    }, () => {
-                      this.focusEditor(1)
-                    })
-      						}
-                }
-  						/>
-              <BottomNavigationItem
-                label='Math'
-                icon={<EditorFunctions />}
-                onClick={
-                  () => {
-                    this.setState({showmatheditorbox: !this.state.showmatheditorbox})
-                  }
-    						}
-  						/>
-              <BottomNavigationItem
-                label='External'
-                icon={previewNotIcon}
-                onClick={() => {
-                  this.setState({preview: true})
-                }}
-  						/>
-              <BottomNavigationItem
-                label='Compile PDF'
-                icon={rightarrow}
-                onClick={() => {
-     						 this.compileText()
-     						}}
-  						/>
+              {
+                [
+                  topButton1,
+                  topButton2,
+                  topButton3,
+                  topButton4NoPreview,
+                  topButton5
+                ]
+              }
             </BottomNavigation>
           </Paper>
           editorDownUtilities =
@@ -2471,47 +2344,14 @@ note = ,\n\u007D\n'
                 backgroundColor: editorDownUtilitiesBackgroundColor
               }}
   					>
-              <BottomNavigationItem
-                label='Expansion On'
-                icon={networkOnIcon}
-                onClick={() => {
-                  this.setState({
-                    networkFeatures: false,
-                  }, () => {
-                    this.focusEditor(0)
-                  })
-                }}
-  						/>
-              <BottomNavigationItem
-                label='Split View'
-                icon={splitIcon}
-                onClick={() => {
-                  this.setState({
-                    preview: true,
-                    split: true,
-                  }, () => {
-                    let skata = this.state.packages.split(/\r\n|\r|\n/).length
-                    this.refs.splitEditor.editor.setOption(
-                      'firstLineNumber', skata + 1
-                    )
-                    let splitSession = this.refs.splitEditor.editor.getSession()
-                    let splitUndoManager = splitSession.getUndoManager()
-                    splitUndoManager.reset()
-                    splitSession.setUndoManager(splitUndoManager)
-                    this.focusEditor(2)
-                  })
-                }}
-  						/>
-              <BottomNavigationItem
-                label='Packages'
-                icon={extensionIcon}
-                onClick={() => this.setState({packageDialog: true})}
-    					/>
-              <BottomNavigationItem
-                label='Add Figure'
-                icon={addIcon}
-                onClick={() => this.onAddFigureClick()}
-    					/>
+              {
+                [
+                  bottomButton1,
+                  bottomButton2,
+                  bottomButton3,
+                  bottomButton4
+                ]
+              }
             </BottomNavigation>
           </Paper>
           editorLeft =
@@ -2529,6 +2369,23 @@ note = ,\n\u007D\n'
             </div>
           </Paper>
         } else {
+          layout = [
+            {i: 'editor', x: 0, y: 0, w: 3, h: 4, static: true},
+          	{i: 'pdf', x: 10, y: 0, w: 3, h: 4, static: true},
+          	{i: 'loginchat', x: 300, y: 0, w: 3, h: 4, static: true}
+          ]
+          divPDFStyle = {
+          	display: 'none',
+          	width: 0,
+          	height: 0,
+          	zDepth: 0
+          }
+          divNetworkStyle = {
+          	display: 'none',
+          	width: 0,
+          	height: 0,
+          	zDepth: 0
+          }
           editorWidth = width - 5
           editorUpUtilities =
           <Paper
@@ -2542,65 +2399,16 @@ note = ,\n\u007D\n'
                 backgroundColor: editorUtilsColor
               }}
 						>
-              <BottomNavigationItem
-                label='Source'
-                icon={codeIcon}
-                onClick={() => {
-                  this.setState({
-                    textSourceBib: 0
-                  }, () => {
-                    this.focusEditor(0)
-                  })
-    						}}
-  						/>
-              <BottomNavigationItem
-                label='Bibliography'
-                icon={biblioIcon}
-                onClick={() => {
-                  this.setState({
-                    textSourceBib: 1
-                  }, () => {
-                    this.focusEditor(1)
-                  })
-    						}}
-  						/>
-              <BottomNavigationItem
-                label='Math'
-                icon={<EditorFunctions />}
-                onClick={() => {
-                  this.setState({showmatheditorbox: true})
-                }}
-  						/>
-              <BottomNavigationItem
-                label='External'
-                icon={previewNotIcon}
-                onClick={() => {
-                  this.setState({preview: true})
-                }}
-  						/>
-              <IconMenu
-                iconButtonElement={
-                  <img
-                    src={compilePDFLogoSrc}
-                    style={{
-                      width: '3vw',
-                      marginLeft: '10%'
-                    }}
-                  />
-                }
-                anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-                targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                value={0}
-              >
-                <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
-                <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
-                <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
-                <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 4, networkFeatures: true})} />
-                <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true})} />
-                <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
-                <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
-                <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
-              </IconMenu>
+              {
+                [
+                  topButton1,
+                  topButton2,
+                  topButton3,
+                  topButton4NoPreview,
+                  topButton5NoNetwork
+                ]
+              }
+
             </BottomNavigation>
           </Paper>
           editorDownUtilities =
@@ -2616,57 +2424,15 @@ note = ,\n\u007D\n'
                 backgroundColor: editorDownUtilitiesBackgroundColor
               }}
   					>
-              <BottomNavigationItem
-                label='Expansion Off'
-                icon={networkOffIcon}
-                onClick={() => {
-                  this.setState({
-                    networkFeatures: true
-                  }, () => {
-                    this.focusEditor(0)
-                  })
-                }}
-  						/>
-              <BottomNavigationItem
-                label='Split View'
-                icon={splitIcon}
-                onClick={() => {
-                  this.setState({
-                    preview: true,
-                    split: true,
-                  }, () => {
-                    let skata = this.state.packages.split(/\r\n|\r|\n/).length
-                    this.refs.splitEditor.editor.setOption(
-                      'firstLineNumber', skata + 1
-                    )
-                    let splitSession = this.refs.splitEditor.editor.getSession()
-                    let splitUndoManager = splitSession.getUndoManager()
-                    splitUndoManager.reset()
-                    splitSession.setUndoManager(splitUndoManager)
-                    this.focusEditor(2)
-                  })
-                }}
-  						/>
-              <BottomNavigationItem
-                label='Show All'
-                icon={openAll}
-                onClick={() => {
-                  this.setState({
-                    preview: true,
-                    networkFeatures: true
-                  })
-                }}
-  						/>
-              <BottomNavigationItem
-                label='Packages'
-                icon={extensionIcon}
-                onClick={() => this.setState({packageDialog: true})}
-    					/>
-              <BottomNavigationItem
-                label='Add Figure'
-                icon={addIcon}
-                onClick={() => this.onAddFigureClick()}
-    					/>
+              {
+                [
+                  bottomButton1NoNetwork,
+                  bottomButton2WildCard,
+                  bottomButtonWildCard,
+                  bottomButton3,
+                  bottomButton4
+                ]
+              }
             </BottomNavigation>
           </Paper>
         }

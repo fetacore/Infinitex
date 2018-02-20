@@ -152,6 +152,7 @@ autoUpdater.on('update-available', (info) => {
   notification = new Notification({
     title: 'InfiniTex',
     body: 'There exist available updates. Working on it...',
+    silent: true,
     icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
   })
   notification.show()

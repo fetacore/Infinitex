@@ -5,7 +5,9 @@ This is my first attempt to write a desktop app with electron and learn the fant
 
 The one part of the app is a LaTeX editor with search functionality and simplified bibliography and packages handling. The other part is a WYSIWYG editor based on quilljs. The simple part also supports encrypted documents.
 
-I have built it on Debian Linux and I tried on Windows but, like always, everything in there is crappy compared to Linux so I just dropped it.
+I have built it on Debian Linux and I tried on Windows but, like always, everything in there is crappy compared to Linux ~~so I just dropped it~~. I still have not tested on mac but I plan on doing it soon. Otherwise I expect that the program will be fully functional for anyone who wants to develop it on their mac.
+
+[URL](https://github.com/fetacore/Infinitex/releases) for prebuild binaries with autoupdates.
 
 In order to run LaTeX you need to have an installed version of the interpeter like TeXlive, MacTex or MikTex.
 

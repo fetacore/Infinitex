@@ -1,7 +1,7 @@
 {
   "name": "InfiniTex",
   "productName": "InfiniTex",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "A new age editor for academics who seek freedom and people with cryptography needs in rich text environments.",
   "main": "src/index.js",
   "scripts": {
@@ -107,7 +107,8 @@
         "cdraft"
       ]
     },
-    "forceCodeSigning": false
+    "forceCodeSigning": false,
+    "afterPack": "../beforeDist.js"
   },
   "config": {
     "forge": "./forge.config.js"

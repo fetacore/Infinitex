@@ -41,4 +41,6 @@ npm run dist
 7. Open formula module on math selection at simple.
 
 ## Roadmap:
-1. Integration with cloud services for collaboration.
+1. Either move to Semantic UI or Material UI beta for performance.
+2. React-Redux.
+3. Integration with cloud services for collaboration.

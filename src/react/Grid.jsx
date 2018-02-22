@@ -384,17 +384,17 @@ You can refer to the graph as \\ref{figure:nickname}\n'
 
   previousPage () {
     if (this.state.pageIndex > 0) {
-      this.setState({
-        pageIndex: this.state.pageIndex - 1
-      })
+      this.setState((prevState) => ({
+        pageIndex: prevState.pageIndex - 1
+      }))
     }
   }
 
   nextPage () {
     if (this.state.pageIndex + 1 < this.state.numPages) {
-      this.setState({
-        pageIndex: this.state.pageIndex + 1
-      })
+      this.setState((prevState) => ({
+        pageIndex: prevState.pageIndex + 1
+      }))
     }
   }
 

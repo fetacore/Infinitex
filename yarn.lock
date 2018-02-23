@@ -4545,16 +4545,16 @@ pbkdf2@^3.0.3:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-pdfjs-dist@^2.0.290:
-  version "2.0.315"
-  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.0.315.tgz#10eea7899788eac0e3df2acf9aaa1d45f535de82"
+pdfjs-dist@2.0.378:
+  version "2.0.378"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.0.378.tgz#e6aa5dc3e48f0e10e27d02816d2bd8d44c6fab16"
   dependencies:
     node-ensure "^0.0.0"
     worker-loader "^1.1.0"
 
-pdfjs-dist@^2.0.389:
-  version "2.0.389"
-  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.0.389.tgz#54c81c2520a412f4b118d9500ad80377ea9b7acf"
+pdfjs-dist@^2.0.290:
+  version "2.0.315"
+  resolved "https://registry.yarnpkg.com/pdfjs-dist/-/pdfjs-dist-2.0.315.tgz#10eea7899788eac0e3df2acf9aaa1d45f535de82"
   dependencies:
     node-ensure "^0.0.0"
     worker-loader "^1.1.0"

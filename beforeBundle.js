@@ -30,7 +30,7 @@ compressor.minify({
   }
 })
 
-shelljs.cp('-R', __dirname + fpresolver + 'node_modules' + fpresolver + 'pdfjs-dist' + fpresolver + 'cmaps/', __dirname + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'reactPdf' + fpresolver)
+shelljs.cp('-R', __dirname + fpresolver + 'node_modules' + fpresolver + 'pdfjs-dist' + fpresolver + 'cmaps' + fpresolver, __dirname + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'reactPdf' + fpresolver)
 shelljs.mkdir('-p', __dirname + fpresolver + 'src' + fpresolver + 'entry')
 
 fs.readFile(__dirname + '/node_modules/brace/ext/language_tools.js', 'utf-8', (err, data) => {

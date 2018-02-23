@@ -1,6 +1,11 @@
-'use strict'
+const electron = require('electron')
+const compile = require('electron-compile')
+const fs = require('fs')
+const path = require('path')
+const shelljs = require('shelljs')
+const updater = require('electron-updater')
 
-import {
+const {
   app,
   BrowserWindow,
   Menu,
@@ -11,14 +16,11 @@ import {
   shell,
   globalShortcut,
   dialog
-} from 'electron'
-import installExtension, { REACT_DEVELOPER_TOOLS } from 'electron-devtools-installer'
-import { enableLiveReload, addBypassChecker } from 'electron-compile'
-import { autoUpdater } from 'electron-updater'
-import fs from 'fs'
-import path from 'path'
+} = electron
+const { enableLiveReload, addBypassChecker } = compile
+const { autoUpdater } = updater
 
-const shelljs = require('shelljs')
+const isDevMode = process.execPath.match(/[\\/]electron/);
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -76,10 +78,7 @@ addBypassChecker((filePath) => {
   return /.pdf/.test(filePath)
 })
 
-const isDevMode = process.execPath.match(/[\\/]electron/)
-
 if (isDevMode) {
-  enableLiveReload({strategy: 'react-hmr'})
   require('electron-reload')(__dirname)}
 
 const createWindow = async () => {
@@ -106,7 +105,6 @@ const createWindow = async () => {
 
   // Open the DevTools.
   if (isDevMode) {
-    await installExtension(REACT_DEVELOPER_TOOLS)
     mainWindow.webContents.openDevTools()}
 
   // Emitted when the window is closed.

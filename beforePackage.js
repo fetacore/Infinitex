@@ -30,7 +30,8 @@ function removeStuff () {
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'InfinitrConverters.js',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'static' + fpresolver + 'main.css',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'static' + fpresolver + 'style.css',
-    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'static' + fpresolver + 'quill.snow.css'
+    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets'+ fpresolver + 'quill' + fpresolver + 'quill.snow.css',
+    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets'+ fpresolver + 'quill' + fpresolver + 'xcode.min.css'
   )
   removeLines()
 }
@@ -41,27 +42,13 @@ function removeLines () {
       alert(err)
     } else {
       let indexXwrisSkata = data.replace(
-        '\'use strict\'', ''
-      ).replace(
-        'import installExtension, { REACT_DEVELOPER_TOOLS } from \'electron-devtools-installer\'', ''
-      ).replace(
-        '\nimport { enableLiveReload, addBypassChecker } from \'electron-compile\'', 'import { enableLiveReload, addBypassChecker } from \'electron-compile\''
-      )
-      // .replace(
-      //   'const isDevMode = process.execPath.match(/[\\\\/]electron/);', ''
-      // )
-      .replace(
         '\nif (isDevMode) {', ''
-      ).replace(
-        'enableLiveReload({strategy: \'react-hmr\'})', ''
       ).replace(
         'require(\'electron-reload\')(__dirname)}', ''
       ).replace(
         '// Open the DevTools.', ''
       ).replace(
         'if (isDevMode) {', ''
-      ).replace(
-        'await installExtension(REACT_DEVELOPER_TOOLS)', ''
       ).replace(
         'mainWindow.webContents.openDevTools()}', ''
       )
@@ -84,10 +71,10 @@ function removeLines () {
     if (err) {
       alert(err)
     } else {
-      let pXwrisSkata = data.replace(
-        '"config": { "forge": "./forge.config.js" },', ''
+      let packXwrisSkata = data.replace(
+        'electron-prebuilt-compile', 'electron'
       )
-      fs.writeFileSync(__dirname + '/prod/package.json', pXwrisSkata)
+      fs.writeFileSync(__dirname + '/prod/package.json', packXwrisSkata)
     }
   })
 }

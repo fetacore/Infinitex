@@ -2551,419 +2551,398 @@ note = ,\n\u007D\n'
     ]
 
     // The dialogs:
-    let mathEditorDialog = null;
-    let mathPreviewDialog = null;
-    let mathPasteDialog = null;
-    let packageDialog = null;
-    let citationDialog = null;
-    let areYouSureTemplateDialog = null;
-    let areYouSureDialog = null;
-    if (this.state.showmatheditorbox) {
-      mathEditorDialog =
-      <Dialog
-        title='Math Editor'
-        actions={mathEditorButtons}
-        modal={false}
-        open={this.state.showmatheditorbox}
-        onRequestClose={
-          () => {
-            this.setState({showmatheditorbox: false}, () => {
-              if (!this.state.filepath) {
-                this.setState({
-                  preview: true
-                })
-              }
-            })
-            this.focusEditor(this.state.textSourceBib)
-          }
+    let mathEditorDialog =
+    <Dialog
+      title='Math Editor'
+      actions={mathEditorButtons}
+      modal={false}
+      open={this.state.showmatheditorbox}
+      onRequestClose={
+        () => {
+          this.setState({showmatheditorbox: false}, () => {
+            if (!this.state.filepath) {
+              this.setState({
+                preview: true
+              })
+            }
+          })
+          this.focusEditor(this.state.textSourceBib)
         }
-        bodyStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
+      }
+      bodyStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      actionsContainerStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      titleStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+    >
+    <div onContextMenu={(e) => {
+      this.contextMenuBuilder(e, 'matheditor')
+    }}>
+      <AceEditor
+        mode='tex'
+        theme={aceEditorTheme}
+        snippets='tex'
+        name='mathEditor'
+        ref='mathEditor'
+        editorProps={{
+          $blockScrolling: Infinity
         }}
-        actionsContainerStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
+        fontSize={14}
+        value={this.state.matheditorinput}
+        setOptions={{
+          enableBasicAutocompletion: true,
+          enableLiveAutocompletion: true,
+          enableSnippets: true,
+          cursorStyle: 'smooth',
+          useSoftTabs: true
         }}
-        titleStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
+        onChange={this.updateMathEditorInput.bind(this)}
+        onCursorChange={() => this.refs.mathEditor.editor.clearSelection()}
+       />
+     </div>
+    </Dialog>
+    let packageDialog =
+    <Dialog
+      title='Edit Packages'
+      actions={packageEditorButtons}
+      modal={false}
+      open={this.state.packageDialog}
+      onRequestClose={
+				() => {
+          this.setState({packageDialog: false}, () => {
+            if (!this.state.filepath) {
+              this.setState({
+                preview: true
+              })
+            }
+            if (!this.state.preview) {
+              this.focusEditor(this.state.textSourceBib)
+            }
+          })
+        }
+			}
+      bodyStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      actionsContainerStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      titleStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      contentStyle={{
+        width: '70%',
+        maxWidth: 'none',
+        height: '70%',
+        maxHeight: 'none',
+        textAlign: 'center'
+      }}
+    >
+      <AceEditor
+        mode='tex'
+        theme={aceEditorTheme}
+        snippets='tex'
+        name='packageEditor'
+        ref='packageEditor'
+        focus
+        editorProps={{
+          $blockScrolling: Infinity
         }}
-      >
-      <div onContextMenu={(e) => {
-        this.contextMenuBuilder(e, 'matheditor')
-      }}>
-        <AceEditor
-          mode='tex'
-          theme={aceEditorTheme}
-          snippets='tex'
-          name='mathEditor'
-          ref='mathEditor'
-          editorProps={{
-            $blockScrolling: Infinity
-          }}
-          fontSize={14}
-          value={this.state.matheditorinput}
-          setOptions={{
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
-            enableSnippets: true,
-            cursorStyle: 'smooth',
-            useSoftTabs: true
-          }}
-          onChange={this.updateMathEditorInput.bind(this)}
-          onCursorChange={() => this.refs.mathEditor.editor.clearSelection()}
-         />
-       </div>
-     </Dialog>
-    }
-    if (this.state.packageDialog) {
-      packageDialog =
-      <Dialog
-        title='Edit Packages'
-        actions={packageEditorButtons}
-        modal={false}
-        open={this.state.packageDialog}
-        onRequestClose={
-  				() => {
-            this.setState({packageDialog: false}, () => {
-              if (!this.state.filepath) {
-                this.setState({
-                  preview: true
-                })
-              }
-              if (!this.state.preview) {
-                this.focusEditor(this.state.textSourceBib)
-              }
-            })
-          }
-				}
-        bodyStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
+        fontSize={14}
+        value={this.state.packages}
+        width={'70%'}
+        wrapEnabled
+        setOptions={{
+          enableBasicAutocompletion: true,
+          enableLiveAutocompletion: true,
+          enableSnippets: true,
+          cursorStyle: 'smooth',
+          useSoftTabs: true
         }}
-        actionsContainerStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
-        }}
-        titleStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
-        }}
-        contentStyle={{
-          width: '70%',
-          maxWidth: 'none',
-          height: '70%',
-          maxHeight: 'none',
-          textAlign: 'center'
-        }}
-      >
-        <AceEditor
-          mode='tex'
-          theme={aceEditorTheme}
-          snippets='tex'
-          name='packageEditor'
-          ref='packageEditor'
-          focus
-          editorProps={{
-            $blockScrolling: Infinity
-          }}
-          fontSize={14}
-          value={this.state.packages}
-          width={'70%'}
-          wrapEnabled
-          setOptions={{
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
-            enableSnippets: true,
-            cursorStyle: 'smooth',
-            useSoftTabs: true
-          }}
-          onChange={this.updatePackages.bind(this)}
-          onCursorChange={() => this.refs.packageEditor.editor.clearSelection()}
-  			/>
-      </Dialog>
-    }
-    if (this.state.showmathpreviewbox) {
-      mathPreviewDialog =
-      <Dialog
-        modal={false}
-        open={this.state.showmathpreviewbox}
-        onRequestClose={
-  				() => {
-            this.setState({showmathpreviewbox: false})
-            this.focusEditor(this.state.textSourceBib)
-          }
-  			}
-        autoScrollBodyContent
-        bodyStyle={{backgroundColor: previewPDFBackgroundColor, color: letterColor}}
-  		>
-        <BlockMath>
-          {this.state.matheditorinput}
-        </BlockMath>
-      </Dialog>
-    }
-    if (this.state.showpastematheditorbox) {
-      mathPasteDialog =
-      <Dialog
-        title='Paste Math'
-        modal={false}
-        open={this.state.showpastematheditorbox}
-        onRequestClose={
-    			() => {
-            this.setState({showpastematheditorbox: false})
-          }
-  			}
-        bodyStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
-        }}
-        actionsContainerStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
-        }}
-        titleStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
-        }}
-        autoScrollBodyContent
-      >
-        <RadioButtonGroup
-          name='PasteMethods'
-          defaultSelected='not_light'
-          onChange={
-  					(event) => {
-                event.persist()
-                this.setState({
-                  matheditorinput: mathOneLiner(this.state.matheditorinput)
-                }, () => {
-                  let cursor = this.refs.mainEditor.editor.selection.getCursor()
-                  if (event.target.value === 'Inline') {
+        onChange={this.updatePackages.bind(this)}
+        onCursorChange={() => this.refs.packageEditor.editor.clearSelection()}
+			/>
+    </Dialog>
+    let mathPreviewDialog =
+    <Dialog
+      modal={false}
+      open={this.state.showmathpreviewbox}
+      onRequestClose={
+				() => {
+          this.setState({showmathpreviewbox: false})
+          this.focusEditor(this.state.textSourceBib)
+        }
+			}
+      autoScrollBodyContent
+      bodyStyle={{backgroundColor: previewPDFBackgroundColor, color: letterColor}}
+		>
+      <BlockMath>
+        {this.state.matheditorinput}
+      </BlockMath>
+    </Dialog>
+    let mathPasteDialog =
+    <Dialog
+      title='Paste Math'
+      modal={false}
+      open={this.state.showpastematheditorbox}
+      onRequestClose={
+  			() => {
+          this.setState({showpastematheditorbox: false})
+        }
+			}
+      bodyStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      actionsContainerStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      titleStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      autoScrollBodyContent
+    >
+      <RadioButtonGroup
+        name='PasteMethods'
+        defaultSelected='not_light'
+        onChange={
+					(event) => {
+              event.persist()
+              this.setState({
+                matheditorinput: mathOneLiner(this.state.matheditorinput)
+              }, () => {
+                let cursor = this.refs.mainEditor.editor.selection.getCursor()
+                if (event.target.value === 'Inline') {
+                  this.setState({
+                    showmatheditorbox: false,
+                    showpastematheditorbox: false
+                  }, () => {
+                    this.refs.mainEditor.editor.insert(' $' + this.state.matheditorinput + '$ \n')
                     this.setState({
-                      showmatheditorbox: false,
-                      showpastematheditorbox: false
+                      texRow: cursor.row + 1,
+                      texColumn: cursor.column,
+                      matheditorinput: reverseMathOneLiner(this.state.matheditorinput)
                     }, () => {
-                      this.refs.mainEditor.editor.insert(' $' + this.state.matheditorinput + '$ \n')
-                      this.setState({
-                        texRow: cursor.row + 1,
-                        texColumn: cursor.column,
-                        matheditorinput: reverseMathOneLiner(this.state.matheditorinput)
-                      }, () => {
-                        this.focusEditor(0)
-                      })
+                      this.focusEditor(0)
                     })
-                  } else if (event.target.value === 'NewLine') {
+                  })
+                } else if (event.target.value === 'NewLine') {
+                  this.setState({
+                    showmatheditorbox: false,
+                    showpastematheditorbox: false
+                  }, () => {
+                    this.refs.mainEditor.editor.insert('\n$$\n\t' + this.state.matheditorinput + '\n$$\n')
                     this.setState({
-                      showmatheditorbox: false,
-                      showpastematheditorbox: false
+                      texRow: cursor.row + 4,
+                      texColumn: cursor.column,
+                      matheditorinput: reverseMathOneLiner(this.state.matheditorinput)
                     }, () => {
-                      this.refs.mainEditor.editor.insert('\n$$\n\t' + this.state.matheditorinput + '\n$$\n')
-                      this.setState({
-                        texRow: cursor.row + 4,
-                        texColumn: cursor.column,
-                        matheditorinput: reverseMathOneLiner(this.state.matheditorinput)
-                      }, () => {
-                        this.focusEditor(0)
-                      })
+                      this.focusEditor(0)
                     })
-                  } else {
+                  })
+                } else {
+                  this.setState({
+                    showmatheditorbox: false,
+                    showpastematheditorbox: false
+                  }, () => {
+                    this.refs.mainEditor.editor.insert('\n\\begin{equation}\n\t' + this.state.matheditorinput + '\n\\end{equation}\n')
                     this.setState({
-                      showmatheditorbox: false,
-                      showpastematheditorbox: false
+                      texRow: cursor.row + 4,
+                      texColumn: cursor.column,
+                      matheditorinput: reverseMathOneLiner(this.state.matheditorinput)
                     }, () => {
-                      this.refs.mainEditor.editor.insert('\n\\begin{equation}\n\t' + this.state.matheditorinput + '\n\\end{equation}\n')
-                      this.setState({
-                        texRow: cursor.row + 4,
-                        texColumn: cursor.column,
-                        matheditorinput: reverseMathOneLiner(this.state.matheditorinput)
-                      }, () => {
-                        this.focusEditor(0)
-                      })
+                      this.focusEditor(0)
                     })
-                  }
-                })
-              }
-  					}
-  				>
-          <RadioButton
-            label='Inline Paste'
-            value='Inline'
-            labelStyle={{
-              color: letterColor
-            }}
-            inputStyle={{
-              color: letterColor
-            }}
-  				/>
-          <RadioButton
-            label='New Line Paste'
-            value='NewLine'
-            labelStyle={{
-              color: letterColor
-            }}
-            inputStyle={{
-              color: letterColor
-            }}
-  				/>
-          <RadioButton
-            label='Paste as Enumerated Equation'
-            value='EnumeratedEquation'
-            labelStyle={{
-              color: letterColor
-            }}
-            inputStyle={{
-              color: letterColor
-            }}
-  				/>
-        </RadioButtonGroup>
-      </Dialog>
-    }
-    if (this.state.citationNicknameDialogDisplay) {
-      citationDialog =
-      <Dialog
-        modal
-        title={'Citation Nickname'}
-        open={this.state.citationNicknameDialogDisplay}
-        actions={citationNicknameDialogActions}
-        onRequestClose={
-          () => {
-            this.setState({
-              citationNicknameDialogDisplay: false,
-              literatureSearchResultsSelectedDisplay: true
-            })
-          }
+                  })
+                }
+              })
+            }
+					}
+				>
+        <RadioButton
+          label='Inline Paste'
+          value='Inline'
+          labelStyle={{
+            color: letterColor
+          }}
+          inputStyle={{
+            color: letterColor
+          }}
+				/>
+        <RadioButton
+          label='New Line Paste'
+          value='NewLine'
+          labelStyle={{
+            color: letterColor
+          }}
+          inputStyle={{
+            color: letterColor
+          }}
+				/>
+        <RadioButton
+          label='Paste as Enumerated Equation'
+          value='EnumeratedEquation'
+          labelStyle={{
+            color: letterColor
+          }}
+          inputStyle={{
+            color: letterColor
+          }}
+				/>
+      </RadioButtonGroup>
+    </Dialog>
+    let citationDialog =
+    <Dialog
+      modal
+      title={'Citation Nickname'}
+      open={this.state.citationNicknameDialogDisplay}
+      actions={citationNicknameDialogActions}
+      onRequestClose={
+        () => {
+          this.setState({
+            citationNicknameDialogDisplay: false,
+            literatureSearchResultsSelectedDisplay: true
+          })
         }
-        autoScrollBodyContent
-        bodyStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
-        }}
-        contentStyle={{
-          maxWidth: 'none',
-          width: '80%',
-          maxHeight: 'none',
-          height: '90%'
-        }}
-        actionsContainerStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
-        }}
-        titleStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
-        }}
+      }
+      autoScrollBodyContent
+      bodyStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      contentStyle={{
+        maxWidth: 'none',
+        width: '80%',
+        maxHeight: 'none',
+        height: '90%'
+      }}
+      actionsContainerStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      titleStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+    >
+      <div>
+            Write the nickname by which you will refer to this piece of literature.
+            Whenever you want to cite this, you can write {'\n'}\citep{'\u007B' + this.state.citationNickname + '\u007D '}
+            for citation with parenthesis and {'\n'}\citet{'\u007B' + this.state.citationNickname + '\u007D'} for textual
+            citation.{'\n'}Do not forget to include just before the end document command the bibliography command with
+            the correct name of the bib file, as in the Thesis Template.
+          </div>
+      <div>
+        <TextField
+          value={this.state.citationNickname}
+          onChange={(e) => this.setState({citationNickname: e.target.value})}
+          autoFocus
+          onKeyPress={(e) => {
+            if (e.key == 'Enter') {
+              this.setState({
+                citationNicknameDialogDisplay: false,
+                literatureSearchResultsSelectedDisplay: true
+              }, () => {
+                this.createCitationFromLiterature()
+              })
+            }
+          }}
+          hintText={'Enter Nickname'}
+          hintStyle={{ width: '90%', color: letterColor}}
+          inputStyle={{
+            fontSize: '12pt',
+            color: letterColor
+          }}
+          style={{
+            width: '90%'
+          }}
+        />
+      </div>
+    </Dialog>
+    let areYouSureTemplateDialog =
+    <Dialog
+      modal
+      title={'Are you sure?'}
+      open={this.state.areYouSureTemplateDialogDisplay}
+      actions={areYouSureTemplateButtons}
+      onRequestClose={
+        () => {
+          this.setState({
+            areYouSureTemplateDialogDisplay: false
+          })
+        }
+      }
+      autoScrollBodyContent
+      bodyStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      contentStyle={{
+        maxWidth: 'none',
+        width: '50%',
+        maxHeight: 'none',
+        height: '50%'
+      }}
+      actionsContainerStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      titleStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
       >
-        <div>
-              Write the nickname by which you will refer to this piece of literature.
-              Whenever you want to cite this, you can write {'\n'}\citep{'\u007B' + this.state.citationNickname + '\u007D '}
-              for citation with parenthesis and {'\n'}\citet{'\u007B' + this.state.citationNickname + '\u007D'} for textual
-              citation.{'\n'}Do not forget to include just before the end document command the bibliography command with
-              the correct name of the bib file, as in the Thesis Template.
-            </div>
-        <div>
-          <TextField
-            value={this.state.citationNickname}
-            onChange={(e) => this.setState({citationNickname: e.target.value})}
-            autoFocus
-            onKeyPress={(e) => {
-              if (e.key == 'Enter') {
-                this.setState({
-                  citationNicknameDialogDisplay: false,
-                  literatureSearchResultsSelectedDisplay: true
-                }, () => {
-                  this.createCitationFromLiterature()
-                })
-              }
-            }}
-            hintText={'Enter Nickname'}
-            hintStyle={{ width: '90%', color: letterColor}}
-            inputStyle={{
-              fontSize: '12pt',
-              color: letterColor
-            }}
-            style={{
-              width: '90%'
-            }}
-          />
-        </div>
-      </Dialog>
-    }
-    if (this.state.areYouSureTemplateDialogDisplay) {
-      areYouSureTemplateDialog =
-      <Dialog
-        modal
-        title={'Are you sure?'}
-        open={this.state.areYouSureTemplateDialogDisplay}
-        actions={areYouSureTemplateButtons}
-        onRequestClose={
-          () => {
-            this.setState({
-              areYouSureTemplateDialogDisplay: false
-            })
-          }
+        By choosing a template you will leave the current working directory.
+        If this is what you want, please make sure you have saved all your work.
+    </Dialog>
+    let areYouSureDialog =
+    <Dialog
+      modal
+      title={'Are you sure?'}
+      open={this.state.areYouSureDialogDisplay}
+      actions={areYouSureButtons}
+      onRequestClose={
+        () => {
+          this.setState({
+            areYouSureDialogDisplay: false
+          })
         }
-        autoScrollBodyContent
-        bodyStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
-        }}
-        contentStyle={{
-          maxWidth: 'none',
-          width: '50%',
-          maxHeight: 'none',
-          height: '50%'
-        }}
-        actionsContainerStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
-        }}
-        titleStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
-        }}
-        >
-          By choosing a template you will leave the current working directory.
-          If this is what you want, please make sure you have saved all your work.
-      </Dialog>
-    }
-    if (this.state.areYouSureDialogDisplay) {
-      areYouSureDialog =
-      <Dialog
-        modal
-        title={'Are you sure?'}
-        open={this.state.areYouSureDialogDisplay}
-        actions={areYouSureButtons}
-        onRequestClose={
-          () => {
-            this.setState({
-              areYouSureDialogDisplay: false
-            })
-          }
-        }
-        autoScrollBodyContent
-        bodyStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
-        }}
-        contentStyle={{
-          maxWidth: 'none',
-          width: '50%',
-          maxHeight: 'none',
-          height: '50%'
-        }}
-        actionsContainerStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
-        }}
-        titleStyle={{
-          backgroundColor: previewPDFBackgroundColor,
-          color: letterColor
-        }}
-        >
-          Are you sure you want to quit the project? Before you do, make sure you have
-          saved everything or your changes will be lost!
-      </Dialog>
-    }
+      }
+      autoScrollBodyContent
+      bodyStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      contentStyle={{
+        maxWidth: 'none',
+        width: '50%',
+        maxHeight: 'none',
+        height: '50%'
+      }}
+      actionsContainerStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      titleStyle={{
+        backgroundColor: previewPDFBackgroundColor,
+        color: letterColor
+      }}
+      >
+        Are you sure you want to quit the project? Before you do, make sure you have
+        saved everything or your changes will be lost!
+    </Dialog>
 
 	  return (
       <div style={{width: width - 20, height: height, backgroundColor: generalBackgroundColor}}>

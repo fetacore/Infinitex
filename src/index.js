@@ -1,32 +1,22 @@
-const electron = require('electron')
-const compile = require('electron-compile')
-const fs = require('fs')
-const path = require('path')
-const shelljs = require('shelljs')
-const updater = require('electron-updater')
-
 const {
   app,
   BrowserWindow,
-  Menu,
-  Tray,
   nativeImage,
   ipcMain,
   Notification,
   shell,
   globalShortcut,
   dialog
-} = electron
-const { enableLiveReload, addBypassChecker } = compile
-const { autoUpdater } = updater
+} = require('electron')
+const { addBypassChecker } = require('electron-compile')
+const { autoUpdater } = require('electron-updater')
+const fs = require('fs')
 
 const isDevMode = process.execPath.match(/[\\/]electron/);
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
-let childPrintWindow
-let tray
 let notification
 
 const registerShortcuts = async () => {
@@ -88,15 +78,14 @@ const createWindow = async () => {
     backgroundColor: '#111',
     icon: nativeImage.createFromPath(__dirname + '/static/icon.png'),
     darkTheme: true,
+    show: false,
     // frame: false,
     // resizable: false,
     webPreferences: {
+      // devTools: false,
       plugins: false
     }
   })
-  // const menu = Menu.buildFromTemplate(template);
-  // Menu.setApplicationMenu(menu);
-
   mainWindow.maximize()
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
@@ -114,6 +103,11 @@ const createWindow = async () => {
     // when you should delete the corresponding element.
     mainWindow = null
   })
+
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show();
+    mainWindow.focus();
+  });
 
   mainWindow.on('focus', registerShortcuts)
   mainWindow.on('blur', unregisterShortcuts)

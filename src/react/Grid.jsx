@@ -209,7 +209,7 @@ export default class Grid extends React.Component {
         if (!this.state.filepath) {
           this.onCreateProjectClick()
         } else {
-          ipcRenderer.send('createTexBibFile', [this.state.filepath, this.state.packages + '\n' + this.state.texfilecontent + '\n\\end{document}', this.state.bibfilecontent])
+          ipcRenderer.send('createTexBibFile', [this.state.filepath, this.state.packages + this.state.texfilecontent + '\\end{document}', this.state.bibfilecontent])
         }
       }
     })
@@ -262,7 +262,7 @@ export default class Grid extends React.Component {
         return
       }
       // fileName is a string that contains the path and filename created in the save file dialog.
-      ipcRenderer.send('createTexBibFile', [fileName, this.state.packages + '\n' + this.state.texfilecontent + '\n\\end{document}', this.state.bibfilecontent])
+      ipcRenderer.send('createTexBibFile', [fileName, this.state.packages + this.state.texfilecontent + '\\end{document}', this.state.bibfilecontent])
       this.setState({ filepath: fileName })
     })
     ipcRenderer.on('openTexDialogFilename', (event, fileNames) => {
@@ -344,7 +344,7 @@ You can refer to the graph as \\ref{figure:nickname}\n'
         } else if (filetitle.indexOf(' ') !== -1) {
           this.onNotification('IncorrectFilename')
         } else {
-          ipcRenderer.send('createTexBibFile', [fileName, this.state.packages + '\n' + this.state.texfilecontent + '\n\\end{document}', this.state.bibfilecontent])
+          ipcRenderer.send('createTexBibFile', [fileName, this.state.packages + this.state.texfilecontent + '\\end{document}', this.state.bibfilecontent])
           this.setState({
             filepath: fileName,
             PDFLoading: true,

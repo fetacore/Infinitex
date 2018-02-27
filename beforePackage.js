@@ -51,6 +51,8 @@ function removeLines () {
         'if (isDevMode) {', ''
       ).replace(
         'mainWindow.webContents.openDevTools()}', ''
+      ).replace(
+        '// devTools', 'devTools'
       )
       fs.writeFileSync(__dirname + '/prod/src/index.js', indexXwrisSkata)
     }

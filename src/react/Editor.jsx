@@ -207,76 +207,68 @@ export default class Editor extends React.Component {
   };
 
   async encrypt (fp, data, thenClose) {
-    magic.pbkdf2(this.state.password, this.state.password + '19(1mfPr1v@cYyYyY!!!11', 60000, 32, 'sha512', (err, derivedKey) => {
+    magic.pbkdf2(this.state.password, this.state.password + '19(1mfPr1v@cYyYyY!!!11', 100000, 32, 'sha512', (err, derivedKey) => {
       if (err) {
-
+        alert(err)
       } else {
-        magic.pbkdf2('19(1mfPr1v@cYyYyY!!!11!@', this.state.password + '19(1mfPr1v@cYyYyY!!!11', 20000, 16, 'sha512', (error, iv) => {
-          if (error) {
-
-          } else {
-            let cipher = magic.createCipheriv('aes-256-cbc', derivedKey, iv)
-            try {
-              var encrypted = cipher.update(data, 'utf8', 'hex')
-              encrypted += cipher.final('hex')
-              ipcRenderer.send('createFile', [fp, encrypted])
+        let iv = magic.randomBytes(16)
+        let cipher = magic.createCipheriv('aes-256-cbc', new Buffer(derivedKey), iv)
+        try {
+          let encrypted = cipher.update(data)
+          encrypted = Buffer.concat([encrypted, cipher.final()])
+          ipcRenderer.send('createFile', [fp, iv.toString('hex') + '-' + encrypted.toString('hex')])
+          this.setState({
+            encrypting: false
+          }, () => {
+            if (thenClose) {
+              this.quillRef.setContents({'ops': [{'insert': ''}]})
+              this.quillRef.history.clear()
               this.setState({
-                encrypting: false
-              }, () => {
-                if (thenClose) {
-                  this.quillRef.setContents({'ops': [{'insert': ''}]})
-                  this.quillRef.history.clear()
-                  this.setState({
-                    filepath: null,
-                    password: '',
-                    areYouSureDialogDisplay: false
-                  })
-                } else {
-                  if (!this.state.filepath) {
-                    this.setState({
-                      filepath: fp
-                    })
-                  }
-                }
+                filepath: null,
+                password: '',
+                areYouSureDialogDisplay: false
               })
-            } catch (ex) {
-              this.setState({
-                encrypting: false,
-                cryptoCreateProjectDialog: true
-              })
+            } else {
+              if (!this.state.filepath) {
+                this.setState({
+                  filepath: fp
+                })
+              }
             }
-          }
-        })
+          })
+        } catch (ex) {
+          this.setState({
+            encrypting: false,
+            cryptoCreateProjectDialog: true
+          })
+        }
       }
     })
   }
 
   async decrypt (data, fp) {
-    magic.pbkdf2(this.state.password, this.state.password + '19(1mfPr1v@cYyYyY!!!11', 60000, 32, 'sha512', (err, derivedKey) => {
+    magic.pbkdf2(this.state.password, this.state.password + '19(1mfPr1v@cYyYyY!!!11', 100000, 32, 'sha512', (err, derivedKey) => {
       if (err) {
-
+        alert(err)
       } else {
-        magic.pbkdf2('19(1mfPr1v@cYyYyY!!!11!@', this.state.password + '19(1mfPr1v@cYyYyY!!!11', 20000, 16, 'sha512', (error, iv) => {
-          if (error) {
-
-          } else {
-            let decipher = magic.createDecipheriv('aes-256-cbc', derivedKey, iv)
-            try {
-              var decrypted = decipher.update(data, 'hex', 'utf8')
-              decrypted += decipher.final('utf8')
-              this.quillRef.setContents(JSON.parse(decrypted))
-              this.setState({
-                filepath: fp,
-                decrypting: false
-              })
-            } catch (ex) {
-              this.setState({
-                decrypting: false,
-                cryptoOpenProjectDialog: true
-              })
-            }
-          }
-        })
+        let textParts = data.split('-');
+        let iv = new Buffer(textParts.shift(), 'hex');
+        let encryptedText = new Buffer(textParts.join('-'), 'hex');
+        let decipher = magic.createDecipheriv('aes-256-cbc', new Buffer(derivedKey), iv)
+        try {
+          let decrypted = decipher.update(encryptedText)
+          decrypted = Buffer.concat([decrypted, decipher.final()])
+          this.quillRef.setContents(JSON.parse(decrypted.toString()))
+          this.setState({
+            filepath: fp,
+            decrypting: false
+          })
+        } catch (ex) {
+          this.setState({
+            decrypting: false,
+            cryptoOpenProjectDialog: true
+          })
+        }
       }
     })
   }
@@ -317,12 +309,12 @@ export default class Editor extends React.Component {
       }, () => {
         setTimeout(() => {
           this.encrypt(fp, data, thenClose)
-        }, 400)
+        }, 300)
       })
     } else {
       setTimeout(() => {
         this.encrypt(fp, data, thenClose)
-      }, 400)
+      }, 300)
     }
   }
 

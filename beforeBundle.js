@@ -34,7 +34,22 @@ shelljs.cp('-R', __dirname + fpresolver + 'node_modules' + fpresolver + 'pdfjs-d
 shelljs.mkdir('-p', __dirname + fpresolver + 'src' + fpresolver + 'entry')
 
 fs.readFile(__dirname + '/node_modules/brace/ext/language_tools.js', 'utf-8', (err, data) => {
-  let dataXwrisSkatila = data.replace('var completers = [snippetCompleter, textCompleter, keyWordCompleter];', 'var completers = [snippetCompleter, keyWordCompleter];')
+  let dataXwrisSkatila = data.replace(
+    'var completers = [snippetCompleter, textCompleter, keyWordCompleter];',
+    'var completers = [snippetCompleter, keyWordCompleter];'
+  ).replace(
+    '#fbfbfb', '#141414'
+  ).replace(
+    '#444', '#696969'
+  ).replace(
+    'rgba(194, 193, 208, 0.09)', '#171717'
+  ).replace(
+    '#CAD6FA', '#585858'
+  ).replace(
+    'rgba(233,233,253,0.4)', '#b9b9b9'
+  ).replace(
+    'lightgray', 'black'
+  )
   fs.writeFileSync(__dirname + '/node_modules/brace/ext/language_tools.js', dataXwrisSkatila)
 })
 

@@ -1,7 +1,7 @@
 {
   "name": "InfiniTex",
   "productName": "InfiniTex",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "A new age editor for academics who seek freedom and people with cryptography needs in rich text environments.",
   "main": "src/index.js",
   "scripts": {
@@ -11,7 +11,8 @@
     "postminify": "uglifyjs --compress drop_console=true --mangle -- ./src/entry/bundle.js > ./src/react/inf.min.js",
     "postpostminify": "uglifyjs --compress drop_console=true --mangle -- ./src/index.js > ./src/index.min.js",
     "package": "node ./beforePackage.js && cd prod && yarn && electron-builder --dir",
-    "dist": "node ./beforePackage.js && cd prod && yarn && electron-builder"
+    "dist": "node ./beforePackage.js && cd prod && yarn && electron-builder",
+    "dist:deb": "node ./beforePackLinuxNoAutoupdates.js && cd prod && yarn && electron-builder"
   },
   "build": {
     "appId": "com.fetacore.InfiniTex",

@@ -193,9 +193,6 @@ export default class Grid extends React.Component {
           splitUndoManager.reset()
           splitSession.setUndoManager(splitUndoManager)
         }
-        this.refs.bibEditor.editor.setOption(
-          'firstLineNumber', skata + 1
-        )
         let bibSession = this.refs.bibEditor.editor.getSession()
         let bibUndoManager = bibSession.getUndoManager()
         bibUndoManager.reset()
@@ -477,9 +474,6 @@ You can refer to the graph as \\ref{figure:nickname}\n'
         let mainUndoManager = mainSession.getUndoManager()
         mainUndoManager.reset()
         mainSession.setUndoManager(mainUndoManager)
-        this.refs.bibEditor.editor.setOption(
-          'firstLineNumber', skata + 1
-        )
         let bibSession = this.refs.bibEditor.editor.getSession()
         let bibUndoManager = bibSession.getUndoManager()
         bibUndoManager.reset()

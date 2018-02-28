@@ -73,8 +73,6 @@ export default class App extends React.Component {
             file: d,
             component: 'simple'
           })
-        } else {
-          ipcRenderer.sendSync('notify', 'unsupportedFP')
         }
       }
     }

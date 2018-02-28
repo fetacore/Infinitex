@@ -173,7 +173,8 @@ export default class Grid extends React.Component {
     ipcRenderer.on('texDataDummy', (event, data) => {
       this.setState({
         texfilecontent: data.slice(data.indexOf('\\begin{document}') + 16, data.indexOf('\\end{document}')),
-        packages: data.slice(0, data.indexOf('\\begin{document}') + 16)
+        packages: data.slice(0, data.indexOf('\\begin{document}') + 16),
+        textSourceBib: 1
       }, () => {
         let skata = this.state.packages.split(/\r\n|\r|\n/).length
         this.refs.mainEditor.editor.setOption(
@@ -192,6 +193,13 @@ export default class Grid extends React.Component {
           splitUndoManager.reset()
           splitSession.setUndoManager(splitUndoManager)
         }
+        this.refs.bibEditor.editor.setOption(
+          'firstLineNumber', skata + 1
+        )
+        let bibSession = this.refs.bibEditor.editor.getSession()
+        let bibUndoManager = bibSession.getUndoManager()
+        bibUndoManager.reset()
+        bibSession.setUndoManager(bibUndoManager)
       })
     })
     ipcRenderer.on('bibDataDummy', (event, data) => {
@@ -458,7 +466,8 @@ You can refer to the graph as \\ref{figure:nickname}\n'
         texRow: 16,
         texColumn: 1,
         bibRow: 9,
-        bibColumn: 1
+        bibColumn: 1,
+        textSourceBib: 1
       }, () => {
         let skata = this.state.packages.split(/\r\n|\r|\n/).length
         this.refs.mainEditor.editor.setOption(
@@ -468,6 +477,13 @@ You can refer to the graph as \\ref{figure:nickname}\n'
         let mainUndoManager = mainSession.getUndoManager()
         mainUndoManager.reset()
         mainSession.setUndoManager(mainUndoManager)
+        this.refs.bibEditor.editor.setOption(
+          'firstLineNumber', skata + 1
+        )
+        let bibSession = this.refs.bibEditor.editor.getSession()
+        let bibUndoManager = bibSession.getUndoManager()
+        bibUndoManager.reset()
+        bibSession.setUndoManager(bibUndoManager)
         this.focusEditor(0)
       })
     }, 50)
@@ -524,13 +540,13 @@ You can refer to the graph as \\ref{figure:nickname}\n'
   }
 
   onFocusMainEditor () {
-    this.refs.mainEditor.editor.clearSelection()
     let crsr = this.refs.mainEditor.editor.selection.getCursor()
     this.setState({
       texRow: crsr.row,
       texColumn: crsr.column,
       textSourceBib: 0
     }, () => {
+      this.refs.mainEditor.editor.clearSelection()
       setTimeout(() => {
         this.focusEditor(0)
       }, 5)
@@ -538,12 +554,12 @@ You can refer to the graph as \\ref{figure:nickname}\n'
   }
 
   onFocusBibEditor () {
-    this.refs.bibEditor.editor.clearSelection()
     let crsr = this.refs.bibEditor.editor.selection.getCursor()
     this.setState({
       bibRow: crsr.row,
       bibColumn: crsr.column
     }, () => {
+      this.refs.bibEditor.editor.clearSelection()
       setTimeout(() => {
         this.focusEditor(1)
       }, 5)
@@ -2604,7 +2620,6 @@ note = ,\n\u007D\n'
           useSoftTabs: true
         }}
         onChange={this.updateMathEditorInput.bind(this)}
-        onCursorChange={() => this.refs.mathEditor.editor.clearSelection()}
        />
      </div>
     </Dialog>
@@ -2670,7 +2685,6 @@ note = ,\n\u007D\n'
           useSoftTabs: true
         }}
         onChange={this.updatePackages.bind(this)}
-        onCursorChange={() => this.refs.packageEditor.editor.clearSelection()}
 			/>
     </Dialog>
     let mathPreviewDialog =

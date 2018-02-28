@@ -12,7 +12,8 @@
     "postpostminify": "uglifyjs --compress drop_console=true --mangle -- ./src/index.js > ./src/index.min.js",
     "package": "node ./beforePackage.js && cd prod && yarn && electron-builder --dir",
     "dist": "node ./beforePackage.js && cd prod && yarn && electron-builder",
-    "dist:deb": "node ./beforePackLinuxNoAutoupdates.js && cd prod && yarn && electron-builder"
+    "dist:deb": "node ./beforePackLinuxNoAutoupdatesDeb.js && cd prod && yarn && electron-builder",
+    "dist:rpm": "node ./beforePackLinuxNoAutoupdatesRpm.js && cd prod && yarn && electron-builder"
   },
   "build": {
     "appId": "com.fetacore.InfiniTex",

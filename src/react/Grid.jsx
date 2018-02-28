@@ -37,6 +37,7 @@ import HardwareKeyboardArrowLeft from 'material-ui/svg-icons/hardware/keyboard-a
 import HardwareKeyboardArrowRight from 'material-ui/svg-icons/hardware/keyboard-arrow-right'
 import AlertAddAlert from 'material-ui/svg-icons/alert/add-alert'
 import EditorFunctions from 'material-ui/svg-icons/editor/functions'
+import EditorFormatPaint from 'material-ui/svg-icons/editor/format-paint'
 import NavigationArrowForward from 'material-ui/svg-icons/navigation/arrow-forward'
 import AceEditor from 'react-ace'
 import brace from 'brace'
@@ -67,8 +68,8 @@ import { draftTex, draftBib } from './assets/texstarters/draft.js'
 const {
   app,
   shell,
-  Menu,
-  process
+  process,
+  Menu
 } = require('electron').remote
 const { remote, ipcRenderer } = require('electron')
 const shelljs = require('shelljs')
@@ -84,7 +85,6 @@ pdfjs.PDFJS.workerSrc = '../src/react/reactPdf/pdf.worker.min.js'
 pdfjs.PDFJS.cMapUrl = '../src/react/reactPdf/cmaps/'
 pdfjs.PDFJS.cMapPacked = true
 
-let ContextMenu = new Menu()
 const codeIcon = <ActionCode />
 const previewIcon = <ActionVisibility />
 const previewNotIcon = <ActionVisibilityOff />
@@ -101,6 +101,7 @@ const networkOnIcon = <CommunicationScreenShare />
 const networkOffIcon = <CommunicationStopScreenShare />
 const openAll = <ContentSelectAll />
 const openProjectIcon = <AvAddToQueue />
+const themeIcon = <EditorFormatPaint />
 
 export default class Grid extends React.Component {
   constructor (props) {
@@ -478,7 +479,7 @@ You can refer to the graph as \\ref{figure:nickname}\n'
         let bibUndoManager = bibSession.getUndoManager()
         bibUndoManager.reset()
         bibSession.setUndoManager(bibUndoManager)
-        this.focusEditor(0)
+        this.focusEditor(1)
       })
     }, 50)
   }
@@ -746,7 +747,6 @@ note = ,\n\u007D\n'
     } else {
       this.setState({
         PDFLoading: true,
-        theme: 'Red',
         preview: true,
         binaryPDFContent: null
       }, () => {
@@ -850,13 +850,9 @@ note = ,\n\u007D\n'
         }
         this.setState({
           PDFLoading: false,
-          theme: 'Default'
         })
         document.body.style.cursor = 'default'
       } else {
-        this.setState({
-          theme: 'Default'
-        })
         if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
           ipcRenderer.send('openPDF', this.state.filepath.replace('.tex', '.pdf'))
         }
@@ -1122,8 +1118,16 @@ note = ,\n\u007D\n'
         ]
       }
     }
-    ContextMenu = Menu.buildFromTemplate(contextMenuTemplate)
-    ContextMenu.popup()
+    const ContextMenu = Menu.buildFromTemplate(contextMenuTemplate)
+    ContextMenu.popup(remote.getCurrentWindow())
+  }
+
+  themeChooser (name) {
+    setTimeout(() => {
+      this.setState({
+        theme: name
+      })
+    }, 100)
   }
 
   render () {
@@ -1194,6 +1198,19 @@ note = ,\n\u007D\n'
       this.infinity = 'White'
       letterColor = '#fff'
     }
+
+    let themeMenu =
+    <MenuItem
+      primaryText="Themes"
+      style={{color: '#fff'}}
+      menuItems={[
+        <MenuItem value={1} primaryText='Default' style={{color: '#959595'}} onClick={() => this.themeChooser('Default')} />,
+        <MenuItem value={1} primaryText='White' style={{color: '#fff'}} onClick={() => this.themeChooser('Light')} />,
+        <MenuItem value={2} primaryText='Red' style={{color: '#d62222'}} onClick={() => this.themeChooser('Red')} />,
+        <MenuItem value={3} primaryText='Green' style={{color: '#398c28'}} onClick={() => this.themeChooser('Green')} />,
+        <MenuItem value={4} primaryText='Purple' style={{color: '#8e2498'}} onClick={() => this.themeChooser('Purple')} />
+      ]}
+    />
 
     // Logo color and source///////////////////////
     let logosrc = null
@@ -1293,13 +1310,14 @@ note = ,\n\u007D\n'
       key='t5NN'
     >
       <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
-      <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
-      <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
-      <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 2, networkFeatures: true, split: false})} />
-      <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true, split: false})} />
-      <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
-      <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
-      <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
+      <MenuItem value={2} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
+      <MenuItem value={3} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
+      <MenuItem value={4} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 2, networkFeatures: true, split: false})} />
+      <MenuItem value={5} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true, split: false})} />
+      <MenuItem value={6} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
+      {themeMenu}
+      <MenuItem value={8} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
+      <MenuItem value={9} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
     </IconMenu>
     const bottomButton1 = <BottomNavigationItem
       label='Expansion On'
@@ -1911,6 +1929,7 @@ note = ,\n\u007D\n'
         <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.editorLeftClickWithLiteratureDisplay(infIconPageNavigation)} />
         <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5})} />
         <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
+        {themeMenu}
         <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
         <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
       </IconMenu>
@@ -1943,6 +1962,7 @@ note = ,\n\u007D\n'
         <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.editorLeftClickWithoutLiteratureDisplay(infIconPageNavigation)} />
         <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5})} />
         <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
+        {themeMenu}
         <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
         <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
       </IconMenu>

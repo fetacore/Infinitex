@@ -6,7 +6,8 @@ const {
   Notification,
   shell,
   globalShortcut,
-  dialog
+  dialog,
+  Menu
 } = require('electron')
 const { addBypassChecker } = require('electron-compile')
 const { autoUpdater } = require('electron-updater')

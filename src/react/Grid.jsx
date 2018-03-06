@@ -79,9 +79,9 @@ const buttonStyles = {
   backgroundColor: '#666666'
 }
 
-const pdfjs = require('pdfjs-dist/build/pdf.min.js')
+import pdfjs from 'pdfjs-dist/build/pdf.min.js'
 
-pdfjs.PDFJS.workerSrc = '../src/react/reactPdf/pdf.worker.min.js'
+pdfjs.PDFJS.GlobalWorkerOptions.workerSrc = '../src/react/reactPdf/pdf.worker.min.js'
 pdfjs.PDFJS.cMapUrl = '../src/react/reactPdf/cmaps/'
 pdfjs.PDFJS.cMapPacked = true
 
@@ -118,6 +118,8 @@ export default class Grid extends React.Component {
       bibfilecontent: '',
       bibRow: 1,
       bibColumn: 1,
+      splitRow: 1,
+      splitColumn: 1,
       textSourceBib: 0,
       // Switches
       preview: true,
@@ -354,7 +356,6 @@ You can refer to the graph as \\ref{figure:nickname}\n'
           this.setState({
             filepath: fileName,
             PDFLoading: true,
-            theme: 'Red',
             preview: true
           }, () => {
             this.actualCompilation()
@@ -562,10 +563,16 @@ You can refer to the graph as \\ref{figure:nickname}\n'
   }
 
   onFocusSplitEditor () {
-    this.refs.splitEditor.editor.clearSelection()
-    setTimeout(() => {
-      this.focusEditor(2)
-    }, 5)
+    let crsr = this.refs.splitEditor.editor.selection.getCursor()
+    this.setState({
+      splitRow: crsr.row,
+      splitColumn: crsr.column
+    }, () => {
+      this.refs.splitEditor.editor.clearSelection()
+      setTimeout(() => {
+        this.focusEditor(2)
+      }, 5)
+    })
   }
 
   onCreateProjectClick () {
@@ -760,7 +767,7 @@ note = ,\n\u007D\n'
     let fpresolver = null
     let windowsCrapCDcommand = null
     document.body.style.cursor = 'wait',
-    ipcRenderer.send('createTexBibFile', [this.state.filepath, this.state.packages + '\n' + this.state.texfilecontent + '\n\\end{document}', this.state.bibfilecontent])
+    ipcRenderer.send('createTexBibFile', [this.state.filepath, this.state.packages + this.state.texfilecontent + '\n\\end{document}', this.state.bibfilecontent])
     switch (process.platform) {
       case 'win32':
         windowsCrapCDcommand = 'pushd '
@@ -918,8 +925,8 @@ note = ,\n\u007D\n'
       this.refs.mainEditor.editor.clearSelection()
     } else if (index == 2){
       this.refs.splitEditor.editor.clearSelection()
-      this.refs.splitEditor.editor.moveCursorTo(this.state.texRow, this.state.texColumn)
-      this.refs.splitEditor.editor.scrollToLine(this.state.texRow, true, true)
+      this.refs.splitEditor.editor.moveCursorTo(this.state.splitRow, this.state.splitColumn)
+      this.refs.splitEditor.editor.scrollToLine(this.state.splitRow, true, true)
       this.refs.splitEditor.editor.focus()
       this.refs.splitEditor.editor.clearSelection()
     } else {
@@ -931,12 +938,25 @@ note = ,\n\u007D\n'
     }
   }
 
-  updateTexInput (value) {
+  onBlurMainEditor () {
     const cursor = this.refs.mainEditor.editor.selection.getCursor()
     this.setState({
-      texfilecontent: value,
       texRow: cursor.row,
       texColumn: cursor.column + 1
+    })
+  }
+
+  onBlurBibEditor () {
+    const cursor = this.refs.bibEditor.editor.selection.getCursor()
+    this.setState({
+      bibRow: cursor.row,
+      bibColumn: cursor.column + 1
+    })
+  }
+
+  updateTexInput (value) {
+    this.setState({
+      texfilecontent: value,
     })
   }
 
@@ -947,11 +967,8 @@ note = ,\n\u007D\n'
   }
 
   updateBibInput (value) {
-    const cursor = this.refs.bibEditor.editor.selection.getCursor()
     this.setState({
       bibfilecontent: value,
-      bibRow: cursor.row,
-      bibColumn: cursor.column + 1
     })
   }
 
@@ -1159,7 +1176,7 @@ note = ,\n\u007D\n'
 			// this.setState({preview:false});
     } else if (this.state.theme == 'Red') {
       generalBackgroundColor = '#000'
-      loadingPDFCircleColor = '#180000'
+      loadingPDFCircleColor = '#ffffff'
       previewPDFBackgroundColor = '#180000'
       editorLeftBackgroundColor = '#180000'
       editorDownUtilitiesBackgroundColor = '#180000'
@@ -1169,7 +1186,7 @@ note = ,\n\u007D\n'
       letterColor = '#fff'
     } else if (this.state.theme == 'Green') {
       generalBackgroundColor = '#010a01'
-      loadingPDFCircleColor = '#062106'
+      loadingPDFCircleColor = '#fff'
       previewPDFBackgroundColor = '#062106'
       editorLeftBackgroundColor = '#062106'
       editorDownUtilitiesBackgroundColor = '#062106'
@@ -1179,7 +1196,7 @@ note = ,\n\u007D\n'
       letterColor = '#fff'
     } else if (this.state.theme == 'Purple') {
       generalBackgroundColor = '#1a0116'
-      loadingPDFCircleColor = '#320f27'
+      loadingPDFCircleColor = '#fff'
       previewPDFBackgroundColor = '#320f27'
       editorLeftBackgroundColor = '#320f27'
       editorDownUtilitiesBackgroundColor = '#320f27'
@@ -1189,7 +1206,7 @@ note = ,\n\u007D\n'
       letterColor = '#fff'
     } else {
       generalBackgroundColor = '#111'
-      loadingPDFCircleColor = '#000'
+      loadingPDFCircleColor = '#fff'
       previewPDFBackgroundColor = '#141414'
       editorLeftBackgroundColor = '#141414'
       editorDownUtilitiesBackgroundColor = '#141414'
@@ -1199,30 +1216,33 @@ note = ,\n\u007D\n'
       letterColor = '#fff'
     }
 
-    let themeMenu =
-    <MenuItem
-      primaryText="Themes"
-      style={{color: '#fff'}}
-      menuItems={[
-        <MenuItem value={1} primaryText='Default' style={{color: '#959595'}} onClick={() => this.themeChooser('Default')} />,
-        <MenuItem value={1} primaryText='White' style={{color: '#fff'}} onClick={() => this.themeChooser('Light')} />,
-        <MenuItem value={2} primaryText='Red' style={{color: '#d62222'}} onClick={() => this.themeChooser('Red')} />,
-        <MenuItem value={3} primaryText='Green' style={{color: '#398c28'}} onClick={() => this.themeChooser('Green')} />,
-        <MenuItem value={4} primaryText='Purple' style={{color: '#8e2498'}} onClick={() => this.themeChooser('Purple')} />
-      ]}
-    />
+    let themeMenu = null
+    if (this.state.theme == 'Default') {
+      themeMenu =
+      <MenuItem
+        primaryText="Dark Theme"
+        style={{color: '#fff'}}
+        checked={true}
+        onClick={(e) => this.themeChooser('Light')}
+      />
+    } else {
+      themeMenu =
+      <MenuItem
+        primaryText="White Theme"
+        style={{color: '#fff'}}
+        checked={true}
+        onClick={(e) => this.themeChooser('Default')}
+      />
+    }
 
     // Logo color and source///////////////////////
     let logosrc = null
-    let loaderColor = null
     let compilePDFLogoSrc = null
     if (this.infinity == 'White') {
       logosrc = '../src/static/infty_white.svg'
-      loaderColor = '#fff'
       compilePDFLogoSrc = '../src/static/infty_white.svg'
     } else {
       logosrc = '../src/static/infty_black.svg'
-      loaderColor = '#000'
       compilePDFLogoSrc = '../src/static/infty_black.svg'
     }
 
@@ -1363,16 +1383,18 @@ note = ,\n\u007D\n'
       onClick={() => this.setState({
         split: true,
         networkFeatures: false,
+        splitRow: this.state.texRow,
+        splitColumn: this.state.texColumn - 1
       }, () => {
+        let skata = this.state.packages.split(/\r\n|\r|\n/).length
+        this.refs.splitEditor.editor.setOption(
+          'firstLineNumber', skata + 1
+        )
+        let splitSession = this.refs.splitEditor.editor.getSession()
+        let splitUndoManager = splitSession.getUndoManager()
+        splitUndoManager.reset()
+        splitSession.setUndoManager(splitUndoManager)
         setTimeout(() => {
-          let skata = this.state.packages.split(/\r\n|\r|\n/).length
-          this.refs.splitEditor.editor.setOption(
-            'firstLineNumber', skata + 1
-          )
-          let splitSession = this.refs.splitEditor.editor.getSession()
-          let splitUndoManager = splitSession.getUndoManager()
-          splitUndoManager.reset()
-          splitSession.setUndoManager(splitUndoManager)
           this.focusEditor(2)
         }, 5)
       })}
@@ -1385,16 +1407,18 @@ note = ,\n\u007D\n'
         preview: true,
         split: true,
         networkFeatures: false,
+        splitRow: this.state.texRow,
+        splitColumn: this.state.texColumn - 1
       }, () => {
+        let skata = this.state.packages.split(/\r\n|\r|\n/).length
+        this.refs.splitEditor.editor.setOption(
+          'firstLineNumber', skata + 1
+        )
+        let splitSession = this.refs.splitEditor.editor.getSession()
+        let splitUndoManager = splitSession.getUndoManager()
+        splitUndoManager.reset()
+        splitSession.setUndoManager(splitUndoManager)
         setTimeout(() => {
-          let skata = this.state.packages.split(/\r\n|\r|\n/).length
-          this.refs.splitEditor.editor.setOption(
-            'firstLineNumber', skata + 1
-          )
-          let splitSession = this.refs.splitEditor.editor.getSession()
-          let splitUndoManager = splitSession.getUndoManager()
-          splitUndoManager.reset()
-          splitSession.setUndoManager(splitUndoManager)
           this.focusEditor(2)
         }, 5)
       })}
@@ -1405,6 +1429,9 @@ note = ,\n\u007D\n'
       key='b2S'
       onClick={() => this.setState({
         split: false,
+      }, () => {
+        this.refs.mainEditor.editor.selection.clearSelection()
+        this.focusEditor(0)
       })}
     />
     const bottomButton3 = <BottomNavigationItem
@@ -1737,7 +1764,7 @@ note = ,\n\u007D\n'
         <CircularProgress
           size={80}
           thickness={9}
-          color={loaderColor}
+          color={loadingPDFCircleColor}
           style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
       />
       </div>
@@ -1850,7 +1877,7 @@ note = ,\n\u007D\n'
           value={this.state.downloadProgress}
           min={0}
           max={100}
-          color={loaderColor}
+          color={loadingPDFCircleColor}
           style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
         />
         <TextField
@@ -2187,53 +2214,62 @@ note = ,\n\u007D\n'
             PDFContainerHeight = height - 55
             if (this.state.PDFLoading) {
               PreviewPDF =
-                <div style={{position: 'relative'}}>
+                <div style={{
+                  position: 'relative',
+                  backgroundColor: previewPDFBackgroundColor
+                }}>
                   <CircularProgress
                     size={100}
                     thickness={8}
-                    color='#fff'
+                    color={loadingPDFCircleColor}
                     style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
       						/>
                 </div>
             } else {
               if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf')) && !this.latexError) {
                 PreviewPDF =
-                  <Document
-                    file={{data: `data:application/pdf;base64,${this.state.binaryPDFContent}`}}
-                    onLoadSuccess={(pdf) => {
-                      this.onDocumentLoadSuccess(pdf.numPages)
+                  <div
+                    style={{
+                      backgroundColor: previewPDFBackgroundColor
                     }}
-                    className='pdfPreview'
-                    rotate={0}
-                    onLoadError={() => {
-                      this.setState({
-                        PDFLoading: true
-                      }, () => {
-                        ipcRenderer.send('openPDF', this.state.filepath.replace('.tex', '.pdf'))
-                      })
-                    }}
-                    loading={
-                      <CircularProgress
-                        size={100}
-                        thickness={8}
-                        color={loaderColor}
-                        style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
+                  >
+                    <Document
+                      file={{data: `data:application/pdf;base64,${this.state.binaryPDFContent}`}}
+                      onLoadSuccess={(pdf) => {
+                        this.onDocumentLoadSuccess(pdf.numPages)
+                      }}
+                      className='pdfPreview'
+                      rotate={0}
+                      onLoadError={() => {
+                        this.setState({
+                          PDFLoading: true
+                        }, () => {
+                          ipcRenderer.send('openPDF', this.state.filepath.replace('.tex', '.pdf'))
+                        })
+                      }}
+                      loading={
+                        <CircularProgress
+                          size={100}
+                          thickness={8}
+                          color={loadingPDFCircleColor}
+                          style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
+                        />
+                      }
+                      >
+                      <Page
+                        key={`page_${this.state.pageIndex + 1}`}
+                        width={this.PDFWidth}
+                        pageNumber={this.state.pageIndex + 1}
+                        renderAnnotations
+                        className='pdfPage'
+                        renderMode='svg'
                       />
-                    }
-                    >
-                    <Page
-                      key={`page_${this.state.pageIndex + 1}`}
-                      width={this.PDFWidth}
-                      pageNumber={this.state.pageIndex + 1}
-                      renderAnnotations
-                      className='pdfPage'
-                      renderMode='svg'
-                    />
-                    <FakePage
-                      pages={Math.min(this.state.numPages, this.state.pageIndex + 20)}
-                      width={this.PDFWidth}
-                    />
-                  </Document>
+                      <FakePage
+                        pages={Math.min(this.state.numPages, this.state.pageIndex + 20)}
+                        width={this.PDFWidth}
+                      />
+                    </Document>
+                  </div>
                   let p = this.state.pageIndex + 1
                   PDFUtils =
                   <div onContextMenu={(e) => {
@@ -2246,7 +2282,7 @@ note = ,\n\u007D\n'
         						>
                       <BottomNavigation
                         style={{
-          								backgroundColor: previewPDFBackgroundColor
+          								backgroundColor: editorDownUtilitiesBackgroundColor
           							}}
         							>
                       <BottomNavigationItem
@@ -2255,7 +2291,7 @@ note = ,\n\u007D\n'
                       />
                       <div
                         style={{
-                          color: '#fff',
+                          color: letterColor,
                           marginTop: 19
                         }}
                         dangerouslySetInnerHTML={{
@@ -2312,7 +2348,7 @@ note = ,\n\u007D\n'
     					>
                 <BottomNavigation
                   style={{
-                    backgroundColor: previewPDFBackgroundColor
+                    backgroundColor: editorDownUtilitiesBackgroundColor
                   }}
     						>
                   <BottomNavigationItem
@@ -2621,17 +2657,20 @@ note = ,\n\u007D\n'
         snippets='tex'
         name='mathEditor'
         ref='mathEditor'
+        enableBasicAutocompletion
+        enableLiveAutocompletion
+        wrapEnabled
         editorProps={{
           $blockScrolling: Infinity
         }}
         fontSize={14}
         value={this.state.matheditorinput}
         setOptions={{
-          enableBasicAutocompletion: true,
-          enableLiveAutocompletion: true,
           enableSnippets: true,
+          behavioursEnabled: true,
           cursorStyle: 'smooth',
-          useSoftTabs: true
+          useWorker: false,
+          showPrintMargin: false
         }}
         onChange={this.updateMathEditorInput.bind(this)}
        />
@@ -2684,6 +2723,9 @@ note = ,\n\u007D\n'
         name='packageEditor'
         ref='packageEditor'
         focus
+        enableBasicAutocompletion
+        enableLiveAutocompletion
+        wrapEnabled
         editorProps={{
           $blockScrolling: Infinity
         }}
@@ -2692,11 +2734,11 @@ note = ,\n\u007D\n'
         width={'70%'}
         wrapEnabled
         setOptions={{
-          enableBasicAutocompletion: true,
-          enableLiveAutocompletion: true,
           enableSnippets: true,
+          behavioursEnabled: true,
           cursorStyle: 'smooth',
-          useSoftTabs: true
+          useWorker: false,
+          showPrintMargin: false
         }}
         onChange={this.updatePackages.bind(this)}
 			/>
@@ -3000,9 +3042,11 @@ note = ,\n\u007D\n'
             }}>
               {editorUpUtilities}
             </div>
-            <div onContextMenu={(e) => {
-              this.contextMenuBuilder(e, 'editor')
-            }}>
+            <div
+              onContextMenu={(e) => {
+                this.contextMenuBuilder(e, 'editor')
+              }}
+            >
               <Paper
                 style={{
                   height: height - 110,
@@ -3036,6 +3080,7 @@ note = ,\n\u007D\n'
                     }}
                     onChange={this.updateTexInput.bind(this)}
                     onFocus={this.onFocusMainEditor.bind(this)}
+                    onBlur={this.onBlurMainEditor.bind(this)}
                   />
                   <div style={{height: separateTexBibHeight, backgroundColor: '#fff'}}></div>
                   <AceEditor
@@ -3057,11 +3102,14 @@ note = ,\n\u007D\n'
                     debounceChangePeriod={0.1}
                     setOptions={{
                       enableSnippets: true,
+                      behavioursEnabled: true,
                       cursorStyle: 'smooth',
+                      useWorker: false,
                       showPrintMargin: false
                     }}
                     onChange={this.updateBibInput.bind(this)}
                     onFocus={this.onFocusBibEditor.bind(this)}
+                    onBlur={this.onBlurBibEditor.bind(this)}
                   />
                 </div>
               </Paper>
@@ -3099,7 +3147,7 @@ note = ,\n\u007D\n'
   }
 }
 
-class FakePage extends React.Component {
+class FakePage extends React.PureComponent {
   constructor (props) {
     super(props)
   }

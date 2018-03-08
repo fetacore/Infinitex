@@ -1386,6 +1386,7 @@ note = ,\n\u007D\n'
       icon={splitIcon}
       key='b2'
       onClick={() => this.setState({
+        preview: true,
         split: true,
         networkFeatures: false,
         splitRow: this.state.texRow,

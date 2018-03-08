@@ -2,3 +2,6 @@
 prod
 node_modules
 src/entry
+src/react/inf.min.js
+beforePackLinuxNoAutoupdatesDeb.js
+beforePackLinuxNoAutoupdatesRpm.js

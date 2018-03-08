@@ -41,11 +41,9 @@ import EditorFormatPaint from 'material-ui/svg-icons/editor/format-paint'
 import NavigationArrowForward from 'material-ui/svg-icons/navigation/arrow-forward'
 import AceEditor from 'react-ace'
 import brace from 'brace'
-import 'brace/mode/latex.js'
 import 'brace/mode/tex.js'
 import 'brace/mode/snippets.js'
 import 'brace/snippets/tex.js'
-import 'brace/snippets/latex.js'
 import 'brace/ext/language_tools.js'
 import 'brace/ext/searchbox.js'
 import 'brace/keybinding/vim.js'
@@ -261,17 +259,18 @@ export default class Grid extends React.Component {
         default:
           fpresolver = '/'
       }
-      let filetitle = fileName.slice(fileName.lastIndexOf(fpresolver) + 1, fileName.length)
       if (fileName == null) {
         this.onNotification('FileWasNotSaved')
         return
       } else if (filetitle.indexOf(' ') !== -1) {
         this.onNotification('IncorrectFilename')
         return
+      } else {
+        let filetitle = fileName.slice(fileName.lastIndexOf(fpresolver) + 1, fileName.length)
+        // fileName is a string that contains the path and filename created in the save file dialog.
+        ipcRenderer.send('createTexBibFile', [fileName, this.state.packages + this.state.texfilecontent + '\\end{document}', this.state.bibfilecontent])
+        this.setState({ filepath: fileName })
       }
-      // fileName is a string that contains the path and filename created in the save file dialog.
-      ipcRenderer.send('createTexBibFile', [fileName, this.state.packages + this.state.texfilecontent + '\\end{document}', this.state.bibfilecontent])
-      this.setState({ filepath: fileName })
     })
     ipcRenderer.on('openTexDialogFilename', (event, fileNames) => {
       if (fileNames == null) {
@@ -535,7 +534,9 @@ You can refer to the graph as \\ref{figure:nickname}\n'
     })
   }
 
-  onFocusMainEditor () {
+  onFocusMainEditor (event) {
+    event.preventDefault()
+    event.stopPropagation()
     let crsr = this.refs.mainEditor.editor.selection.getCursor()
     this.setState({
       texRow: crsr.row,
@@ -545,11 +546,13 @@ You can refer to the graph as \\ref{figure:nickname}\n'
       this.refs.mainEditor.editor.clearSelection()
       setTimeout(() => {
         this.focusEditor(0)
-      }, 5)
+      }, 0.1)
     })
   }
 
-  onFocusBibEditor () {
+  onFocusBibEditor (event) {
+    event.preventDefault()
+    event.stopPropagation()
     let crsr = this.refs.bibEditor.editor.selection.getCursor()
     this.setState({
       bibRow: crsr.row,
@@ -558,11 +561,13 @@ You can refer to the graph as \\ref{figure:nickname}\n'
       this.refs.bibEditor.editor.clearSelection()
       setTimeout(() => {
         this.focusEditor(1)
-      }, 5)
+      }, 0.1)
     })
   }
 
-  onFocusSplitEditor () {
+  onFocusSplitEditor (event) {
+    event.preventDefault()
+    event.stopPropagation()
     let crsr = this.refs.splitEditor.editor.selection.getCursor()
     this.setState({
       splitRow: crsr.row,
@@ -571,7 +576,7 @@ You can refer to the graph as \\ref{figure:nickname}\n'
       this.refs.splitEditor.editor.clearSelection()
       setTimeout(() => {
         this.focusEditor(2)
-      }, 5)
+      }, 0.1)
     })
   }
 
@@ -3084,7 +3089,7 @@ note = ,\n\u007D\n'
                   />
                   <div style={{height: separateTexBibHeight, backgroundColor: '#fff'}}></div>
                   <AceEditor
-                    mode='latex'
+                    mode='tex'
                     theme={aceEditorTheme}
                     snippets='tex'
                     name='bibEditor'

@@ -1,18 +1,16 @@
 {
   "name": "InfiniTex",
   "productName": "InfiniTex",
-  "version": "0.9.3",
+  "version": "0.9.5",
   "description": "A new age editor for academics who seek freedom and people with cryptography needs in rich text environments.",
   "main": "src/index.js",
   "scripts": {
     "start": "electron .",
     "preminify": "node ./beforeBundle.js",
-    "minify": "browserify ./src/entryDev.js -g [ envify --NODE_ENV production --BABEL_ENV production ] -t [ babelify --presets [ env --targets [ electron ] react ] --plugins transform-async-to-generator ] --full-path=false --exclude electron --exclude shelljs -o ./src/entry/bundle.js",
-    "postminify": "uglifyjs --ecma 7 --compress drop_console=true --mangle -- ./src/entry/bundle.js > ./src/react/inf.min.js",
-    "package": "node ./beforePackage.js && cd prod && yarn && electron-builder --dir",
-    "dist": "node ./beforePackage.js && cd prod && yarn && electron-builder",
-    "dist:deb": "node ./beforePackLinuxNoAutoupdatesDeb.js && cd prod && yarn && electron-builder",
-    "dist:rpm": "node ./beforePackLinuxNoAutoupdatesRpm.js && cd prod && yarn && electron-builder"
+    "minify": "browserify ./src/entryDev.js -g [ envify --NODE_ENV production --BABEL_ENV production ] -g uglifyify -t [ babelify --presets [ env --targets [ electron ] react ] --plugins transform-async-to-generator ] --full-path=false --exclude electron --exclude shelljs -o ./src/entry/bundle.js",
+    "postminify": "uglifyjs --compress drop_console=true --mangle -- ./src/entry/bundle.js > ./src/react/inf.min.js",
+    "package": "npm run minify && node ./beforePackage.js && cd prod && yarn && electron-builder --dir",
+    "dist": "npm run minify && node ./beforePackage.js && cd prod && yarn && electron-builder"
   },
   "build": {
     "appId": "com.fetacore.InfiniTex",
@@ -138,7 +136,7 @@
     "babelify": "^8.0.0",
     "brace": "^0.11.1",
     "browserify": "^16.1.1",
-    "electron-builder": "^20.3.1",
+    "electron-builder": "^20.4.0",
     "electron-devtools-installer": "^2.2.3",
     "electron-prebuilt-compile": "2.0.0-beta.1",
     "electron-reload": "^1.2.2",
@@ -159,6 +157,7 @@
     "react-resizable": "^1.7.5",
     "react-transition-group": "^2.2.1",
     "request": "^2.83.0",
-    "uglify-es": "^3.3.9"
+    "uglify-js": "^3.3.13",
+    "uglifyify": "^4.0.5"
   }
 }

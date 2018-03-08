@@ -38,20 +38,40 @@ fs.readFile(__dirname + '/node_modules/brace/ext/language_tools.js', 'utf-8', (e
     'var completers = [snippetCompleter, textCompleter, keyWordCompleter];',
     'var completers = [snippetCompleter, keyWordCompleter];'
   ).replace(
-    '#fbfbfb', '#141414'
+    '#fbfbfb', '#f7f7f7'
   ).replace(
-    '#444', '#696969'
+    '#444', '#383838'
   ).replace(
-    'rgba(194, 193, 208, 0.09)', '#171717'
+    'rgba(194, 193, 208, 0.09)', '#adadad'
   ).replace(
-    '#CAD6FA', '#585858'
+    '#CAD6FA', '#adadad'
   ).replace(
-    'rgba(233,233,253,0.4)', '#b9b9b9'
+    'rgba(233,233,253,0.4)', '#adadad'
   ).replace(
     'lightgray', 'black'
   )
   fs.writeFileSync(__dirname + '/node_modules/brace/ext/language_tools.js', dataXwrisSkatila)
 })
+
+// fs.readFile(__dirname + '/node_modules/brace/mode/latex.js', 'utf-8', (err, data) => {
+//   let dataXwrisSkatila = data.replace(
+//     '\"require\",\"exports\",\"module\",\"ace/lib/oop\",\"ace/mode/text_highlight_rules\"',
+//     '\"require",\"exports\",\"module\",\"ace/lib/oop\",\"ace/lib/lang\",\"ace/mode/text_highlight_rules\"'
+//   ).replace(
+//     'var oop = acequire(\"../lib/oop\");\nvar TextHighlightRules = acequire(\"./text_highlight_rules\").TextHighlightRules;',
+//     'var oop = acequire(\"../lib/oop\");\nvar lang = acequire(\"../lib/lang\");\nvar TextHighlightRules = acequire(\"./text_highlight_rules\").TextHighlightRules;'
+//   ).replace(
+//     'var LatexHighlightRules = function() {',
+//     'var LatexHighlightRules = function(textClass) {\n\n\tif (!textClass)\n  textClass = \"text\";'
+//   )
+//   fs.writeFileSync(__dirname + '/node_modules/brace/mode/latex.js', dataXwrisSkatila)
+// })
+
+// fs.readFile(__dirname + '/node_modules/brace/snippets/tex.js', 'utf-8', (err, data) => {
+//   let newSnips = data
+//   shelljs.mkdir('-p', __dirname + fpresolver + 'src' + fpresolver + 'snippets' + fpresolver)
+//   fs.writeFileSync(__dirname + '/src/snippets/latex.js', newSnips)
+// })
 
 fs.writeFileSync(__dirname + '/src/react/reactPdf/pdf.worker.min.js', worker)
 fs.writeFileSync(__dirname + '/src/static/polyfill.min.js', poly)

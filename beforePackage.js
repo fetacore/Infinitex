@@ -1,12 +1,25 @@
 const fs = require('fs')
 const path = require('path')
 const shelljs = require('shelljs')
+var UglifyJS = require("uglify-es");
 
 if (process.platform == 'win32') {
   var fpresolver = '\\'
 } else {
   var fpresolver = '/'
 }
+
+var uglifyOptions = {
+  ecma: 6,
+  compress: {
+    drop_console: true,
+    passes: 2
+  },
+  mangle: true,
+  output: {
+    beautify: false,
+  }
+};
 
 function copyPasteStuff () {
   shelljs.cp('-R', __dirname + fpresolver + 'src' + fpresolver, __dirname + fpresolver + 'prod' + fpresolver)
@@ -17,6 +30,7 @@ function copyPasteStuff () {
 
 function removeStuff () {
   shelljs.rm('-rf',
+    __dirname + fpresolver + 'src' + fpresolver + 'entry' + fpresolver,
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'entry' + fpresolver,
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'entryDev.js',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'ace' + fpresolver,
@@ -62,9 +76,9 @@ function removeLines () {
       alert(err)
     } else {
       let htmlXwrisSkata = data.replace(
-        '<!-- <script src="../src/entry/bundle.js"></script> -->', ''
+        '<!-- <script src=\"./react/inf.min.js\"></script> -->', '<script src=\"./react/inf.min.js\"></script>'
       ).replace(
-        '<!-- <script src="entryDev.js"></script> -->', ''
+        '<script src=\"entryDev.js\"></script>', ''
       )
       fs.writeFileSync(__dirname + '/prod/src/index.html', htmlXwrisSkata)
     }
@@ -74,9 +88,34 @@ function removeLines () {
       alert(err)
     } else {
       let packXwrisSkata = data.replace(
-        'electron-prebuilt-compile', 'electron'
+        '\"electron-prebuilt-compile\": \"2.0.0-beta.1\",', '\"electron\": \"1.8.3\",'
+      ).replace(
+        '\"src/index.js\"', '\"src/index.min.js\"'
+      ).replace(
+        '\"uglify-js\": \"^3.3.13\"', '\"uglify-es\": \"^3.3.9\"'
       )
       fs.writeFileSync(__dirname + '/prod/package.json', packXwrisSkata)
+    }
+  })
+  fixIndex()
+}
+
+function fixIndex () {
+  fs.readFile(__dirname + '/prod/src/index.js', 'utf-8', (err, data) => {
+    if (err) {
+      alert(err)
+    } else {
+      let mini = UglifyJS.minify(data, uglifyOptions);
+      fs.writeFile(__dirname + '/prod/src/index.min.js', mini.code, (err) => {
+        if (err) {
+          alert(err)
+        } else {
+          shelljs.rm('-rf',
+            __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'index.js'
+          )
+        }
+      })
+
     }
   })
 }

@@ -67,11 +67,9 @@ fs.readFile(__dirname + '/node_modules/brace/ext/language_tools.js', 'utf-8', (e
 //   fs.writeFileSync(__dirname + '/node_modules/brace/mode/latex.js', dataXwrisSkatila)
 // })
 
-// fs.readFile(__dirname + '/node_modules/brace/snippets/tex.js', 'utf-8', (err, data) => {
-//   let newSnips = data
-//   shelljs.mkdir('-p', __dirname + fpresolver + 'src' + fpresolver + 'snippets' + fpresolver)
-//   fs.writeFileSync(__dirname + '/src/snippets/latex.js', newSnips)
-// })
+fs.readFile(__dirname + '/src/react/assets/ace/snippetsTex.js', 'utf-8', (err, data) => {
+  fs.writeFileSync(__dirname + '/node_modules/brace/snippets/tex.js', data)
+})
 
 fs.writeFileSync(__dirname + '/src/react/reactPdf/pdf.worker.min.js', worker)
 fs.writeFileSync(__dirname + '/src/static/polyfill.min.js', poly)

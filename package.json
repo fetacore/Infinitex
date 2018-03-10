@@ -136,7 +136,7 @@
     "babelify": "^8.0.0",
     "brace": "^0.11.1",
     "browserify": "^16.1.1",
-    "electron-builder": "^20.4.0",
+    "electron-builder": "20.5.0",
     "electron-devtools-installer": "^2.2.3",
     "electron-prebuilt-compile": "2.0.0-beta.1",
     "electron-reload": "^1.2.2",
@@ -150,14 +150,14 @@
     "react": "^16.2.0",
     "react-ace": "^5.9.0",
     "react-dom": "^16.2.0",
-    "react-grid-layout": "^0.16.5",
+    "react-grid-layout": "^0.16.6",
     "react-hot-loader": "^4.0.0",
     "react-pdf": "3.0.0-alpha.4",
     "react-quill": "^1.2.6",
     "react-resizable": "^1.7.5",
     "react-transition-group": "^2.2.1",
     "request": "^2.83.0",
-    "uglify-js": "^3.3.13",
+    "uglify-js": "^3.3.14",
     "uglifyify": "^4.0.5"
   }
 }

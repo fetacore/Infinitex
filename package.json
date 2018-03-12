@@ -1,7 +1,7 @@
 {
   "name": "InfiniTex",
   "productName": "InfiniTex",
-  "version": "0.9.5",
+  "version": "0.9.6",
   "description": "A new age editor for academics who seek freedom and people with cryptography needs in rich text environments.",
   "main": "src/index.js",
   "scripts": {
@@ -10,7 +10,9 @@
     "minify": "browserify ./src/entryDev.js -g [ envify --NODE_ENV production --BABEL_ENV production ] -g uglifyify -t [ babelify --presets [ env --targets [ electron ] react ] --plugins transform-async-to-generator ] --full-path=false --exclude electron --exclude shelljs -o ./src/entry/bundle.js",
     "postminify": "uglifyjs --compress drop_console=true --mangle -- ./src/entry/bundle.js > ./src/react/inf.min.js",
     "package": "npm run minify && node ./beforePackage.js && cd prod && yarn && electron-builder --dir",
-    "dist": "npm run minify && node ./beforePackage.js && cd prod && yarn && electron-builder"
+    "package:nominify": "node ./beforePackage.js && cd prod && yarn && electron-builder --dir",
+    "dist": "npm run minify && node ./beforePackage.js && cd prod && yarn && electron-builder",
+    "dist:nominify": "node ./beforePackage.js && cd prod && yarn && electron-builder"
   },
   "build": {
     "appId": "com.fetacore.InfiniTex",
@@ -74,28 +76,8 @@
     "rpm": {
       "icon": "src/static/icons/",
       "depends": [
-        "libnotify4",
-        "texlive-base",
-        "texlive-latex-recommended",
-        "texlive-latex-extra",
-        "texlive-fonts-recommended",
-        "texlive-fonts-extra",
-        "texlive-latex-base",
-        "texlive-font-utils",
-        "make"
-      ]
-    },
-    "pacman": {
-      "icon": "src/static/icons/",
-      "depends": [
-        "libnotify4",
-        "texlive-base",
-        "texlive-latex-recommended",
-        "texlive-latex-extra",
-        "texlive-fonts-recommended",
-        "texlive-fonts-extra",
-        "texlive-latex-base",
-        "texlive-font-utils",
+        "texlive-collection-latex",
+        "texlive-collection-bibextra",
         "make"
       ]
     },
@@ -146,7 +128,7 @@
     "node-minify": "^2.4.1",
     "pdfjs-dist": "^2.0.402",
     "prop-types": "^15.6.1",
-    "quill": "^1.3.5",
+    "quill": "^1.3.6",
     "react": "^16.2.0",
     "react-ace": "^5.9.0",
     "react-dom": "^16.2.0",
@@ -156,7 +138,7 @@
     "react-quill": "^1.2.6",
     "react-resizable": "^1.7.5",
     "react-transition-group": "^2.2.1",
-    "request": "^2.83.0",
+    "request": "^2.85.0",
     "uglify-js": "^3.3.14",
     "uglifyify": "^4.0.5"
   }

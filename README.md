@@ -13,20 +13,19 @@ In order to run LaTeX you need to have an installed version of the interpeter li
 
 To start the process go to the folder, open a terminal there and press
 ```
-yarn
+yarn && yarn preminify
 npm start
 ```
-If you want live reload and developer tools you need to point the index.html file to the entryDev.js file (commented just above the inf.min.js script).
 The file Infinitex.jsx is only used for react-dom. The app.jsx file separates the two environments and has width and height event listeners.
 The grid.jsx file has the LaTeX editor and the editor.jsx file has the WYSIWYG.
 
 
-To update the minified js you press
+To build the minified js you press
 ```
 npm run minify
 ```
 
-To create the executable in a dist folder run
+To create the executable in a dist folder run (!Attention! This will trigger the minification which takes a lot of time)
 ```
 npm run dist
 ```
@@ -42,5 +41,4 @@ npm run dist
 
 ## Roadmap:
 1. Either move to Semantic UI or Material UI beta for performance.
-2. React-Redux.
-3. Integration with cloud services for collaboration.
+2. Integration with ~~cloud services~~IPFS for collaboration (working on it).

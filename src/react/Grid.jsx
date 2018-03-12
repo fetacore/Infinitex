@@ -41,7 +41,7 @@ import EditorFormatPaint from 'material-ui/svg-icons/editor/format-paint'
 import NavigationArrowForward from 'material-ui/svg-icons/navigation/arrow-forward'
 import AceEditor from 'react-ace'
 import brace from 'brace'
-import 'brace/mode/tex.js'
+import './assets/ace/tex.js'
 import 'brace/mode/snippets.js'
 import './assets/ace/snippetsTex.js'
 import 'brace/ext/language_tools.js'
@@ -50,7 +50,6 @@ import 'brace/keybinding/vim.js'
 import request from 'request'
 import JSSoup from 'jssoup'
 import { Document, Page } from 'react-pdf'
-import { BlockMath } from './reactKatex'
 import './assets/ace/chaos.js'
 import './assets/ace/light.js'
 import './assets/ace/red.js'
@@ -107,6 +106,7 @@ export default class Grid extends React.Component {
     this.state = {
       theme: 'Default',
       matheditorinput: '',
+      mathhtml: '',
       showmatheditorbox: false,
       showmathpreviewbox: false,
       showpastematheditorbox: false,
@@ -227,8 +227,13 @@ export default class Grid extends React.Component {
     ipcRenderer.on('Run Compilation', (event, arg) => {
       if (arg) {
         if (this.state.showmatheditorbox) {
+          let math = katex.renderToString(this.state.matheditorinput, {
+            displayMode: true,
+            throwOnError: false
+          });
           this.setState({
-            showmathpreviewbox: true
+            showmathpreviewbox: true,
+            mathhtml: math
           })
         } else {
           this.compileText()
@@ -979,13 +984,18 @@ note = ,\n\u007D\n'
 
   updateMathEditorInput (value) {
     this.setState({
-      matheditorinput: value
+      matheditorinput: value,
     })
   }
 
   compileMathEditor (value) {
+    let math = katex.renderToString(value, {
+      displayMode: true,
+      throwOnError: false
+    });
     this.setState({
-      showmathpreviewbox: true
+      showmathpreviewbox: true,
+      mathhtml: math
     })
   }
 
@@ -2762,9 +2772,7 @@ note = ,\n\u007D\n'
       autoScrollBodyContent
       bodyStyle={{backgroundColor: previewPDFBackgroundColor, color: letterColor}}
 		>
-      <BlockMath>
-        {this.state.matheditorinput}
-      </BlockMath>
+      <div dangerouslySetInnerHTML={{__html: this.state.mathhtml}} />
     </Dialog>
     let mathPasteDialog =
     <Dialog

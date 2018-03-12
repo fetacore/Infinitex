@@ -35,8 +35,6 @@ function removeStuff () {
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'entryDev.js',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'ace' + fpresolver,
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'texstarters' + fpresolver,
-    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'reactPdf' + fpresolver + 'entry.js',
-    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'reactKatex' + fpresolver,
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'App.jsx',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'Editor.jsx',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'Grid.jsx',

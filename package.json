@@ -1,7 +1,7 @@
 {
   "name": "InfiniTex",
   "productName": "InfiniTex",
-  "version": "0.9.6",
+  "version": "0.9.7",
   "description": "A new age editor for academics who seek freedom and people with cryptography needs in rich text environments.",
   "main": "src/index.js",
   "scripts": {

@@ -33,43 +33,5 @@ compressor.minify({
 shelljs.cp('-R', __dirname + fpresolver + 'node_modules' + fpresolver + 'pdfjs-dist' + fpresolver + 'cmaps' + fpresolver, __dirname + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'reactPdf' + fpresolver)
 shelljs.mkdir('-p', __dirname + fpresolver + 'src' + fpresolver + 'entry')
 
-fs.readFile(__dirname + '/node_modules/brace/ext/language_tools.js', 'utf-8', (err, data) => {
-  let dataXwrisSkatila = data.replace(
-    'var completers = [snippetCompleter, textCompleter, keyWordCompleter];',
-    'var completers = [snippetCompleter, keyWordCompleter];'
-  ).replace(
-    '#fbfbfb', '#f7f7f7'
-  ).replace(
-    '#444', '#383838'
-  ).replace(
-    'rgba(194, 193, 208, 0.09)', '#adadad'
-  ).replace(
-    '#CAD6FA', '#adadad'
-  ).replace(
-    'rgba(233,233,253,0.4)', '#adadad'
-  ).replace(
-    'lightgray', 'black'
-  )
-  fs.writeFileSync(__dirname + '/node_modules/brace/ext/language_tools.js', dataXwrisSkatila)
-})
-
-// fs.readFile(__dirname + '/node_modules/brace/mode/latex.js', 'utf-8', (err, data) => {
-//   let dataXwrisSkatila = data.replace(
-//     '\"require\",\"exports\",\"module\",\"ace/lib/oop\",\"ace/mode/text_highlight_rules\"',
-//     '\"require",\"exports\",\"module\",\"ace/lib/oop\",\"ace/lib/lang\",\"ace/mode/text_highlight_rules\"'
-//   ).replace(
-//     'var oop = acequire(\"../lib/oop\");\nvar TextHighlightRules = acequire(\"./text_highlight_rules\").TextHighlightRules;',
-//     'var oop = acequire(\"../lib/oop\");\nvar lang = acequire(\"../lib/lang\");\nvar TextHighlightRules = acequire(\"./text_highlight_rules\").TextHighlightRules;'
-//   ).replace(
-//     'var LatexHighlightRules = function() {',
-//     'var LatexHighlightRules = function(textClass) {\n\n\tif (!textClass)\n  textClass = \"text\";'
-//   )
-//   fs.writeFileSync(__dirname + '/node_modules/brace/mode/latex.js', dataXwrisSkatila)
-// })
-
-fs.readFile(__dirname + '/src/react/assets/ace/snippetsTex.js', 'utf-8', (err, data) => {
-  fs.writeFileSync(__dirname + '/node_modules/brace/snippets/tex.js', data)
-})
-
 fs.writeFileSync(__dirname + '/src/react/reactPdf/pdf.worker.min.js', worker)
 fs.writeFileSync(__dirname + '/src/static/polyfill.min.js', poly)

@@ -1,1 +1,223 @@
-ace.define("ace/snippets/tex",["require","exports","module"],function(e,t,n){"use strict";t.snippetText="#PREAMBLE\n#newcommand\nsnippet \\newcommand\n	newcommand{\\${1:cmd}}[${2:opt}]{${3:realcmd}}${4}\n#usepackage\nsnippet \\usepackage\n	usepackage[${1:[options}]{${2:package}}\n#newunicodechar\nsnippet \\newunicodechar\n	newunicodechar{${1}}{${2:\\ensuremath}${3:tex-substitute}}}\n#DeclareMathOperator\nsnippet \\declare\n	DeclareMathOperator{${1}}{${2}}\n\n#DOCUMENT\n# \\begin{}...\\end{}\nsnippet \\begin\n	begin{${1:env}}\n		${2}\n	\\end{$1}\n# Tabular\nsnippet \\begin{tabular}\n	begin{${1:tabular}}{${2:c}}\n	${3}\n	\\end{$1}\nsnippet \\theorem\n	begin[${1:author}]{${2:thm}}\n	${3}\n	\\end{$1}\nsnippet \\begin{theorem}\n	begin[${1:author}]{${2:thm}}\n	${3}\n	\\end{$1}\nsnippet \\center\n	begin{center}\n		${1}\n	\\end{center}\nsnippet \\begin{center}\n	begin{center}\n		${1}\n	\\end{center}\n# Align(ed)\nsnippet \\align\n	begin{align${1:ed}}\n		${2}\n	\\end{align$1}\nsnippet \\begin{align}\n	begin{align${1:ed}}\n		${2}\n	\\end{align$1}\n# Gather(ed)\nsnippet \\gather\n	begin{gather${1:ed}}\n		${2}\n	\\end{gather$1}\n# Gather(ed)\nsnippet \\begin{gather}\n	begin{gather${1:ed}}\n		${2}\n	\\end{gather$1}\n# Equation\nsnippet \\equation\n	begin{equation}\n		${1}\n	\\end{equation}\n# Equation\nsnippet \\equation*\n	begin{equation*}\n		${1}\n	\\end{equation*}\n# Equation\n# Unnumbered Equation\nsnippet \\\n	\\[\n		${1}\n	\\]\n# Enumerate\nsnippet \\enumerate\n	begin{enumerate}\n		\\item ${1}\n	\\end{enumerate}\n# Enumerate\nsnippet \\begin{enumerate}\n	begin{enumerate}\n		\\item ${1}\n	\\end{enumerate}\n# Itemize\nsnippet \\itemize\n	begin{itemize}\n		\\item ${1}\n	\\end{itemize}\n# Itemize\nsnippet \\begin{itemize}\n	begin{itemize}\n		\\item ${1}\n	\\end{itemize}\n# Description\nsnippet \\description\n	begin{description}\n		\\item[${1}] ${2}\n	\\end{description}\n# Description\nsnippet \\begin{description}\n	begin{description}\n		\\item[${1}] ${2}\n	\\end{description}\n# Matrix\nsnippet \\matrix\n	begin{${1:p/b/v/V/B/small}matrix}\n		${2}\n	\\end{$1matrix}\n# Matrix\nsnippet \\begin{matrix}\n	begin{${1:p/b/v/V/B/small}matrix}\n		${2}\n	\\end{$1matrix}\n# Cases\nsnippet \\cases\n	begin{cases}\n		${1:equation} &\\text{ if }${2:case}\n	\\end{cases}\n# Split\nsnippet \\split\n	begin{split}\n		${1}\n	\\end{split}\n# Part\nsnippet \\part\n	part{${1:part name}} % (fold)\n	\\label{prt:${2:$1}}\n	${3}\n	% part $2 (end)\n# Chapter\nsnippet \\chapter\n	chapter{${1:chapter name}}\n	\\label{cha:${2:$1}}\n	${3}\n# Section\nsnippet \\section\n	section{${1:section name}}\n	\\label{sec:${2:$1}}\n	${3}\n# Sub Section\nsnippet \\subsection\n	subsection{${1:subsection name}}\n	\\label{sub:${2:$1}}\n	${3}\n# Sub Sub Section\nsnippet \\subsubsection\n	subsubsection{${1:subsubsection name}}\n	\\label{ssub:${2:$1}}\n	${3}\n# Paragraph\nsnippet \\paragraph\n	paragraph{${1:paragraph name}}\n	\\label{par:${2:$1}}\n	${3}\n# Sub Paragraph\nsnippet \\subparagraph\n	subparagraph{${1:subparagraph name}}\n	\\label{subp:${2:$1}}\n	${3}\n#References\nsnippet \\itemdescription\n	item[${1:description}] ${2:item}\nsnippet figure\n	${1:Figure}~\\ref{${2:fig:}}${3}\nsnippet table\n	${1:Table}~\\ref{${2:tab:}}${3}\nsnippet listing\n	${1:Listing}~\\ref{${2:list}}${3}\nsnippet section\n	${1:Section}~\\ref{${2:sec:}}${3}\nsnippet page\n	${1:page}~\\pageref{${2}}${3}\nsnippet \\index\n	index{${1:index}}${2}\n#Citations\nsnippet \\cite\n	cite[${1}]{${2}}${3}\n#Citations\nsnippet \\citet\n	citet{${1}}\n#Citations\nsnippet \\citep\n	citep{${1}}\nsnippet \\footcite\n	footcite[${1}]{${2}}${3}\n#Formating text: italic, bold, underline, small capital, emphase ..\nsnippet \\italics\n	textit{${1:text}}\nsnippet \\textit\n	textit{${1:text}}\nsnippet \\bold\n	textbf{${1:text}}\nsnippet \\textbf\n	textbf{${1:text}}\nsnippet \\underline\n	underline{${1:text}}\nsnippet \\emphasize\n	emph{${1:text}}\nsnippet \\textsc\n	textsc{${1:text}}\n#Choosing font\nsnippet \\textsf\n	textsf{${1:text}}\nsnippet \\textrm\n	textrm{${1:text}}\nsnippet \\texttt\n	texttt{${1:text}}\n#misc\nsnippet \\footnote\n	footnote{${1:text}}\nsnippet \\figure\n	begin{figure}\n	\\begin{center}\n	    \\includegraphics[scale=${1}]{Figures/${2}}\n	\\end{center}\n	\\caption{${3}}\n	\\label{fig:${4}}\n	\\end{figure}\nsnippet \\begin{figure}\n	begin{figure}\n	\\begin{center}\n	    \\includegraphics[scale=${1}]{Figures/${2}}\n	\\end{center}\n	\\caption{${3}}\n	\\label{fig:${4}}\n	\\end{figure}\nsnippet \\tikzfig\n	begin{figure}\n	\\begin{center}\n	\\begin{tikzpicture}[scale=${1:1}]\n		${2}\n	\\end{tikzpicture}\n	\\end{center}\n	\\caption{${3}}\n	\\label{fig:${4}}\n	\\end{figure}\n#math\nsnippet \\stackrel\n	stackrel{${1:above}}{${2:below}} ${3}\nsnippet \\frac\n	frac{${1:num}}{${2:denom}}\nsnippet \\sum\n	sum^{${1:n}}_{${2:i=1}}{${3}}\nsnippet \\int\n	int^{${1:n}}_{${2:i=1}}{${3}}\nsnippet \\infinity\n	infty\nsnippet \\left\\lbrace\n	left\\lbrace ${1:n} \\right\\rbrace\nsnippet \\left(\n	left( ${1:n} \\right)\nsnippet \\left[\n	left[ ${1:n} \\right]\nsnippet \\left|\n	left| ${1:n} \\right|\nsnippet \\left| noright\n	left|_{${2:i=1}} ${1:n} \\right.\nsnippet \\left| onlyright\n	left.mx ${1:n} \\right|_{${2:i=1}}\nsnippet \\alpha\n	alpha\nsnippet \\beta\n	beta\nsnippet \\gamma\n	gamma\nsnippet \\Gamma\n	Gamma\nsnippet \\delta\n	delta\nsnippet \\Delta\n	Delta\nsnippet \\epsilon\n	epsilon\nsnippet \\varepsilon\n	varepsilon\nsnippet \\zeta\n	zeta\nsnippet \\eta\n	eta\nsnippet \\theta\n	theta\nsnippet \\Theta\n	Theta\nsnippet \\vartheta\n	vartheta\nsnippet \\lambda\n	lambda\nsnippet \\Lambda\n	Lambda\nsnippet \\mu\n	mu\nsnippet \\xi\n	xi\nsnippet \\Xi\n	Xi\nsnippet \\chi\n	chi\nsnippet \\Chi\n	Chi\nsnippet \\omega\n	omega\nsnippet \\Omega\n	Omega\nsnippet \\rho\n	rho\nsnippet \\pi\n	pi\nsnippet \\Pi\n	Pi\nsnippet \\sigma\n	sigma\nsnippet \\Sigma\n	Sigma\nsnippet \\tau\n	tau\nsnippet \\phi\n	phi\nsnippet \\Phi\n	Phi\nsnippet \\norm\n	| ${1:n} \\|\nsnippet \\aleph\n	aleph\nsnippet \\approx\n	approx\nsnippet \\arccos\n	arccos\nsnippet \\arcsin\n	arcsin\nsnippet \\arctan\n	arctan\nsnippet \\arg\n	arg\nsnippet \\asymp\n	asymp\nsnippet \\backslash\n	backslash\nsnippet \\intersection\n	bigcap\nsnippet \\bigcap\n	bigcap\nsnippet \\bigcirc\n	bigcirc\nsnippet \\union\n	bigcup\nsnippet \\bigcup\n	bigcup\nsnippet \\bigodot\n	bigcodot\nsnippet \\bigoplus\n	bigoplus\nsnippet \\kroneker\n	bigotimes\nsnippet \\bigotimes\n	bigotimes\nsnippet \\gradient\n	bigtriangledown\nsnippet \\bigtriangledown\n	bigtriangledown\nsnippet \\deltadifference\n	bigtriangleup\nsnippet \\bigtriangleup\n	bigtriangleup\nsnippet \\bigsqcup\n	bigsqcup\nsnippet \\biguplus\n	biguplus\nsnippet \\bigvee\n	bigvee\nsnippet \\bigwedge\n	bigwedge\nsnippet \\modulus\n	bmod\nsnippet \\bmod\n	bmod\nsnippet \\orthogonal\n	bot\nsnippet \\bot\n	bot\nsnippet \\bullet\n	bullet\nsnippet \\dotscenter\n	cdots\nsnippet \\cdots\n	cdots\nsnippet \\dotsbottom\n	ldots\nsnippet \\ldots\n	ldots\nsnippet \\dotsvertical\n	vdots\nsnippet \\vdots\n	vdots\nsnippet \\leftarrow\n	leftarrow\nsnippet \\Leftarrow\n	Leftarrow\nsnippet \\rightarrow\n	rightarrow\nsnippet \\Rightarrow\n	Rightarrow\nsnippet \\leftrightarrow\n	leftrightarrow\nsnippet \\Leftrightarrow\n	Leftrightarrow\nsnippet \\longleftarrow\n	longleftarrow\nsnippet \\Longleftarrow\n	Longleftarrow\nsnippet \\longrightarrow\n	longrightarrow\nsnippet \\Longrightarrow\n	Longrightarrow\nsnippet \\longleftrightarrow\n	longleftrightarrow\nsnippet \\Longleftrightarrow\n	Longleftrightarrow\nsnippet \\lowerthanorequal\n	leq\nsnippet \\leq\n	leq\nsnippet \\dominated\n	prec\nsnippet \\prec\n	prec\nsnippet \\dominatedorindifferent\n	preceq\nsnippet \\preceq\n	preceq\nsnippet \\muchlowerthan\n	ll\nsnippet \\ll\n	ll\nsnippet \\subset\n	subset\nsnippet \\subsetorequal\n	subseteq\nsnippet \\subseteq\n	subseteq\nsnippet \\belongs\n	in\nsnippet \\in\n	in\nsnippet \\notequal\n	neq\nsnippet \\neq\n	neq\nsnippet \\indifferent\n	sim\nsnippet \\similar\n sim\nsnippet \\similarorequal\n	simeq\nsnippet \\asymptequivalent\n	asymp\nsnippet \\approximatelly\n	approx\nsnippet \\greaterorequal\n	geq\nsnippet \\dominates\n	succ\nsnippet \\dominatesorequal\n	succeq\nsnippet \\muchgreaterthan\n	gg\nsnippet \\gg\n	gg\nsnippet \\superset\n	supset\nsnippet \\supersetorequal\n	supseteq\nsnippet \\plusminus\n	pm\nsnippet \\minusplus\n	mp\nsnippet X\n	\\times\nsnippet \\division\n	div\nsnippet \\big(\n	big(${1:n}\\big\nsnippet \\Big(\n	Big(${1:n}\\Big\nsnippet \\bigg(\n	bigg(${1:n}\\bigg\nsnippet \\Bigg(\n	Bigg(${1:n}\\Bigg\nsnippet \\big[\n	big[${1:n}\\big]\nsnippet \\Big[\n	Big[${1:n}\\Big]\nsnippet \\bigg[\n	bigg[${1:n}\\bigg]\nsnippet \\Bigg[\n	Bigg[${1:n}\\Bigg]\nsnippet \\big\\lbrace\n	big\\lbrace ${1:n}\\big\\rbrace\nsnippet \\Big\\lbrace\n	Big\\lbrace ${1:n}\\Big\\rbrace\nsnippet \\bigg\\lbrace\n	bigg\\lbrace ${1:n}\\bigg\\rbrace\nsnippet \\lbrace\n	lbrace ${1:n}\\rbrace\nsnippet \\Bigg\\lbrace\n	Bigg\\lbrace ${1:n}\\Bigg\\rbrace\nsnippet $\n	$\n		${1}\n	$\nsnippet $$\n	$$\n		${1}\n	$$\nsnippet \\clearpage \n	clearpage \nsnippet \\newpage\n	newpage\nsnippet \\root\n	sqrt[${1:base}]{${2:n}}\nsnippet \\sqrt\n	sqrt[${1:base}]{${2:n}}\nsnippet \\mathbb\n	mathbb{${1:base}}\nsnippet \\mathit\n	mathit{${1:base}}\nsnippet \\mathcal\n	mathcal{${1:base}}\nsnippet \\mathbf\n	mathbf{${1:base}}\nsnippet \\mathsf\n	mathsf{${1:base}}\nsnippet \\mathtt\n	mathtt{${1:base}}\nsnippet \\lim\n	lim_{${1:base}\\longrightarrow\\infty}\nsnippet {\n	\\lbrace ${1:n}\\rbrace\nsnippet \\binomial\n	binom{${1:n}}{${2:n}}\nsnippet \\scalarproduct\n	langle ${1:n}, ${2:n} \\rangle\nsnippet \\langle\n	langle ${1:n}, ${2:n} \\rangle \nsnippet \\text\n	text{ ${1:n}}\nsnippet \\overline\n	overline{${1:n}} \nsnippet \\overbrace\n	overbrace{${2:n}}^{${1:over}}\nsnippet \\underbrace\n	underbrace{${2:n}}_{${1:under}}\nsnippet \\braces\n	\\{${1:n}\\}\nsnippet \\tilde\n	tilde{${1:n}}\nsnippet \\hat\n	hat{${1:n}}\nsnippet \\{\n	{${1:n}\\}\nsnippet \\|\n	|${1:n}\\|\nsnippet \\log\n	log(${1:n})\nsnippet \\dot\n	bullet\nsnippet \\ball\n	mathit{B}_{${1:n}}(${2:n})\nsnippet \\normal\n	mathcal{N}(0,1)\nsnippet \\expectation\n	\mathbb{E}_{${1:n}}\nsnippet \\proportional\n	propto",t.scope="tex"})
+ace.define("ace/snippets/tex",["require","exports","module"],function(e,t,n){"use strict";t.snippetText="\
+\nsnippet $\n	$\n		${1}\n	$\n\
+\nsnippet $$\n	$$\n		${1}\n	$$\n\
+\nsnippet \\a\n	alpha\n\
+\nsnippet \\aleph\n	aleph\n\
+\nsnippet \\align\n	begin{align}\n		${1}\n	\\end{align}\n\
+\nsnippet \\approximates\n	approx\n\
+\nsnippet \\arccos\n	arccos\n\
+\nsnippet \\arcsin\n	arcsin\n\
+\nsnippet \\arctan\n	arctan\n\
+\nsnippet \\arg\n	arg\n\
+\nsnippet \\argmax\n	arg\\max_{${1:n}}\n\
+\nsnippet \\argmin\n	arg\\min_{${1:n}}\n\
+\nsnippet \\asymptotically-equivalent\n	asymp\n\
+\nsnippet \\b\n	beta\n\
+\nsnippet \\backslash\n	backslash\n\
+\nsnippet \\ball\n	mathit{B}_{${1:n}}(${2:n})\n\
+\nsnippet \\begin\n	begin{${1:env}}\n		${2}\n	\\end{$1}\n\
+\nsnippet \\belongs\n	in\n\
+\nsnippet \\big-braces\n	left\\lbrace ${1:n} \\right\\rbrace\n\
+\nsnippet \\big-parentheses\n	left( ${1:n} \\right)\n\
+\nsnippet \\big-brackets\n	left[ ${1:n} \\right]\n\
+\nsnippet \\big-absolute\n	left| ${1:n} \\right|\n\
+\nsnippet \\bigcap\n	bigcap\n\
+\nsnippet \\bigcup\n bigcup\n\
+\nsnippet \\bigcirc\n	bigcirc\n\
+\nsnippet \\bigodot\n	bigcodot\n\
+\nsnippet \\bigoplus\n	bigoplus\n\
+\nsnippet \\bigotimes\n	bigotimes\n\
+\nsnippet \\bigtriangledown\n	bigtriangledown\n\
+\nsnippet \\bigtriangleup\n	bigtriangleup\n\
+\nsnippet \\bigsqcup\n	bigsqcup\n\
+\nsnippet \\biguplus\n	biguplus\n\
+\nsnippet \\bigvee\n	bigvee\n\
+\nsnippet \\bigwedge\n	bigwedge\n\
+\nsnippet \\bold\n	textbf{${1:text}}\n\
+\nsnippet \\bullet\n	bullet\n\
+\nsnippet \\big(\n	big( ${1:n} \\big)\n\
+\nsnippet \\Big(\n	Big( ${1:n} \\Big)\n\
+\nsnippet \\bigg(\n	bigg( ${1:n} \\bigg)\n\
+\nsnippet \\Bigg(\n	Bigg( ${1:n} \\Bigg)\n\
+\nsnippet \\big[\n	big[ ${1:n} \\big]\n\
+\nsnippet \\Big[\n	Big[ ${1:n} \\Big]\n\
+\nsnippet \\bigg[\n	bigg[ ${1:n} \\bigg]\n\
+\nsnippet \\Bigg[\n	Bigg[ ${1:n} \\Bigg]\n\
+\nsnippet \\big\\lbrace\n	big\\lbrace ${1:n} \\big\\rbrace\n\
+\nsnippet \\Big\\lbrace\n	Big\\lbrace ${1:n} \\Big\\rbrace\n\
+\nsnippet \\bigg\\lbrace\n	bigg\\lbrace ${1:n} \\bigg\\rbrace\n\
+\nsnippet \\Bigg\\lbrace\n	Bigg\\lbrace ${1:n} \\Bigg\\rbrace\n\
+\nsnippet \\binomial\n	binom{${1:n}}{${2:n}}\n\
+\nsnippet \\braces\n	\\{${1:n}\\}\n\
+\nsnippet \\newcommand\n	newcommand{\\${1:cmd}}[${2:opt}]{${3:realcmd}}${4}\n\
+\nsnippet \\usepackage\n	usepackage[${1:[options}]{${2:package}}\n\
+\nsnippet \\newunicodechar\n	newunicodechar{${1}}{${2:\\ensuremath}${3:tex-substitute}}}\n\
+\nsnippet \\declare\n	DeclareMathOperator{${1}}{${2}}\n\
+\nsnippet \\tabular\n	begin{tabular}{${1:c}}\n	${2}\n	\\end{tabular}\n\
+\nsnippet \\theorem\n	begin[${1:author}]{theorem}\n	${3}\n	\\end{theorem}\n\
+\nsnippet \\center\n	begin{center}\n		${1}\n	\\end{center}\n\
+\nsnippet \\gather\n	begin{gather}\n		${1}\n	\\end{gather}\n\
+\nsnippet \\equation-numbered\n	begin{equation}\n		${1}\n	\\end{equation}\n\
+\nsnippet \\equation-unnumbered\n	begin{equation*}\n		${1}\n	\\end{equation*}\n\
+\nsnippet \\enumerate\n	begin{enumerate}\n		\\item ${1}\n	\\end{enumerate}\n\
+\nsnippet \\list-numbered\n	begin{enumerate}\n		\\item ${1}\n	\\end{enumerate}\n\
+\nsnippet \\itemize\n	begin{itemize}\n		\\item ${1}\n	\\end{itemize}\n\
+\nsnippet \\list-bullets\n	begin{itemize}\n		\\item ${1}\n	\\end{itemize}\n\
+\nsnippet \\description\n	begin{description}\n		\\item[${1}] ${2}\n	\\end{description}\n\
+\nsnippet \\matrix-parentheses\n	begin{pmatrix}\n		${2}\n	\\end{pmatrix}\n\
+\nsnippet \\matrix-brackets\n	begin{bmatrix}\n		${2}\n	\\end{bmatrix}\n\
+\nsnippet \\matrix-braces\n	begin{Bmatrix}\n		${2}\n	\\end{Bmatrix}\n\
+\nsnippet \\matrix-small\n	begin{smallmatrix}\n		${2}\n	\\end{smallmatrix}\n\
+\nsnippet \\matrix\n	begin{matrix}\n		${2}\n	\\end{matrix}\n\
+\nsnippet \\cases\n	begin{cases}\n		${1:equation} &\\text{ if }${2:case}\n	\\end{cases}\n\
+\nsnippet \\split\n	begin{split}\n		${1}\n	\\end{split}\n\
+\nsnippet \\part\n	part{${1:part name}} % (fold)\n	\\label{prt:${2:$1}}\n	${3}\n	% part $2 (end)\n\
+\nsnippet \\chapter\n	chapter{${1:chapter name}}\n	\\label{cha:${2:$1}}\n	${3}\n\
+\nsnippet \\section\n	section{${1:section name}}\n	\\label{sec:${2:$1}}\n	${3}\n\
+\nsnippet \\subsection\n	subsection{${1:subsection name}}\n	\\label{sub:${2:$1}}\n	${3}\n\
+\nsnippet \\subsubsection\n	subsubsection{${1:subsubsection name}}\n	\\label{ssub:${2:$1}}\n	${3}\n\
+\nsnippet \\paragraph\n	paragraph{${1:paragraph name}}\n	\\label{par:${2:$1}}\n	${3}\n\
+\nsnippet \\subparagraph\n	subparagraph{${1:subparagraph name}}\n	\\label{subp:${2:$1}}\n	${3}\n\
+\nsnippet \\itemdescription\n	item[${1:description}] ${2:item}\n\
+\nsnippet \\figure\n	begin{figure}\n	\\begin{center}\n	    \\includegraphics[scale=${1}]{Plots/${2}}\n	\\end{center}\n	\\caption{${3}}\n	\\label{fig:${4}}\n	\\end{figure}\n\
+\nsnippet \\cite\n	cite[${1}]{${2}}${3}\n\
+\nsnippet \\cite-textual\n	citet{${1}}\n\
+\nsnippet \\cite-parenthesis\n	citep{${1}}\n\
+\nsnippet \\cite-footnote\n	footcite[${1}]{${2}}${3}\n\
+\nsnippet \\italics\n	textit{${1:text}}\n\
+\nsnippet \\underline\n	underline{${1:text}}\n\
+\nsnippet \\emphasize\n	emph{${1:text}}\n\
+\nsnippet \\textsc\n	textsc{${1:text}}\n\
+\nsnippet \\text-sans\n	textsf{${1:text}}\n\
+\nsnippet \\text-roman\n	textrm{${1:text}}\n\
+\nsnippet \\text-teletype\n	texttt{${1:text}}\n\
+\nsnippet \\footnote\n	footnote{${1:text}}\n\
+\nsnippet \\stackrel\n	stackrel{${1:above}}{${2:below}} ${3}\n\
+\nsnippet \\fraction\n	frac{${1:num}}{${2:denom}}\n\
+\nsnippet \\fraction-derivative\n	frac{d ${1:f}}{d ${2:x}}\n\
+\nsnippet \\fraction-derivative-caligraphy\n	frac{\\partial ${1:f}}{\\partial ${2:x}}\n\
+\nsnippet \\sum\n	sum^{${1:n}}_{${2:i=1}}{${3}}\n\
+\nsnippet \\integral\n	int^{${1:n}}_{${2:i=1}}{${3}}\n\
+\nsnippet \\integral-curve\n	oint_{\\gamma}${1}\n\
+\nsnippet \\integral-surface\n	iint_{\\mathit{F}}${1}\n\
+\nsnippet \\integral-volume\n	iiint_{\\mathit{V}}${1}\n\
+\nsnippet \\infinity\n	infty\n\
+\nsnippet \\left\\lbrace\n	left\\lbrace ${1:n} \\right\\rbrace\n\
+\nsnippet \\left(\n	left( ${1:n} \\right)\n\
+\nsnippet \\left[\n	left[ ${1:n} \\right]\n\
+\nsnippet \\left|\n	left| ${1:n} \\right|\n\
+\nsnippet \\left| noright\n	left|_{${2:i=1}} ${1:n} \\right.\n\
+\nsnippet \\evaluated-left\n	left|_{${2:i=1}} ${1:n} \\right.\n\
+\nsnippet \\left| onlyright\n	left.mx ${1:n} \\right|_{${2:i=1}}\n\
+\nsnippet \\evaluated-right\n	left.mx ${1:n} \\right|_{${2:i=1}}\n\
+\nsnippet \\gamma\n	gamma\n\
+\nsnippet \\GAMMA\n	Gamma\n\
+\nsnippet \\delta\n	delta\n\
+\nsnippet \\DELTA\n	Delta\n\
+\nsnippet \\epsilon\n	epsilon\n\
+\nsnippet \\epsilon-pretty\n	varepsilon\n\
+\nsnippet \\zeta\n	zeta\n\
+\nsnippet \\eta\n	eta\n\
+\nsnippet \\theta\n	theta\n\
+\nsnippet \\THETA\n	Theta\n\
+\nsnippet \\vartheta\n	vartheta\n\
+\nsnippet \\lambda\n	lambda\n\
+\nsnippet \\LAMBDA\n	Lambda\n\
+\nsnippet \\mu\n	mu\n\
+\nsnippet \\xi\n	xi\n\
+\nsnippet \\XI\n	Xi\n\
+\nsnippet \\chi\n	chi\n\
+\nsnippet \\omega\n	omega\n\
+\nsnippet \\OMEGA\n	Omega\n\
+\nsnippet \\rho\n	rho\n\
+\nsnippet \\pi\n	pi\n\
+\nsnippet \\PI\n	Pi\n\
+\nsnippet \\prod\n prod\n\
+\nsnippet \\sigma\n	sigma\n\
+\nsnippet \\SIGMA\n	Sigma\n\
+\nsnippet \\tau\n	tau\n\
+\nsnippet \\phi\n	phi\n\
+\nsnippet \\PHI\n	Phi\n\
+\nsnippet \\norm\n	| ${1:n} \\|\n\
+\nsnippet \\excluding\n	backslash\n\
+\nsnippet \\intersection\n	cap\n\
+\nsnippet \\intersection-big\n	bigcap\n\
+\nsnippet \\union\n	cup\n\
+\nsnippet \\union-big\n	bigcup\n\
+\nsnippet \\hadamard\n	bigcodot\n\
+\nsnippet \\kroneker\n	bigotimes\n\
+\nsnippet \\gradient\n	nabla\n\
+\nsnippet \\deltadifference\n	bigtriangleup\n\
+\nsnippet \\modulus\n	bmod\n\
+\nsnippet \\orthogonal\n	bot\n\
+\nsnippet \\dots\n	ldots\n\
+\nsnippet \\dots-center\n	cdots\n\
+\nsnippet \\dots-diagonal\n	ddots\n\
+\nsnippet \\dots-vertical\n	vdots\n\
+\nsnippet \\leftarrow\n	leftarrow\n\
+\nsnippet \\Leftarrow\n	Leftarrow\n\
+\nsnippet \\rightarrow\n	rightarrow\n\
+\nsnippet \\Rightarrow\n	Rightarrow\n\
+\nsnippet \\leftrightarrow\n	leftrightarrow\n\
+\nsnippet \\Leftrightarrow\n	Leftrightarrow\n\
+\nsnippet \\longleftarrow\n	longleftarrow\n\
+\nsnippet \\Longleftarrow\n	Longleftarrow\n\
+\nsnippet \\longrightarrow\n	longrightarrow\n\
+\nsnippet \\Longrightarrow\n	Longrightarrow\n\
+\nsnippet \\longleftrightarrow\n	longleftrightarrow\n\
+\nsnippet \\Longleftrightarrow\n	Longleftrightarrow\n\
+\nsnippet \\lower-or-equal\n	leq\n\
+\nsnippet \\dominated\n	prec\n\
+\nsnippet \\dominated-or-indifferent\n	preceq\n\
+\nsnippet \\much-lower\n	ll\n\
+\nsnippet \\subset-proper\n	subset\n\
+\nsnippet \\subset\n	subseteq\n\
+\nsnippet \\in\n	in\n\
+\nsnippet \\not-equal\n	neq\n\
+\nsnippet \\indifferent\n	sim\n\
+\nsnippet \\similar\n sim\n\
+\nsnippet \\similar-or-equal\n	simeq\n\
+\nsnippet \\greater-or-equal\n	geq\n\
+\nsnippet \\dominates\n	succ\n\
+\nsnippet \\prefered\n	succ\n\
+\nsnippet \\dominates-or-equal\n	succeq\n\
+\nsnippet \\prefered-or-equal\n	succeq\n\
+\nsnippet \\much-greater\n	gg\n\
+\nsnippet \\superset-proper\n	supset\n\
+\nsnippet \\superset\n	supseteq\n\
+\nsnippet \\plus-minus\n	pm\n\
+\nsnippet \\minus-plus\n	mp\n\
+\nsnippet \\product\n	\\times\n\
+\nsnippet \\division\n	div\n\
+\nsnippet \\lbrace\n	lbrace ${1:n} \\rbrace\n\
+\nsnippet \\clearpage \n	clearpage\n\
+\nsnippet \\newpage\n	newpage\n\
+\nsnippet \\root-square\n	sqrt{${1:n}}\n\
+\nsnippet \\root-general\n	sqrt[${1:base}]{${2:n}}\n\
+\nsnippet \\math-boldlines\n	mathbb{${1:base}}\n\
+\nsnippet \\math-italics\n	mathit{${1:base}}\n\
+\nsnippet \\math-caligraphy\n	mathcal{${1:base}}\n\
+\nsnippet \\math-boldface\n	mathbf{${1:base}}\n\
+\nsnippet \\math-sans\n	mathsf{${1:base}}\n\
+\nsnippet \\math-teletype\n	mathtt{${1:base}}\n\
+\nsnippet \\limit\n	lim_{${1:base}\\longrightarrow\\infty}\n\
+\nsnippet \\product-scalar\n	langle ${1:n}, ${2:n} \\rangle\n\
+\nsnippet \\langle\n	langle ${1:n}, ${2:n} \\rangle\n\
+\nsnippet \\text\n	text{ ${1:n} }\n\
+\nsnippet \\overline\n	overline{${1:n}}\n\
+\nsnippet \\overbrace\n	overbrace{${2:n}}^{${1:over}}\n\
+\nsnippet \\underbrace\n	underbrace{${2:n}}_{${1:under}}\n\
+\nsnippet \\tilde\n	tilde{${1:n}}\n\
+\nsnippet \\hat\n	hat{${1:n}}\n\
+\nsnippet \\log\n	log(${1:n})\n\
+\nsnippet \\dot\n	bullet\n\
+\nsnippet \\normal-distribution\n	mathcal{N}(0,1)\n\
+\nsnippet \\expectation\n	mathbb{E}_{${1:n}}\n\
+\nsnippet \\real\n	mathbb{R}^{${1:n}}\n\
+\nsnippet \\complex\n	mathbb{C}\n\
+\nsnippet \\natural\n	mathbb{N}\n\
+\nsnippet \\rational\n	mathbb{Q}\n\
+\nsnippet \\derivative-differential-first\n	dot{${1:f}}\n\
+\nsnippet \\derivative-differential-second\n	ddot{${1:f}}\n\
+\nsnippet \\proportional\n	propto\n\
+",t.scope="tex"})

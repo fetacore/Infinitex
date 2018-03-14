@@ -372,6 +372,54 @@ You can refer to the graph as \\ref{figure:nickname}\n'
     document.getElementById('pdfContainer').removeEventListener('wheel', this.onScrollPDF.bind(this))
   }
 
+  shouldComponentUpdate (prevState, nextState) {
+    if (this.state.texfilecontent !== nextState.texfilecontent) {
+      return false
+    } else {
+      return true;
+    }
+    if (this.state.bibfilecontent !== nextState.bibfilecontent) {
+      return false
+    } else {
+      return true;
+    }
+    if (this.state.packages !== nextState.packages) {
+      return false
+    } else {
+      return true;
+    }
+    if (this.state.texRow !== nextState.texRow) {
+      return false
+    } else {
+      return true;
+    }
+    if (this.state.splitRow !== nextState.splitRow) {
+      return false
+    } else {
+      return true;
+    }
+    if (this.state.bibRow !== nextState.bibRow) {
+      return false
+    } else {
+      return true;
+    }
+    if (this.state.texColumn !== nextState.texColumn) {
+      return false
+    } else {
+      return true;
+    }
+    if (this.state.splitColumn !== nextState.splitColumn) {
+      return false
+    } else {
+      return true;
+    }
+    if (this.state.bibColumn !== nextState.bibColumn) {
+      return false
+    } else {
+      return true;
+    }
+  }
+
   onScrollPDF (event) {
     if (this.state.filepath) {
       if (this.state.preview) {
@@ -948,7 +996,7 @@ note = ,\n\u007D\n'
   }
 
   onBlurMainEditor () {
-    const cursor = this.refs.mainEditor.editor.selection.getCursor()
+    let cursor = this.refs.mainEditor.editor.selection.getCursor()
     this.setState({
       texRow: cursor.row,
       texColumn: cursor.column + 1
@@ -956,7 +1004,7 @@ note = ,\n\u007D\n'
   }
 
   onBlurBibEditor () {
-    const cursor = this.refs.bibEditor.editor.selection.getCursor()
+    let cursor = this.refs.bibEditor.editor.selection.getCursor()
     this.setState({
       bibRow: cursor.row,
       bibColumn: cursor.column + 1
@@ -2038,9 +2086,10 @@ note = ,\n\u007D\n'
             }}
             width={(editorWidth + 5).toString() + 'px'}
             height={(PDFContainerHeight).toString() + 'px'}
-            fontSize={14}
+            fontSize={16}
             value={this.state.texfilecontent}
             setOptions={{
+              fontFamily: 'TeXtt',
               enableSnippets: true,
               behavioursEnabled: true,
               cursorStyle: 'smooth',
@@ -2528,7 +2577,7 @@ note = ,\n\u007D\n'
       <FlatButton
         label='Compile Math'
         labelStyle={{color: letterColor}}
-        onClick={this.compileMathEditor.bind(this)}
+        onClick={() => this.compileMathEditor(this.state.matheditorinput)}
       />,
       <FlatButton
         label='Paste to main text'
@@ -2678,9 +2727,10 @@ note = ,\n\u007D\n'
         editorProps={{
           $blockScrolling: Infinity
         }}
-        fontSize={14}
+        fontSize={16}
         value={this.state.matheditorinput}
         setOptions={{
+          fontFamily: 'TeXtt',
           enableSnippets: true,
           behavioursEnabled: true,
           cursorStyle: 'smooth',
@@ -2744,11 +2794,12 @@ note = ,\n\u007D\n'
         editorProps={{
           $blockScrolling: Infinity
         }}
-        fontSize={14}
+        fontSize={16}
         value={this.state.packages}
         width={'70%'}
         wrapEnabled
         setOptions={{
+          fontFamily: 'TeXtt',
           enableSnippets: true,
           behavioursEnabled: true,
           cursorStyle: 'smooth',
@@ -3082,9 +3133,10 @@ note = ,\n\u007D\n'
                     }}
                     width={(editorWidth + 5).toString() + 'px'}
                     height={(texEditorHeight - 110).toString() + 'px'}
-                    fontSize={14}
+                    fontSize={16}
                     value={this.state.texfilecontent}
                     setOptions={{
+                      fontFamily: 'TeXtt',
                       enableSnippets: true,
                       behavioursEnabled: true,
                       cursorStyle: 'smooth',
@@ -3095,7 +3147,12 @@ note = ,\n\u007D\n'
                     onFocus={this.onFocusMainEditor.bind(this)}
                     onBlur={this.onBlurMainEditor.bind(this)}
                   />
-                  <div style={{height: separateTexBibHeight, backgroundColor: '#fff'}}></div>
+                  <div style={{
+                      height: separateTexBibHeight,
+                      width: editorWidth+5,
+                      backgroundColor: '#666666'
+                    }}>
+                  </div>
                   <AceEditor
                     mode='tex'
                     theme={aceEditorTheme}
@@ -3110,10 +3167,11 @@ note = ,\n\u007D\n'
                     }}
                     width={(editorWidth + 5).toString() + 'px'}
                     height={(bibEditorHeight).toString() + 'px'}
-                    fontSize={14}
+                    fontSize={16}
                     value={this.state.bibfilecontent}
                     debounceChangePeriod={0.1}
                     setOptions={{
+                      fontFamily: 'TeXtt',
                       enableSnippets: true,
                       behavioursEnabled: true,
                       cursorStyle: 'smooth',

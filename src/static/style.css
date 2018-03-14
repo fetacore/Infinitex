@@ -1235,14 +1235,24 @@
   border: 1px solid #ccc;
 }
 .hljs{display:block;overflow-x:auto;padding:0.5em;background:#cdcdcd;color:black}.hljs-comment,.hljs-quote{color:#006a00}.hljs-keyword,.hljs-selector-tag,.hljs-literal{color:#aa0d91}.hljs-name{color:#008}.hljs-variable,.hljs-template-variable{color:#660}.hljs-string{color:#c41a16}.hljs-regexp,.hljs-link{color:#080}.hljs-title,.hljs-tag,.hljs-symbol,.hljs-bullet,.hljs-number,.hljs-meta{color:#1c00cf}.hljs-section,.hljs-class .hljs-title,.hljs-type,.hljs-attr,.hljs-built_in,.hljs-builtin-name,.hljs-params{color:#5c2699}.hljs-attribute,.hljs-subst{color:#000}.hljs-formula{background-color:#eee;font-style:italic}.hljs-addition{background-color:#baeeba}.hljs-deletion{background-color:#ffc8bd}.hljs-selector-id,.hljs-selector-class{color:#9b703f}.hljs-doctag,.hljs-strong{font-weight:bold}.hljs-emphasis{font-style:italic}
-* { margin:0; padding:0; box-sizing:border-box; }
+@font-face {
+  font-family: TeXnormal;
+  src: url('./fonts/cmunrm.ttf');
+}
+@font-face {
+  font-family: TeXtt;
+  src: url('./fonts/cmuntb.ttf');
+}
+* { margin:0; padding:0; box-sizing:border-box;}
 *::selection {
   color: #fff;
   background-color: #454444;
 }
-@font-face {
-  font-family: TeXnormal;
-  src: url('./fonts/cmunrm.ttf');
+.ace_gutter > .ace_layer {
+  width: 60px !important;
+  margin-left: 0;
+  text-align: center;
+  padding: 0;
 }
 #title-bar {
  -webkit-app-region: drag;

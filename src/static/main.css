@@ -1,11 +1,21 @@
-* { margin:0; padding:0; box-sizing:border-box; }
+@font-face {
+  font-family: TeXnormal;
+  src: url('./fonts/cmunrm.ttf');
+}
+@font-face {
+  font-family: TeXtt;
+  src: url('./fonts/cmuntb.ttf');
+}
+* { margin:0; padding:0; box-sizing:border-box;}
 *::selection {
   color: #fff;
   background-color: #454444;
 }
-@font-face {
-  font-family: TeXnormal;
-  src: url('./fonts/cmunrm.ttf');
+.ace_gutter > .ace_layer {
+  width: 60px !important;
+  margin-left: 0;
+  text-align: center;
+  padding: 0;
 }
 #title-bar {
  -webkit-app-region: drag;

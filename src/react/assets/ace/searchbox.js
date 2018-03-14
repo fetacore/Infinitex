@@ -6,9 +6,9 @@ var lang = acequire("../lib/lang");
 var event = acequire("../lib/event");
 var searchboxCss = "\
 .ace_search {\
-background-color: #eeeeee;\
-color: #666;\
-border: 1px solid #cbcbcb;\
+background-color: #696969;\
+color: white;\
+border: none;\
 border-top: 0 none;\
 overflow: hidden;\
 margin: 0;\
@@ -39,37 +39,41 @@ line-height: 1.9;\
 margin-right: 0;\
 }\
 .ace_search_form.ace_nomatch {\
-outline: 1px solid red;\
+outline: 1px solid #a73131;\
 }\
 .ace_search_field {\
 border-radius: 3px 0 0 3px;\
-background-color: white;\
-color: black;\
+background-color: #f1f1f1;\
+color: #494949;\
 border: 1px solid #cbcbcb;\
 border-right: 0 none;\
 box-sizing: border-box!important;\
 outline: 0;\
 padding: 0;\
-font-size: inherit;\
+font-size: 12pt;\
+font-family: TeXnormal;\
 margin: 0;\
 line-height: inherit;\
 padding: 0 6px;\
-width: 80%;\
+width: 86.2%;\
 vertical-align: top;\
 }\
 .ace_searchbtn {\
-border: 1px solid #cbcbcb;\
+border: 1px solid #787878;\
 line-height: inherit;\
+font-family: TeXnormal;\
+font-size: 12pt;\
 display: inline-block;\
 padding: 0 6px;\
-background: #fff;\
+background: #3d3d3d;\
 border-right: 0 none;\
 border-left: 1px solid #dcdcdc;\
 cursor: pointer;\
 margin: 0;\
+width: 4.5%;\
 position: relative;\
 box-sizing: content-box!important;\
-color: #666;\
+color: #969696;\
 }\
 .ace_searchbtn:last-child {\
 border-radius: 0 3px 3px 0;\
@@ -83,7 +87,7 @@ cursor: default;\
 background-color: #eef1f6;\
 }\
 .ace_searchbtn.prev, .ace_searchbtn.next {\
-padding: 0px 0.7em\
+text-align: center;\
 }\
 .ace_searchbtn.prev:after, .ace_searchbtn.next:after {\
 content: \"\";\
@@ -103,7 +107,7 @@ border-radius: 50%;\
 border: 0 none;\
 color: #656565;\
 cursor: pointer;\
-font: 16px/16px Arial;\
+font: 16px/16px TeXnormal;\
 padding: 0;\
 height: 14px;\
 width: 14px;\
@@ -128,8 +132,10 @@ overflow: hidden;\
 opacity: 0.7;\
 border: 1px solid rgba(100,100,100,0.23);\
 padding: 1px;\
+font-family: TeXnormal;\
+font-size: 12pt;\
 box-sizing:    border-box!important;\
-color: black;\
+color: white;\
 }\
 .ace_button:hover {\
 background-color: #eee;\
@@ -139,7 +145,7 @@ opacity:1;\
 background-color: #ddd;\
 }\
 .ace_button.checked {\
-border-color: #3399ff;\
+background-color: #111;\
 opacity:1;\
 }\
 .ace_search_options{\
@@ -154,7 +160,8 @@ clear: both;\
 }\
 .ace_search_counter {\
 float: left;\
-font-family: arial;\
+font-size: 10pt;\
+font-family: TeXnormal;\
 padding: 0 8px;\
 }";
 var HashHandler = acequire("../keyboard/hash_handler").HashHandler;
@@ -165,21 +172,19 @@ var MAX_COUNT = 999;
 dom.importCssString(searchboxCss, "ace_searchbox");
 
 var html = '<div class="ace_search right">\
-    <span action="hide" class="ace_searchbtn_close"></span>\
     <div class="ace_search_form">\
         <input class="ace_search_field" placeholder="Search for" spellcheck="false"></input>\
         <span action="findPrev" class="ace_searchbtn prev"></span>\
         <span action="findNext" class="ace_searchbtn next"></span>\
-        <span action="findAll" class="ace_searchbtn" title="Alt-Enter">All</span>\
     </div>\
     <div class="ace_replace_form">\
         <input class="ace_search_field" placeholder="Replace with" spellcheck="false"></input>\
-        <span action="replaceAndFindNext" class="ace_searchbtn">Replace</span>\
+        <span action="replaceAndFindNext" class="ace_searchbtn">Do</span>\
         <span action="replaceAll" class="ace_searchbtn">All</span>\
     </div>\
     <div class="ace_search_options">\
-        <span action="toggleReplace" class="ace_button" title="Toggel Replace mode"\
-            style="float:left;margin-top:-2px;padding:0 5px;">+</span>\
+        <span action="toggleReplace" class="ace_button" title="Toggle Replace mode"\
+            style="float:left;margin-top:-2px;padding:0 5px;">Replace</span>\
         <span class="ace_search_counter"></span>\
         <span action="toggleRegexpMode" class="ace_button" title="RegExp Search">.*</span>\
         <span action="toggleCaseSensitive" class="ace_button" title="CaseSensitive Search">Aa</span>\
@@ -344,6 +349,7 @@ var SearchBox = function(editor, range, showReplaceForm) {
         }
     }, {
         name: "toggleReplace",
+        bindKey: {win: "Ctrl-F", mac: "Ctrl-F"},
         exec: function(sb) {
             sb.replaceOption.checked = !sb.replaceOption.checked;
             sb.$syncOptions();

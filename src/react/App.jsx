@@ -19,8 +19,8 @@ export default class App extends React.Component {
   constructor () {
     super()
     this.state = {
-      width: 0,
-      height: 0,
+      width: window.innerWidth,
+      height: window.innerHeight,
       component: null,
       file: null,
     }
@@ -101,14 +101,15 @@ export default class App extends React.Component {
       buttonArea: {
         marginTop: '100',
         display: 'inline-block',
+        backgroundColor: '#111',
         textAlign: 'center',
-        width: this.state.width,
-        height: this.state.height / 6
+        width: window.innerWidth,
+        height: window.innerHeight / 6
       },
       buttons: {
         margin: '2%',
-        width: this.state.width / 4,
-        height: this.state.height / 6,
+        width: window.innerWidth / 4,
+        height: window.innerHeight / 6,
         color: '#fff',
         backgroundColor: '#111'
       },
@@ -142,7 +143,7 @@ export default class App extends React.Component {
         classNames='networkstuff'
         timeout={{ enter: 450, exit: 450 }}
 	    >
-        <div>
+        <div style={{backgroundColor: '#111', height: window.innerHeight}}>
           <div style={{textAlign: 'center'}}>
             <object type='image/svg+xml' style={styles.logo} data='../src/static/infty_white.svg' />
           </div>

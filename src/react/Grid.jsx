@@ -109,15 +109,15 @@ export default class Grid extends React.Component {
       showmatheditorbox: false,
       showmathpreviewbox: false,
       showpastematheditorbox: false,
-      texfilecontent: '',
-      texRow: 1,
+      texfilecontent: startTex.slice(startTex.indexOf('\\begin{document}') + 16, startTex.indexOf('\\end{document}')),
+      texRow: 16,
       texColumn: 1,
-      bibfilecontent: '',
-      bibRow: 1,
+      bibfilecontent: startBib,
+      bibRow: 9,
       bibColumn: 1,
       splitRow: 1,
       splitColumn: 1,
-      textSourceBib: 0,
+      textSourceBib: 1,
       // Switches
       preview: true,
       split: false,
@@ -139,7 +139,7 @@ export default class Grid extends React.Component {
       areYouSureDialogDisplay: false,
       areYouSureTemplateDialogDisplay: false,
       packageDialog: false,
-      packages: ''
+      packages: startTex.slice(0, startTex.indexOf('\\begin{document}') + 16)
     }
   }
 
@@ -166,8 +166,6 @@ export default class Grid extends React.Component {
           }
         }
       })
-    } else {
-      this.starterEditor()
     }
     document.getElementById('pdfContainer').addEventListener('wheel', this.onScrollPDF.bind(this))
     ipcRenderer.on('texDataDummy', (event, data) => {
@@ -372,49 +370,90 @@ You can refer to the graph as \\ref{figure:nickname}\n'
     document.getElementById('pdfContainer').removeEventListener('wheel', this.onScrollPDF.bind(this))
   }
 
-  shouldComponentUpdate (prevState, nextState) {
-    if (this.state.texfilecontent !== nextState.texfilecontent) {
+  shouldComponentUpdate (prevState, nextState, prevProps, nextProps) {
+    if (prevProps === nextProps) {
       return false
+    } else {
+      return true
+    }
+    if (this.state.texfilecontent !== nextState.texfilecontent) {
+      if (prevState.filepath !== null && prevState.filepath === nextState.filepath) {
+        return false
+      } else {
+        return true
+      }
     } else {
       return true;
     }
     if (this.state.bibfilecontent !== nextState.bibfilecontent) {
-      return false
+      if (prevState.filepath !== null && prevState.filepath === nextState.filepath) {
+        return false
+      } else {
+        return true
+      }
     } else {
       return true;
     }
     if (this.state.packages !== nextState.packages) {
-      return false
+      if (prevState.filepath !== null && prevState.filepath === nextState.filepath) {
+        return false
+      } else {
+        return true
+      }
     } else {
       return true;
     }
     if (this.state.texRow !== nextState.texRow) {
-      return false
+      if (prevState.filepath !== null && prevState.filepath === nextState.filepath) {
+        return false
+      } else {
+        return true
+      }
     } else {
       return true;
     }
     if (this.state.splitRow !== nextState.splitRow) {
-      return false
+      if (prevState.filepath !== null && prevState.filepath === nextState.filepath) {
+        return false
+      } else {
+        return true
+      }
     } else {
       return true;
     }
     if (this.state.bibRow !== nextState.bibRow) {
-      return false
+      if (prevState.filepath !== null && prevState.filepath === nextState.filepath) {
+        return false
+      } else {
+        return true
+      }
     } else {
       return true;
     }
     if (this.state.texColumn !== nextState.texColumn) {
-      return false
+      if (prevState.filepath !== null && prevState.filepath === nextState.filepath) {
+        return false
+      } else {
+        return true
+      }
     } else {
       return true;
     }
     if (this.state.splitColumn !== nextState.splitColumn) {
-      return false
+      if (prevState.filepath !== null && prevState.filepath === nextState.filepath) {
+        return false
+      } else {
+        return true
+      }
     } else {
       return true;
     }
     if (this.state.bibColumn !== nextState.bibColumn) {
-      return false
+      if (prevState.filepath !== null && prevState.filepath === nextState.filepath) {
+        return false
+      } else {
+        return true
+      }
     } else {
       return true;
     }
@@ -508,32 +547,29 @@ You can refer to the graph as \\ref{figure:nickname}\n'
   }
 
   starterEditor () {
-    setTimeout(() => {
-      this.setState({
-        texfilecontent: startTex.slice(startTex.indexOf('\\begin{document}') + 16, startTex.indexOf('\\end{document}')),
-        packages: startTex.slice(0, startTex.indexOf('\\begin{document}') + 16),
-        bibfilecontent: startBib,
-        texRow: 16,
-        texColumn: 1,
-        bibRow: 9,
-        bibColumn: 1,
-        textSourceBib: 1
-      }, () => {
-        let skata = this.state.packages.split(/\r\n|\r|\n/).length
-        this.refs.mainEditor.editor.setOption(
-          'firstLineNumber', skata + 1
-        )
-        let mainSession = this.refs.mainEditor.editor.getSession()
-        let mainUndoManager = mainSession.getUndoManager()
-        mainUndoManager.reset()
-        mainSession.setUndoManager(mainUndoManager)
-        let bibSession = this.refs.bibEditor.editor.getSession()
-        let bibUndoManager = bibSession.getUndoManager()
-        bibUndoManager.reset()
-        bibSession.setUndoManager(bibUndoManager)
-        this.focusEditor(1)
-      })
-    }, 50)
+    this.setState({
+      texfilecontent: startTex.slice(startTex.indexOf('\\begin{document}') + 16, startTex.indexOf('\\end{document}')),
+      packages: startTex.slice(0, startTex.indexOf('\\begin{document}') + 16),
+      bibfilecontent: startBib,
+      texRow: 16,
+      texColumn: 1,
+      bibRow: 9,
+      bibColumn: 1,
+      textSourceBib: 1
+    }, () => {
+      let skata = this.state.packages.split(/\r\n|\r|\n/).length
+      this.refs.mainEditor.editor.setOption(
+        'firstLineNumber', skata + 1
+      )
+      let mainUndoManager = this.refs.mainEditor.editor.session.getUndoManager()
+      mainUndoManager.reset()
+      this.refs.mainEditor.editor.session.setUndoManager(mainUndoManager)
+      let bibSession = this.refs.bibEditor.editor.getSession()
+      let bibUndoManager = bibSession.getUndoManager()
+      bibUndoManager.reset()
+      bibSession.setUndoManager(bibUndoManager)
+      this.focusEditor(1)
+    })
   }
 
   onSearchDownloadBook () {
@@ -2329,7 +2365,7 @@ note = ,\n\u007D\n'
                         renderMode='svg'
                       />
                       <FakePage
-                        pages={Math.min(this.state.numPages, this.state.pageIndex + 20)}
+                        pages={Math.min(this.state.numPages, this.state.pageIndex + 10)}
                         width={this.PDFWidth}
                       />
                     </Document>
@@ -2647,7 +2683,6 @@ note = ,\n\u007D\n'
             areYouSureDialogDisplay: false
           }, () => {
             this.starterEditor()
-            this.focusEditor(0)
           })
         }}
       />

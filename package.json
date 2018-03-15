@@ -43,7 +43,7 @@
       ]
     },
     "win": {
-      "target": "nsis",
+      "target": ["nsis", "portable"],
       "icon": "src/static/icons/icon.ico"
     },
     "nsis": {

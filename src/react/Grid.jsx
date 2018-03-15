@@ -568,6 +568,14 @@ You can refer to the graph as \\ref{figure:nickname}\n'
       let bibUndoManager = bibSession.getUndoManager()
       bibUndoManager.reset()
       bibSession.setUndoManager(bibUndoManager)
+      if (this.state.split) {
+        this.refs.splitEditor.editor.setOption(
+          'firstLineNumber', skata + 1
+        )
+        let splitUndoManager = this.refs.splitEditor.editor.session.getUndoManager()
+        splitUndoManager.reset()
+        this.refs.splitEditor.editor.session.setUndoManager(splitUndoManager)
+      }
       this.focusEditor(1)
     })
   }

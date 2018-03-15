@@ -168,10 +168,11 @@ export default class Grid extends React.Component {
       })
     }
     document.getElementById('pdfContainer').addEventListener('wheel', this.onScrollPDF.bind(this))
-    ipcRenderer.on('texDataDummy', (event, data) => {
+    ipcRenderer.on('texDataDummy', (event, [data, bibdata]) => {
       this.setState({
         texfilecontent: data.slice(data.indexOf('\\begin{document}') + 16, data.indexOf('\\end{document}')),
         packages: data.slice(0, data.indexOf('\\begin{document}') + 16),
+        bibfilecontent: bibdata,
         textSourceBib: 1
       }, () => {
         let skata = this.state.packages.split(/\r\n|\r|\n/).length
@@ -195,11 +196,6 @@ export default class Grid extends React.Component {
         let bibUndoManager = bibSession.getUndoManager()
         bibUndoManager.reset()
         bibSession.setUndoManager(bibUndoManager)
-      })
-    })
-    ipcRenderer.on('bibDataDummy', (event, data) => {
-      this.setState({
-        bibfilecontent: data
       })
     })
     ipcRenderer.on('Open Project', (event, arg) => {

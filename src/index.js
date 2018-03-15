@@ -412,7 +412,6 @@ ipcMain.on('openTexBibFile', (event, filepath) => {
       })
       notification.show()
     } else {
-      event.sender.send('texDataDummy', texdata)
       fs.readFile(filepath.replace('.tex', '.bib'), 'utf-8', (error, bibdata) => {
         if (error) {
           notification = new Notification({
@@ -423,7 +422,7 @@ ipcMain.on('openTexBibFile', (event, filepath) => {
           })
           notification.show()
         } else {
-          event.sender.send('bibDataDummy', bibdata)
+          event.sender.send('texDataDummy', [texdata, bibdata])
         }
       })
     }

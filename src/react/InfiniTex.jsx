@@ -1,7 +1,5 @@
 import React from 'react'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import * as Colors from 'material-ui/styles/colors'
-import { fade } from 'material-ui/utils/colorManipulator'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import App from './App.jsx'
 

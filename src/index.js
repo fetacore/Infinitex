@@ -87,11 +87,10 @@ const createWindow = async () => {
       plugins: false
     }
   })
-  mainWindow.maximize()
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
-
   mainWindow.setMenu(null)
+  mainWindow.maximize()
 
   // Open the DevTools.
   if (isDevMode) {
@@ -106,8 +105,8 @@ const createWindow = async () => {
   })
 
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show();
-    mainWindow.focus();
+    mainWindow.show()
+    mainWindow.focus()
   });
 
   mainWindow.on('focus', registerShortcuts)

@@ -638,7 +638,7 @@ You can refer to the graph as \\ref{figure:nickname}\n'
       this.refs.mainEditor.editor.clearSelection()
       setTimeout(() => {
         this.focusEditor(0)
-      }, 0.1)
+      }, 10)
     })
   }
 
@@ -653,7 +653,7 @@ You can refer to the graph as \\ref{figure:nickname}\n'
       this.refs.bibEditor.editor.clearSelection()
       setTimeout(() => {
         this.focusEditor(1)
-      }, 0.1)
+      }, 10)
     })
   }
 
@@ -668,7 +668,7 @@ You can refer to the graph as \\ref{figure:nickname}\n'
       this.refs.splitEditor.editor.clearSelection()
       setTimeout(() => {
         this.focusEditor(2)
-      }, 0.1)
+      }, 10)
     })
   }
 
@@ -1017,19 +1017,19 @@ note = ,\n\u007D\n'
     if (index == 0) {
       this.refs.mainEditor.editor.clearSelection()
       this.refs.mainEditor.editor.moveCursorTo(this.state.texRow, this.state.texColumn)
-      this.refs.mainEditor.editor.scrollToLine(this.state.texRow, true, true)
+      this.refs.mainEditor.editor.scrollToLine(this.state.texRow, false, true)
       this.refs.mainEditor.editor.focus()
       this.refs.mainEditor.editor.clearSelection()
     } else if (index == 2){
       this.refs.splitEditor.editor.clearSelection()
       this.refs.splitEditor.editor.moveCursorTo(this.state.splitRow, this.state.splitColumn)
-      this.refs.splitEditor.editor.scrollToLine(this.state.splitRow, true, true)
+      this.refs.splitEditor.editor.scrollToLine(this.state.splitRow, false, true)
       this.refs.splitEditor.editor.focus()
       this.refs.splitEditor.editor.clearSelection()
     } else {
       this.refs.bibEditor.editor.clearSelection()
       this.refs.bibEditor.editor.moveCursorTo(this.state.bibRow, this.state.bibColumn)
-      this.refs.bibEditor.editor.scrollToLine(this.state.bibRow, true, true)
+      this.refs.bibEditor.editor.scrollToLine(this.state.bibRow, false, true)
       this.refs.bibEditor.editor.focus()
       this.refs.bibEditor.editor.clearSelection()
     }
@@ -1499,7 +1499,7 @@ note = ,\n\u007D\n'
         splitSession.setUndoManager(splitUndoManager)
         setTimeout(() => {
           this.focusEditor(2)
-        }, 5)
+        }, 10)
       })}
     />
     const bottomButton2WildCard = <BottomNavigationItem
@@ -1523,7 +1523,7 @@ note = ,\n\u007D\n'
         splitSession.setUndoManager(splitUndoManager)
         setTimeout(() => {
           this.focusEditor(2)
-        }, 5)
+        }, 10)
       })}
     />
     const bottomButton2Split = <BottomNavigationItem

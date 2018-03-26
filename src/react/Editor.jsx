@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import ReactQuill, { Quill } from 'react-quill'
 import TextField from 'material-ui/TextField'
 import IconMenu from 'material-ui/IconMenu'

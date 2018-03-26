@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import RaisedButton from 'material-ui/RaisedButton'
 import IconButton from 'material-ui/FloatingActionButton'
 import Add from 'material-ui/svg-icons/content/add'
@@ -206,9 +205,4 @@ export default class App extends React.Component {
       </div>
     )
   }
-}
-
-App.propTypes = {
-  Grid: PropTypes.element,
-  Editor: PropTypes.element
 }

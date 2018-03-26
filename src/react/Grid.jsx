@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import ReactGridLayout from 'react-grid-layout'
 import { BottomNavigation, BottomNavigationItem } from 'material-ui/BottomNavigation'
 import CircularProgress from 'material-ui/CircularProgress'
@@ -1017,19 +1016,16 @@ note = ,\n\u007D\n'
     if (index == 0) {
       this.refs.mainEditor.editor.clearSelection()
       this.refs.mainEditor.editor.moveCursorTo(this.state.texRow, this.state.texColumn)
-      this.refs.mainEditor.editor.scrollToLine(this.state.texRow, false, true)
       this.refs.mainEditor.editor.focus()
       this.refs.mainEditor.editor.clearSelection()
     } else if (index == 2){
       this.refs.splitEditor.editor.clearSelection()
       this.refs.splitEditor.editor.moveCursorTo(this.state.splitRow, this.state.splitColumn)
-      this.refs.splitEditor.editor.scrollToLine(this.state.splitRow, false, true)
       this.refs.splitEditor.editor.focus()
       this.refs.splitEditor.editor.clearSelection()
     } else {
       this.refs.bibEditor.editor.clearSelection()
       this.refs.bibEditor.editor.moveCursorTo(this.state.bibRow, this.state.bibColumn)
-      this.refs.bibEditor.editor.scrollToLine(this.state.bibRow, false, true)
       this.refs.bibEditor.editor.focus()
       this.refs.bibEditor.editor.clearSelection()
     }
@@ -3282,9 +3278,4 @@ class FakePage extends React.PureComponent {
       </div>
     )
   }
-}
-
-Grid.propTypes = {
-  width: PropTypes.number,
-  height: PropTypes.number
 }

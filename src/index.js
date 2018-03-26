@@ -79,7 +79,7 @@ const createWindow = async () => {
     backgroundColor: '#111',
     icon: nativeImage.createFromPath(__dirname + '/static/icon.png'),
     darkTheme: true,
-    show: false,
+    show: true,
     // frame: false,
     // resizable: false,
     webPreferences: {
@@ -105,7 +105,6 @@ const createWindow = async () => {
   })
 
   mainWindow.on('ready-to-show', () => {
-    mainWindow.show()
     mainWindow.focus()
   });
 

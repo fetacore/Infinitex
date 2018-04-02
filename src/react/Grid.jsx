@@ -6,6 +6,7 @@ import LinearProgress from 'material-ui/LinearProgress'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import Paper from 'material-ui/Paper'
+import Popover from 'material-ui/Popover'
 import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
 import RaisedButton from 'material-ui/RaisedButton'
@@ -138,7 +139,9 @@ export default class Grid extends React.Component {
       areYouSureDialogDisplay: false,
       areYouSureTemplateDialogDisplay: false,
       packageDialog: false,
-      packages: startTex.slice(0, startTex.indexOf('\\begin{document}') + 16)
+      packages: startTex.slice(0, startTex.indexOf('\\begin{document}') + 16),
+      openPopover: false,
+      openPopoverAnchor: null
     }
   }
 
@@ -850,7 +853,6 @@ note = ,\n\u007D\n'
     } else {
       this.setState({
         PDFLoading: true,
-        preview: true,
         binaryPDFContent: null
       }, () => {
         this.latexError = null
@@ -959,7 +961,7 @@ note = ,\n\u007D\n'
         if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
           ipcRenderer.send('openPDF', this.state.filepath.replace('.tex', '.pdf'))
         }
-      			document.body.style.cursor = 'default'
+      	document.body.style.cursor = 'default'
       }
     })
   }
@@ -1412,31 +1414,39 @@ note = ,\n\u007D\n'
         this.compileText()
       }}
     />
-    const topButton5NoNetwork = <IconMenu
-      iconButtonElement={
-        <img
-          src={compilePDFLogoSrc}
-          style={{
-            width: '3vw',
-            marginLeft: '10%'
-          }}
-        />
-      }
-      anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-      targetOrigin={{horizontal: 'left', vertical: 'top'}}
-      value={0}
+    let topButton5NoNetworkImage = null
+    if (this.state.PDFLoading) {
+      topButton5NoNetworkImage =
+      <LinearProgress
+        mode="indeterminate"
+      />
+    } else {
+      topButton5NoNetworkImage =
+      <img
+        src={'../src/static/icon.svg'}
+        style={{
+          width: '2vw',
+          color: '#8a8a8a',
+          marginLeft: '26%',
+          paddingLeft: 5,
+          paddingBottom: 8
+        }}
+      />
+    }
+    const topButton5NoNetwork =
+    <BottomNavigationItem
+      icon={topButton5NoNetworkImage}
       key='t5NN'
-    >
-      <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
-      <MenuItem value={2} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
-      <MenuItem value={3} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
-      <MenuItem value={4} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 2, networkFeatures: true, split: false})} />
-      <MenuItem value={5} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true, split: false})} />
-      <MenuItem value={6} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
-      {themeMenu}
-      <MenuItem value={8} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
-      <MenuItem value={9} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
-    </IconMenu>
+      onClick={(event) => {
+        event.preventDefault()
+        this.setState({
+          openPopover: true,
+          openPopoverAnchor: event.currentTarget
+        }, () => {
+          this.focusEditor(0)
+        })
+      }}
+    />
     const bottomButton1 = <BottomNavigationItem
       label='Expansion On'
       icon={networkOnIcon}
@@ -1494,6 +1504,7 @@ note = ,\n\u007D\n'
         splitUndoManager.reset()
         splitSession.setUndoManager(splitUndoManager)
         setTimeout(() => {
+          this.refs.splitEditor.editor.scrollToLine(this.state.texRow, true, true)
           this.focusEditor(2)
         }, 10)
       })}
@@ -1518,6 +1529,7 @@ note = ,\n\u007D\n'
         splitUndoManager.reset()
         splitSession.setUndoManager(splitUndoManager)
         setTimeout(() => {
+          this.refs.splitEditor.editor.scrollToLine(this.state.texRow, true, true)
           this.focusEditor(2)
         }, 10)
       })}
@@ -3113,6 +3125,25 @@ note = ,\n\u007D\n'
         saved everything or your changes will be lost!
     </Dialog>
 
+    const popOverMenu =
+    <Popover
+      open={this.state.openPopover}
+      anchorEl={this.state.openPopoverAnchor}
+      anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+      targetOrigin={{horizontal: 'left', vertical: 'top'}}
+      onRequestClose={() => this.setState({ openPopover: false})}
+    >
+      <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
+      <MenuItem value={2} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
+      <MenuItem value={3} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
+      <MenuItem value={4} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 2, networkFeatures: true, split: false})} />
+      <MenuItem value={5} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true, split: false})} />
+      <MenuItem value={6} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
+      {themeMenu}
+      <MenuItem value={8} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
+      <MenuItem value={9} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
+    </Popover>
+
 	  return (
       <div style={{width: width - 20, height: height, backgroundColor: generalBackgroundColor}}>
         {mathEditorDialog}
@@ -3123,6 +3154,7 @@ note = ,\n\u007D\n'
         {citationDialog}
         {areYouSureTemplateDialog}
         {areYouSureDialog}
+        {popOverMenu}
         <ReactGridLayout
           className='layout'
           layout={layout}

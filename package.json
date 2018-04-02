@@ -7,7 +7,7 @@
   "scripts": {
     "start": "electron .",
     "preminify": "node ./beforeBundle.js",
-    "minify": "browserify ./src/entryDev.js -g [ envify --NODE_ENV production --BABEL_ENV production ] -t [ babelify --presets [ env --targets [ electron ] react ] --plugins transform-async-to-generator ] -p tinyify --full-path=false --exclude electron --exclude shelljs -o ./src/entry/bundle.js",
+    "minify": "browserify ./src/entryDev.js -g [ envify --NODE_ENV production --BABEL_ENV production ] -g uglifyify -t [ babelify --presets [ env --targets [ electron ] react ] --plugins transform-async-to-generator ] -p common-shakeify --full-path=false --exclude electron --exclude shelljs -o ./src/entry/bundle.js",
     "postminify": "uglifyjs --compress drop_console,hoist_funs,toplevel,unsafe --mangle toplevel=true -- ./src/entry/bundle.js > ./src/react/inf.min.js",
     "package:minify": "npm run minify && node ./beforePackage.js && cd prod && yarn && electron-builder --dir",
     "package": "node ./beforePackage.js && cd prod && yarn && electron-builder --dir",
@@ -121,6 +121,7 @@
     "babelify": "^8.0.0",
     "brace": "^0.11.1",
     "browserify": "^16.1.1",
+    "common-shakeify": "^0.4.6",
     "electron-builder": "20.8.2",
     "electron-devtools-installer": "^2.2.3",
     "electron-prebuilt-compile": "^2.0.0-beta.5",
@@ -141,7 +142,6 @@
     "react-resizable": "^1.7.5",
     "react-transition-group": "^2.3.0",
     "request": "^2.85.0",
-    "tinyify": "^2.4.0",
     "uglify-js": "^3.3.17",
     "uglifyify": "^4.0.5"
   }

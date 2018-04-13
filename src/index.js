@@ -446,9 +446,9 @@ ipcMain.on('openFile', (event, [whereTo, filepath]) => {
 ipcMain.on('openPDF', (event, arg) => {
   fs.readFile(arg, (err, data) => {
     // let b = new Buffer(data).toString('base64');
-    var raw = new Buffer(data).toString('base64')
-    var uint8Array = new Uint8Array(raw.length)
-    for (var i = 0; i < raw.length; i++) {
+    let raw = new Buffer(data).toString('base64')
+    let uint8Array = new Uint8Array(raw.length)
+    for (let i = 0; i < raw.length; i++) {
       uint8Array[i] = raw.charCodeAt(i)
     }
     // event.sender.send('getPDF', b);

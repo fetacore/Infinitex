@@ -21,7 +21,6 @@ function removeUnnecessary () {
   shelljs.rm('-rf',
     __dirname + fpresolver + 'src' + fpresolver + 'index.min.js',
     __dirname + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'inf.min.js',
-    __dirname + fpresolver + 'prod' + fpresolver + 'dist' + fpresolver + unpacked + fpresolver + 'locales' + fpresolver,
     __dirname + fpresolver + 'prod' + fpresolver + 'dist' + fpresolver + unpacked + fpresolver + 'pdf_viewer_resources.pak'
   )
 }

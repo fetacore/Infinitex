@@ -121,7 +121,7 @@ export default class Grid extends React.Component {
       // Switches
       preview: true,
       split: false,
-      networkFeatures: true,
+      networkFeatures: false,
       // //////////
       filepath: null,
       PDFLoading: false,
@@ -1088,12 +1088,20 @@ note = ,\n\u007D\n'
     shell.openItem(pdffilepath)
   }
 
+  openPopoverMenu (event) {
+    event.preventDefault()
+    this.setState({
+      openPopover: true,
+      openPopoverAnchor: event.currentTarget
+    })
+  }
+
   contextMenuBuilder (e, arg) {
     e.preventDefault()
     if (arg == 'loginchat') {
       var contextMenuTemplate = [
         {
-          label: 'Toggle Collaboration Tools Off',
+          label: 'Toggle Networking',
           click: () => {
             this.setState({networkFeatures: false})
           }
@@ -1210,29 +1218,107 @@ note = ,\n\u007D\n'
         }
       ]
     } else {
-      if (this.state.filepath) {
+      if (this.state.split) {
         var contextMenuTemplate = [
           {
-            label: 'External View',
-            accelerator: 'CmdOrCtrl+P',
-            click: () => this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
+            label: 'Start With Template',
+            submenu: [
+              {
+                label: 'Draft',
+                click: () => {
+                  if (!this.state.filepath) {
+                    this.initTemplate('Draft')
+                  } else {
+                    this.templateArg = 'Draft'
+                    this.setState({
+                      areYouSureTemplateDialogDisplay: true
+                    })
+                  }
+                }
+              },
+              {
+                label: 'Thesis',
+                click: () => {
+                  if (!this.state.filepath) {
+                    this.initTemplate('Thesis')
+                  } else {
+                    this.templateArg = 'Thesis'
+                    this.setState({
+                      areYouSureTemplateDialogDisplay: true
+                    })
+                  }
+                }
+              },
+              {
+                label: 'Presentation',
+                click: () => {
+                  if (!this.state.filepath) {
+                    this.initTemplate('Presentation')
+                  } else {
+                    this.templateArg = 'Presentation'
+                    this.setState({
+                      areYouSureTemplateDialogDisplay: true
+                    })
+                  }
+                }
+              },
+              {
+                label: 'CV',
+                click: () => {
+                  if (!this.state.filepath) {
+                    this.initTemplate('CV')
+                  } else {
+                    this.templateArg = 'CV'
+                    this.setState({
+                      areYouSureTemplateDialogDisplay: true
+                    })
+                  }
+                }
+              }
+            ]
           },
+          {type: 'separator'},
+          {role: 'cut'},
+          {role: 'copy'},
+          {role: 'paste'},
+          {role: 'pasteandmatchstyle'},
+          {role: 'delete'},
+          {role: 'selectall'},
+          {type: 'separator'},
           {
-            label: 'External View Only',
-            accelerator: 'CmdOrCtrl+Shift+P',
+            label: 'Toggle Split',
             click: () => {
-              this.setState({preview: false})
-              this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
+              this.setState({
+                split: false
+              })
             }
           }
         ]
       } else {
-        var contextMenuTemplate = [
-          {
-            label: 'Toggle PDF Preview Placeholder',
-            click: () => this.setState({preview: false})
-          }
-        ]
+        if (this.state.filepath) {
+          var contextMenuTemplate = [
+            {
+              label: 'External View',
+              accelerator: 'CmdOrCtrl+P',
+              click: () => this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
+            },
+            {
+              label: 'External View Only',
+              accelerator: 'CmdOrCtrl+Shift+P',
+              click: () => {
+                this.setState({preview: false})
+                this.pdfNewWindow(this.state.filepath.replace('.tex', '.pdf'))
+              }
+            }
+          ]
+        } else {
+          var contextMenuTemplate = [
+            {
+              label: 'Toggle PDF Preview Placeholder',
+              click: () => this.setState({preview: false})
+            }
+          ]
+        }
       }
     }
     const ContextMenu = Menu.buildFromTemplate(contextMenuTemplate)
@@ -1437,15 +1523,7 @@ note = ,\n\u007D\n'
     <BottomNavigationItem
       icon={topButton5NoNetworkImage}
       key='t5NN'
-      onClick={(event) => {
-        event.preventDefault()
-        this.setState({
-          openPopover: true,
-          openPopoverAnchor: event.currentTarget
-        }, () => {
-          this.focusEditor(0)
-        })
-      }}
+      onClick={this.openPopoverMenu.bind(this)}
     />
     const bottomButton1 = <BottomNavigationItem
       label='Expansion On'
@@ -3132,6 +3210,10 @@ note = ,\n\u007D\n'
       anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
       targetOrigin={{horizontal: 'left', vertical: 'top'}}
       onRequestClose={() => this.setState({ openPopover: false})}
+      canAutoPosition={false}
+      style={{
+        width: '20%'
+      }}
     >
       <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
       <MenuItem value={2} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />

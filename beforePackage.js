@@ -86,7 +86,7 @@ function removeLines () {
       alert(err)
     } else {
       let packXwrisSkata = data.replace(
-        '\"electron-prebuilt-compile\": \"2.0.0-beta.5\",', '\"electron\": \"2.0.0-beta.5\",'
+        '\"electron-prebuilt-compile\": \"2.0.0-beta.5\",', '\"electron\": \"2.0.0-beta.7\",'
       ).replace(
         '\"src/index.js\"', '\"src/index.min.js\"'
       ).replace(

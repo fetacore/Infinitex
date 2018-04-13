@@ -35,12 +35,16 @@ ace.define("ace/snippets/tex",["require","exports","module"],function(e,t,n){"us
 \nsnippet \\bigwedge\n	bigwedge\n\
 \nsnippet \\bold\n	textbf{${1:text}}\n\
 \nsnippet \\bullet\n	bullet\n\
-\nsnippet \\big(\n	big( ${1:n} \\big)\n\
-\nsnippet \\Big(\n	Big( ${1:n} \\Big)\n\
+\nsnippet \\big{\n	big\{ ${1:n} \\big\\\n\
+\nsnippet \\Big{\n	Big\{ ${1:n} \\Big\\\n\
+\nsnippet \\bigg{\n	bigg\{ ${1:n} \\bigg\\\n\
+\nsnippet \\Bigg{\n	Bigg\{ ${1:n} \\Bigg\\\n\
+\nsnippet \\big(\n	big( ${1:n} \\big\n\
+\nsnippet \\Big(\n	Big( ${1:n} \\Big\n\
 \nsnippet \\bigg(\n	bigg( ${1:n} \\bigg)\n\
 \nsnippet \\Bigg(\n	Bigg( ${1:n} \\Bigg)\n\
-\nsnippet \\big[\n	big[ ${1:n} \\big]\n\
-\nsnippet \\Big[\n	Big[ ${1:n} \\Big]\n\
+\nsnippet \\big[\n	big[ ${1:n} \\big\n\
+\nsnippet \\Big[\n	Big[ ${1:n} \\Big\n\
 \nsnippet \\bigg[\n	bigg[ ${1:n} \\bigg]\n\
 \nsnippet \\Bigg[\n	Bigg[ ${1:n} \\Bigg]\n\
 \nsnippet \\big\\lbrace\n	big\\lbrace ${1:n} \\big\\rbrace\n\
@@ -111,33 +115,25 @@ ace.define("ace/snippets/tex",["require","exports","module"],function(e,t,n){"us
 \nsnippet \\left| onlyright\n	left.mx ${1:n} \\right|_{${2:i=1}}\n\
 \nsnippet \\evaluated-right\n	left.mx ${1:n} \\right|_{${2:i=1}}\n\
 \nsnippet \\gamma\n	gamma\n\
-\nsnippet \\GAMMA\n	Gamma\n\
 \nsnippet \\delta\n	delta\n\
-\nsnippet \\DELTA\n	Delta\n\
 \nsnippet \\epsilon\n	epsilon\n\
 \nsnippet \\epsilon-pretty\n	varepsilon\n\
 \nsnippet \\zeta\n	zeta\n\
 \nsnippet \\eta\n	eta\n\
 \nsnippet \\theta\n	theta\n\
-\nsnippet \\THETA\n	Theta\n\
 \nsnippet \\vartheta\n	vartheta\n\
 \nsnippet \\lambda\n	lambda\n\
-\nsnippet \\LAMBDA\n	Lambda\n\
 \nsnippet \\mu\n	mu\n\
 \nsnippet \\xi\n	xi\n\
 \nsnippet \\XI\n	Xi\n\
 \nsnippet \\chi\n	chi\n\
 \nsnippet \\omega\n	omega\n\
-\nsnippet \\OMEGA\n	Omega\n\
 \nsnippet \\rho\n	rho\n\
 \nsnippet \\pi\n	pi\n\
-\nsnippet \\PI\n	Pi\n\
 \nsnippet \\prod\n prod\n\
 \nsnippet \\sigma\n	sigma\n\
-\nsnippet \\SIGMA\n	Sigma\n\
 \nsnippet \\tau\n	tau\n\
 \nsnippet \\phi\n	phi\n\
-\nsnippet \\PHI\n	Phi\n\
 \nsnippet \\norm\n	| ${1:n} \\|\n\
 \nsnippet \\excluding\n	backslash\n\
 \nsnippet \\intersection\n	cap\n\
@@ -151,6 +147,9 @@ ace.define("ace/snippets/tex",["require","exports","module"],function(e,t,n){"us
 \nsnippet \\modulus\n	bmod\n\
 \nsnippet \\orthogonal\n	bot\n\
 \nsnippet \\dots\n	ldots\n\
+\nsnippet \\cdots\n	cdots\n\
+\nsnippet \\ddots\n	ddots\n\
+\nsnippet \\vdots\n	vdots\n\
 \nsnippet \\dots-center\n	cdots\n\
 \nsnippet \\dots-diagonal\n	ddots\n\
 \nsnippet \\dots-vertical\n	vdots\n\
@@ -213,6 +212,7 @@ ace.define("ace/snippets/tex",["require","exports","module"],function(e,t,n){"us
 \nsnippet \\dot\n	bullet\n\
 \nsnippet \\normal-distribution\n	mathcal{N}(0,1)\n\
 \nsnippet \\expectation\n	mathbb{E}_{${1:n}}\n\
+\nsnippet \\probability\n	mathbb{P}_{${1:n}}\n\
 \nsnippet \\real\n	mathbb{R}^{${1:n}}\n\
 \nsnippet \\complex\n	mathbb{C}\n\
 \nsnippet \\natural\n	mathbb{N}\n\

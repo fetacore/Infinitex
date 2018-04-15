@@ -2157,18 +2157,6 @@ detective@^5.0.2:
     acorn "^5.2.1"
     defined "^1.0.0"
 
-dictionary-el@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/dictionary-el/-/dictionary-el-3.0.0.tgz#59fd1cf8b88c8716aec6306036fc0d3147cfb869"
-
-dictionary-en-us@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/dictionary-en-us/-/dictionary-en-us-2.0.0.tgz#b9135f403444bb5e4b3cf465fb7d3f2fd276a839"
-
-dictionary-fr@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/dictionary-fr/-/dictionary-fr-2.1.0.tgz#d2cded14ba20f5f2fe35a61995572dc250018d88"
-
 diff-match-patch@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/diff-match-patch/-/diff-match-patch-1.0.0.tgz#1cc3c83a490d67f95d91e39f6ad1f2e086b63048"
@@ -3357,7 +3345,7 @@ is-binary-path@^1.0.0:
   dependencies:
     binary-extensions "^1.0.0"
 
-is-buffer@^1.1.0, is-buffer@^1.1.4, is-buffer@^1.1.5:
+is-buffer@^1.1.0, is-buffer@^1.1.5:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
 
@@ -4248,13 +4236,6 @@ npmlog@^4.0.2:
     console-control-strings "~1.1.0"
     gauge "~2.7.3"
     set-blocking "~2.0.0"
-
-nspell@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/nspell/-/nspell-1.0.5.tgz#f5ab262506f3bbf4ca51c924736e133a53a1af73"
-  dependencies:
-    is-buffer "^1.1.4"
-    trim "0.0.1"
 
 nth-check@~1.0.1:
   version "1.0.1"
@@ -6011,10 +5992,6 @@ trim-right@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/trim-right/-/trim-right-1.0.1.tgz#cb2e1203067e0c8de1f614094b9fe45704ea6003"
 
-trim@0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/trim/-/trim-0.0.1.tgz#5858547f6b290757ee95cccc666fb50084c460dd"
-
 truncate-utf8-bytes@^1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/truncate-utf8-bytes/-/truncate-utf8-bytes-1.0.2.tgz#405923909592d56f78a5818434b0b78489ca5f2b"
@@ -6054,6 +6031,10 @@ typedarray@^0.0.6, typedarray@~0.0.5:
 typescript@>=1.6:
   version "2.7.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.7.2.tgz#2d615a1ef4aee4f574425cdff7026edf81919836"
+
+typo-js@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/typo-js/-/typo-js-1.0.3.tgz#54d8ebc7949f1a7810908b6002c6841526c99d5a"
 
 ua-parser-js@^0.7.9:
   version "0.7.17"

@@ -69,6 +69,10 @@ const {
 } = require('electron').remote
 const { remote, ipcRenderer } = require('electron')
 const shelljs = require('shelljs')
+const Typo = require("typo-js");
+const dictionary = new Typo("en_US", false, false, { dictionaryPath: __dirname+'/assets/ace/dictionaries' })
+// const french_dictionary = new Typo("fr", false, false, { dictionaryPath: "./assets/ace/dictionaries" })
+// const greek_dictionary = new Typo("el", false, false, { dictionaryPath: "./assets/ace/dictionaries" })
 
 const buttonStyles = {
   textAlign: 'center',
@@ -1098,8 +1102,9 @@ note = ,\n\u007D\n'
 
   contextMenuBuilder (e, arg) {
     e.preventDefault()
+    let contextMenuTemplate = []
     if (arg == 'loginchat') {
-      var contextMenuTemplate = [
+      contextMenuTemplate = [
         {
           label: 'Toggle Networking',
           click: () => {
@@ -1108,7 +1113,34 @@ note = ,\n\u007D\n'
         }
       ]
     } else if (arg == 'editor') {
-      var contextMenuTemplate = [
+      let sel = this.refs.mainEditor.editor.selection.getRange()
+      let word = this.refs.mainEditor.editor.getSelectedText()
+      let suggestions = null
+      if ((sel.end.row - sel.start.row == 0) && (word.indexOf(' ') == -1) && (sel.end.column - sel.start.column >= 3)) {
+        let check = dictionary.check(word);
+        if (check == false) {
+          suggestions = dictionary.suggest(word);
+          for (let i = 0; i < suggestions.length; i++) {
+            if (i == suggestions.length - 1) {
+              contextMenuTemplate.push(
+                {
+                  label: suggestions[i],
+                  click: () => this.refs.mainEditor.editor.getSession().replace(sel, suggestions[i])
+                },
+                {type: 'separator'},
+              )
+            } else {
+              contextMenuTemplate.push(
+                {
+                  label: suggestions[i],
+                  click: () => this.refs.mainEditor.editor.getSession().replace(sel, suggestions[i])
+                }
+              )
+            }
+          }
+        }
+      }
+      contextMenuTemplate.push(
         {
           label: 'Start With Template',
           submenu: [
@@ -1173,7 +1205,7 @@ note = ,\n\u007D\n'
         {role: 'pasteandmatchstyle'},
         {role: 'delete'},
         {role: 'selectall'}
-      ]
+      )
       if (!this.state.preview) {
         contextMenuTemplate.push(
 					{type: 'separator'},
@@ -1190,25 +1222,25 @@ note = ,\n\u007D\n'
 				)
       }
     } else if (arg == 'editorUtils') {
-      var contextMenuTemplate = [
+      contextMenuTemplate = [
         {
           label: 'You are in the editor utilities'
         }
       ]
     } else if (arg == 'editorCollabUtils') {
-      var contextMenuTemplate = [
+      contextMenuTemplate = [
         {
           label: 'You are in the editor expansion utilities'
         }
       ]
     } else if (arg == 'PDFUtils') {
-      var contextMenuTemplate = [
+      contextMenuTemplate = [
         {
           label: 'You are in the PDF utilities'
         }
       ]
     } else if (arg == 'matheditor') {
-      var contextMenuTemplate = [
+      contextMenuTemplate = [
         {role: 'cut'},
         {role: 'copy'},
         {role: 'paste'},
@@ -1219,7 +1251,7 @@ note = ,\n\u007D\n'
       ]
     } else {
       if (this.state.split) {
-        var contextMenuTemplate = [
+        contextMenuTemplate = [
           {
             label: 'Start With Template',
             submenu: [
@@ -1296,7 +1328,7 @@ note = ,\n\u007D\n'
         ]
       } else {
         if (this.state.filepath) {
-          var contextMenuTemplate = [
+          contextMenuTemplate = [
             {
               label: 'External View',
               accelerator: 'CmdOrCtrl+P',
@@ -1312,7 +1344,7 @@ note = ,\n\u007D\n'
             }
           ]
         } else {
-          var contextMenuTemplate = [
+          contextMenuTemplate = [
             {
               label: 'Toggle PDF Preview Placeholder',
               click: () => this.setState({preview: false})
@@ -1321,7 +1353,7 @@ note = ,\n\u007D\n'
         }
       }
     }
-    const ContextMenu = Menu.buildFromTemplate(contextMenuTemplate)
+    let ContextMenu = Menu.buildFromTemplate(contextMenuTemplate)
     ContextMenu.popup(remote.getCurrentWindow())
   }
 

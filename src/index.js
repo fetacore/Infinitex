@@ -12,6 +12,7 @@ const {
 const { addBypassChecker } = require('electron-compile')
 const { autoUpdater } = require('electron-updater')
 const fs = require('fs')
+const path = require('path')
 
 const isDevMode = process.execPath.match(/[\\/]electron/);
 
@@ -376,7 +377,20 @@ ipcMain.on('createTexBibFile', (event, [filepath, texdata, bibdata]) => {
       })
       notification.show()
     } else {
-      fs.writeFileSync(filepath.replace('.tex', '.bib'), bibdata, 'utf-8')
+      let texfile = path.basename(filepath)
+      let folder = filepath.replace(texfile, '')
+      let files = fs.readdirSync(folder)
+      let foundbib = false
+      for (let i = 0; i < files.length; i++) {
+        let filename = path.join(folder, files[i])
+        if (filename.indexOf('.bib')>=0) {
+          foundbib = true
+          fs.writeFileSync(filename, bibdata, 'utf-8')
+        }
+      }
+      if (!foundbib) {
+        fs.writeFileSync(filepath.replace('.tex', '.bib'), bibdata, 'utf-8')
+      }
     }
   })
 })
@@ -410,19 +424,40 @@ ipcMain.on('openTexBibFile', (event, filepath) => {
       })
       notification.show()
     } else {
-      fs.readFile(filepath.replace('.tex', '.bib'), 'utf-8', (error, bibdata) => {
-        if (error) {
-          notification = new Notification({
-            title: 'Error',
-            body: 'Could not open Bibliography file',
-            silent: true,
-            icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
+      let texfile = path.basename(filepath)
+      let folder = filepath.replace(texfile, '')
+      let files = fs.readdirSync(folder)
+      let foundbib = false
+      for (let i = 0; i < files.length; i++) {
+        let filename = path.join(folder, files[i])
+        if (filename.indexOf('.bib')>=0) {
+          foundbib = true
+          fs.readFile(filename, 'utf-8', (error, bibdata) => {
+            if (error) {
+              notification = new Notification({
+                title: 'Error',
+                body: 'Could not open Bibliography file',
+                silent: true,
+                icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
+              })
+              notification.show()
+              event.sender.send('texDataDummy', [texdata, ''])
+            } else {
+              event.sender.send('texDataDummy', [texdata, bibdata])
+            }
           })
-          notification.show()
-        } else {
-          event.sender.send('texDataDummy', [texdata, bibdata])
         }
-      })
+      }
+      if (!foundbib) {
+        notification = new Notification({
+          title: 'Error',
+          body: 'Could not find Bibliography file',
+          silent: true,
+          icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
+        })
+        notification.show()
+        event.sender.send('texDataDummy', [texdata, ''])
+      }
     }
   })
 })

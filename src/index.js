@@ -602,3 +602,19 @@ ipcMain.on('get-file-data', (event) => {
     event.returnValue = null
   }
 })
+
+ipcMain.on('load-dictionary', (event) => {
+  fs.readFile(__dirname+'/react/assets/ace/dictionaries/en_US/en_US.aff', 'utf-8', (err, aff) => {
+    if (err) {
+      return
+    } else {
+      fs.readFile(__dirname+'/react/assets/ace/dictionaries/en_US/en_US.dic', 'utf-8', (error, dic) => {
+        if (error) {
+          return
+        } else {
+          event.sender.send('dictionary-loaded', [aff, dic])
+        }
+      })
+    }
+  })
+})

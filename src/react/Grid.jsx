@@ -70,7 +70,6 @@ const {
 const { remote, ipcRenderer } = require('electron')
 const shelljs = require('shelljs')
 const Typo = require("typo-js");
-const dictionary = new Typo("en_US", false, false, { dictionaryPath: __dirname+'/assets/ace/dictionaries' })
 // const french_dictionary = new Typo("fr", false, false, { dictionaryPath: "./assets/ace/dictionaries" })
 // const greek_dictionary = new Typo("el", false, false, { dictionaryPath: "./assets/ace/dictionaries" })
 
@@ -174,6 +173,9 @@ export default class Grid extends React.Component {
       })
     }
     document.getElementById('pdfContainer').addEventListener('wheel', this.onScrollPDF.bind(this))
+    ipcRenderer.on('dictionary-loaded', (event, [aff, dic]) => {
+      this.dictionary = new Typo("en_US", aff, dic)
+    })
     ipcRenderer.on('texDataDummy', (event, [data, bibdata]) => {
       this.setState({
         texfilecontent: data.slice(data.indexOf('\\begin{document}') + 16, data.indexOf('\\end{document}')),
@@ -1117,9 +1119,9 @@ note = ,\n\u007D\n'
       let word = this.refs.mainEditor.editor.getSelectedText()
       let suggestions = null
       if ((sel.end.row - sel.start.row == 0) && (word.indexOf(' ') == -1) && (sel.end.column - sel.start.column >= 3)) {
-        let check = dictionary.check(word);
+        let check = this.dictionary.check(word);
         if (check == false) {
-          suggestions = dictionary.suggest(word);
+          suggestions = this.dictionary.suggest(word);
           for (let i = 0; i < suggestions.length; i++) {
             if (i == suggestions.length - 1) {
               contextMenuTemplate.push(

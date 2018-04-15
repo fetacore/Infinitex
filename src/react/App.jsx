@@ -89,6 +89,7 @@ export default class App extends React.Component {
 
   onButtonClick (which) {
     if (which == 'tex') {
+      ipcRenderer.send('load-dictionary')
       this.setState({component: 'tex'})
     } else {
       this.setState({component: 'simple'})

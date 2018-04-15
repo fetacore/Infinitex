@@ -1,7 +1,7 @@
 {
   "name": "InfiniTex",
   "productName": "InfiniTex",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "description": "A new age editor for academics who seek freedom and people with cryptography needs in rich text environments.",
   "main": "src/index.js",
   "scripts": {
@@ -140,7 +140,7 @@
     "react-pdf": "^3.0.4",
     "react-quill": "^1.2.7",
     "react-resizable": "^1.7.5",
-    "react-transition-group": "^2.3.0",
+    "react-transition-group": "^2.3.1",
     "request": "^2.85.0",
     "typo-js": "^1.0.3",
     "uglify-js": "^3.3.21",

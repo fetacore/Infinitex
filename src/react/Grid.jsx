@@ -72,6 +72,7 @@ const shelljs = require('shelljs')
 const Typo = require("typo-js");
 // const french_dictionary = new Typo("fr", false, false, { dictionaryPath: "./assets/ace/dictionaries" })
 // const greek_dictionary = new Typo("el", false, false, { dictionaryPath: "./assets/ace/dictionaries" })
+const Range = brace.acequire('ace/range').Range
 
 const buttonStyles = {
   textAlign: 'center',
@@ -175,6 +176,7 @@ export default class Grid extends React.Component {
     document.getElementById('pdfContainer').addEventListener('wheel', this.onScrollPDF.bind(this))
     ipcRenderer.on('dictionary-loaded', (event, [aff, dic]) => {
       this.dictionary = new Typo("en_US", aff, dic)
+      this.markers_present = []
     })
     ipcRenderer.on('texDataDummy', (event, [data, bibdata]) => {
       this.setState({
@@ -191,6 +193,7 @@ export default class Grid extends React.Component {
         let mainUndoManager = mainSession.getUndoManager()
         mainUndoManager.reset()
         mainSession.setUndoManager(mainUndoManager)
+        this.spellcheck()
         if (this.state.split) {
           this.refs.splitEditor.editor.setOption(
             'firstLineNumber', skata + 1
@@ -461,6 +464,64 @@ You can refer to the graph as \\ref{figure:nickname}\n'
     } else {
       return true;
     }
+  }
+
+  async spellcheck () {
+    document.body.style.cursor = 'wait'
+    let session = this.refs.mainEditor.editor.getSession();
+    for (let i in this.markers_present) {
+      session.removeMarker(this.markers_present[i]);
+    }
+    this.markers_present = []
+    try {
+  	  let lines = session.getDocument().getAllLines();
+  	  for (let i in lines) {
+  	  	// Clear the gutter.
+  	    session.removeGutterDecoration(i, "misspelled");
+  	    // Check spelling of this line.
+  	    let misspellings = this.misspelled(lines[i]);
+  	    // Add markers and gutter markings.
+  	    if (misspellings.length > 0) {
+  	      session.addGutterDecoration(i, "misspelled");
+          for (let j in misspellings) {
+    	      let range = new Range(i, misspellings[j][0], i, misspellings[j][1]);
+    	      this.markers_present[this.markers_present.length] = session.addMarker(range, "misspelled", "typo", true);
+    	    }
+  	    }
+  	  }
+  	} catch(ex) {
+      console.log(ex);
+    }
+    document.body.style.cursor = 'pointer'
+  }
+
+  misspelled (line) {
+    let content = line.replace(/\{|\}/g, " ").replace(/\(|\)/g, " ").replace(/\,/g, " ").replace(/\:/g, ' ').replace(/\^/g," ").replace(/\?/g, " ")
+  	let words = content.split(' ')
+  	let i = 0;
+  	let bads = [];
+  	for (let word in words) {
+  	  let x = words[word] + "";
+      if ((x.length <= 15) &&
+          (x.indexOf('.') == -1) &&
+          (x.indexOf('\\') == -1) &&
+          (x.indexOf('%') == -1) &&
+          (x.indexOf('_') == -1) &&
+          (x.indexOf('+') == -1) &&
+          (x.indexOf('-') == -1) &&
+          (x.indexOf('=') == -1) &&
+          (x.indexOf('/') == -1) &&
+          (x.indexOf('$') == -1)
+        ) {
+        if (!this.dictionary.check(x)) {
+    	    bads[bads.length] = [i, i + words[word].length];
+    	  }
+    	  i += words[word].length + 1;
+      } else {
+        return bads
+      }
+    }
+    return bads
   }
 
   onScrollPDF (event) {
@@ -1055,9 +1116,18 @@ note = ,\n\u007D\n'
     })
   }
 
-  updateTexInput (value) {
+  updateTexInput (value, e) {
     this.setState({
       texfilecontent: value,
+    }, () => {
+      if (
+        (e.lines[0] == ' ') ||
+        ((e.lines[0] == '' && e.lines[1] == '')) ||
+        (e.lines[0].length !== 1) ||
+        (e.action == 'remove')
+      ) {
+        this.spellcheck()
+      }
     })
   }
 
@@ -1118,7 +1188,17 @@ note = ,\n\u007D\n'
       let sel = this.refs.mainEditor.editor.selection.getRange()
       let word = this.refs.mainEditor.editor.getSelectedText()
       let suggestions = null
-      if ((sel.end.row - sel.start.row == 0) && (word.indexOf(' ') == -1) && (sel.end.column - sel.start.column >= 3)) {
+      if (
+        (sel.end.row - sel.start.row == 0) &&
+        (word.indexOf(' ') == -1) &&
+        (sel.end.column - sel.start.column >= 3) &&
+        (sel.end.column - sel.start.column <= 15) &&
+        (word.indexOf('\\') == -1) &&
+        (word.indexOf('(') == -1) &&
+        (word.indexOf(')') == -1) &&
+        (word.indexOf('{') == -1) &&
+        (word.indexOf('}') == -1)
+      ) {
         let check = this.dictionary.check(word);
         if (check == false) {
           suggestions = this.dictionary.suggest(word);
@@ -1127,7 +1207,12 @@ note = ,\n\u007D\n'
               contextMenuTemplate.push(
                 {
                   label: suggestions[i],
-                  click: () => this.refs.mainEditor.editor.getSession().replace(sel, suggestions[i])
+                  click: () => {
+                    this.refs.mainEditor.editor.getSession().replace(sel, suggestions[i])
+                    setTimeout(() => {
+                      this.spellcheck()
+                    }, 200)
+                  }
                 },
                 {type: 'separator'},
               )
@@ -1135,7 +1220,12 @@ note = ,\n\u007D\n'
               contextMenuTemplate.push(
                 {
                   label: suggestions[i],
-                  click: () => this.refs.mainEditor.editor.getSession().replace(sel, suggestions[i])
+                  click: () => {
+                    this.refs.mainEditor.editor.getSession().replace(sel, suggestions[i])
+                    setTimeout(() => {
+                      this.spellcheck()
+                    }, 200)
+                  }
                 }
               )
             }
@@ -3326,7 +3416,7 @@ note = ,\n\u007D\n'
                       useWorker: false,
                       showPrintMargin: false
                     }}
-                    onChange={this.updateTexInput.bind(this)}
+                    onChange={(value, e) => this.updateTexInput(value, e)}
                     onFocus={this.onFocusMainEditor.bind(this)}
                     onBlur={this.onBlurMainEditor.bind(this)}
                   />

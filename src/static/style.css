@@ -1254,6 +1254,8 @@
   text-align: center;
   padding: 0;
 }
+.ace_marker-layer .misspelled { position: absolute; z-index: -2; border-bottom: 1px solid red; margin-bottom: -1px; }
+.misspelled { border-bottom: 1px solid red; margin-bottom: -1px; }
 #title-bar {
  -webkit-app-region: drag;
  height: 30px;

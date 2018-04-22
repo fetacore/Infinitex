@@ -383,6 +383,16 @@ You can refer to the graph as \\ref{figure:nickname}\n'
     } else {
       return true
     }
+    if (nextState.openPopover == true) {
+      return false
+    } else {
+      return false
+    }
+    if (nextState.openPopoverAnchor == true) {
+      return false
+    } else {
+      return false
+    }
     if (this.state.texfilecontent !== nextState.texfilecontent) {
       if (prevState.filepath !== null && prevState.filepath === nextState.filepath) {
         return false
@@ -496,13 +506,13 @@ You can refer to the graph as \\ref{figure:nickname}\n'
   }
 
   misspelled (line) {
-    let content = line.replace(/\{|\}/g, " ").replace(/\(|\)/g, " ").replace(/\,/g, " ").replace(/\:/g, ' ').replace(/\^/g," ").replace(/\?/g, " ")
+    let content = line.replace(/\{|\}/g, " ").replace(/\(|\)/g, " ").replace(/\,/g, " ").replace(/\:/g, " ").replace(/\^/g," ").replace(/\?/g, " ")
   	let words = content.split(' ')
   	let i = 0;
   	let bads = [];
   	for (let word in words) {
   	  let x = words[word] + "";
-      if ((x.length <= 15) &&
+      if (
           (x.indexOf('.') == -1) &&
           (x.indexOf('\\') == -1) &&
           (x.indexOf('%') == -1) &&
@@ -513,7 +523,7 @@ You can refer to the graph as \\ref{figure:nickname}\n'
           (x.indexOf('/') == -1) &&
           (x.indexOf('$') == -1)
         ) {
-        if (!this.dictionary.check(x)) {
+        if (!this.dictionary.check(x.replace(/[^a-zA-Z']/g, ''))) {
     	    bads[bads.length] = [i, i + words[word].length];
     	  }
     	  i += words[word].length + 1;
@@ -1452,7 +1462,8 @@ note = ,\n\u007D\n'
   themeChooser (name) {
     setTimeout(() => {
       this.setState({
-        theme: name
+        theme: name,
+        openPopover: false
       })
     }, 100)
   }
@@ -3339,15 +3350,51 @@ note = ,\n\u007D\n'
         width: '20%'
       }}
     >
-      <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => this.compileText()} />
-      <MenuItem value={2} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
-      <MenuItem value={3} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
-      <MenuItem value={4} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 2, networkFeatures: true, split: false})} />
-      <MenuItem value={5} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true, split: false})} />
-      <MenuItem value={6} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
+      <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => {
+          this.compileText()
+          this.setState({
+            openPopover: false
+          })
+        }}
+      />
+      <MenuItem value={2} primaryText='Open Project' style={{color: '#fff'}} onClick={() => {
+          this.onOpenProjectClick()
+          this.setState({
+            openPopover: false
+          })
+        }}
+      />
+      <MenuItem value={3} primaryText='Create Project' style={{color: '#fff'}} onClick={() => {
+          this.onCreateProjectClick()
+          this.setState({
+            openPopover: false
+          })
+        }}
+      />
+    <MenuItem value={4} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 2, networkFeatures: true, split: false, openPopover: false})} />
+      <MenuItem value={5} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true, split: false, openPopover: false})} />
+      <MenuItem value={6} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => {
+          this.goToSimple()
+          this.setState({
+            openPopover: false
+          })
+        }}
+      />
       {themeMenu}
-      <MenuItem value={8} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
-      <MenuItem value={9} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
+      <MenuItem value={8} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => {
+          this.openLatexHelp()
+          this.setState({
+            openPopover: false
+          })
+        }}
+      />
+      <MenuItem value={9} primaryText='Close Project' style={{color: '#fff'}} onClick={() => {
+          this.closeProject()
+          this.setState({
+            openPopover: false
+          })
+        }}
+      />
     </Popover>
 
 	  return (

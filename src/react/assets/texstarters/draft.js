@@ -34,8 +34,8 @@ export const draftTex = '\\documentclass[12pt,a4paper]{article}\n\
 \\newtheorem{lemma}{Lemma}[theorem]\n\
 \\newtheorem{proposition}{Proposition}[section]\n\
 \\renewcommand\\qedsymbol{$\\blacksquare$}\n\
-\\let\\counterwithout\relax\n\
-\\let\\counterwithin\relax\n\
+\\let\\counterwithout\\relax\n\
+\\let\\counterwithin\\relax\n\
 \\usepackage{chngcntr}\n\
 \\usepackage{apptools}\n\
 \\AtAppendix{\\counterwithin{lemma}{section}}\n\

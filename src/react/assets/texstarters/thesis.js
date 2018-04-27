@@ -45,9 +45,6 @@ export const thesisTex = '\\documentclass[12pt,twoside,openright]{book}\n\
 \\newtheorem{lemma}{Lemma}[theorem]\n\
 \\newtheorem{proposition}{Proposition}[chapter]\n\
 \\renewcommand\\qedsymbol{$\\blacksquare$}\n\
-\\let\\counterwithout\\relax\n\
-\\let\\counterwithin\\relax\n\
-\\usepackage{chngcntr}\n\
 \\usepackage{apptools}\n\
 \\AtAppendix{\\counterwithin{lemma}{chapter}}\n\
 \\AtAppendix{\\counterwithin{theorem}{chapter}}\n\
@@ -55,6 +52,8 @@ export const thesisTex = '\\documentclass[12pt,twoside,openright]{book}\n\
 \\AtAppendix{\\counterwithin{proposition}{chapter}}\n\
 \n\
 \\newcommand{\\vc}[3]{\\overset{#2}{\\underset{#3}{#1}}}\n\
+\\let\\counterwithout\\relax\n\
+\\let\\counterwithin\\relax\n\
 \\usepackage{chngcntr}\n\
 \\counterwithout{footnote}{chapter}\n\
 \n\

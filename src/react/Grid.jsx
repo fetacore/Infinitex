@@ -303,7 +303,7 @@ export default class Grid extends React.Component {
       })
     })
     ipcRenderer.on('figureTexDialogFilename', (event, fileNames) => {
-      if (fileNames === undefined) {
+      if (fileNames === null) {
         this.onNotification('DidNotChooseFile')
       } else {
         let fp = fileNames[0]
@@ -382,6 +382,11 @@ You can refer to the graph as \\ref{figure:nickname}\n'
       return false
     } else {
       return true
+    }
+    if (nextState.pageIndex !== prevState.pageIndex) {
+      return false
+    } else {
+      return false
     }
     if (nextState.openPopover == true) {
       return false
@@ -476,7 +481,7 @@ You can refer to the graph as \\ref{figure:nickname}\n'
     }
   }
 
-  async spellcheck () {
+  spellcheck () {
     document.body.style.cursor = 'wait'
     let session = this.refs.mainEditor.editor.getSession();
     for (let i in this.markers_present) {
@@ -506,30 +511,94 @@ You can refer to the graph as \\ref{figure:nickname}\n'
   }
 
   misspelled (line) {
-    let content = line.replace(/\{|\}/g, " ").replace(/\(|\)/g, " ").replace(/\,/g, " ").replace(/\:/g, " ").replace(/\^/g," ").replace(/\?/g, " ")
+
+    let content = line.replace(/citet\{.*\}|citep\{.*\}|label\{.*\}|ref\{.*\}|bibliography\{.*\}|\{|\}|\(|\)|\,|\.|\?|\"|\:|\^|\/|\\\\|\\|\-|\'|\|/g, " ")
   	let words = content.split(' ')
+    let last = words.length - 1
   	let i = 0;
   	let bads = [];
-  	for (let word in words) {
-  	  let x = words[word] + "";
-      if (
-          (x.indexOf('.') == -1) &&
-          (x.indexOf('\\') == -1) &&
+  	for (let j = 0; j < last; j++) {
+  	  let x = words[j];
+      if ((!this.dictionary.check(x.replace(/[^a-zA-Z']/g, ''))) &&
+          (x.length > 2) &&
+          (x.indexOf('page') == -1) &&
+          (x.indexOf('mathcal') == -1) &&
+          (x.indexOf('mathit') == -1) &&
+          (x.indexOf('mathbf') == -1) &&
+          (x.indexOf('mathbb') == -1) &&
+          (x.indexOf('dimensionality') == -1) &&
+          (x.indexOf('arg') == -1) &&
+          (x.indexOf('twocolumn') == -1) &&
+          (x.indexOf('onecolumn') == -1) &&
+          (x.indexOf('mathds') == -1) &&
+          (x.indexOf('section') == -1) &&
+          (x !== 'minimax') &&
+          (x !== 'Minimax') &&
+          (x !== 'Maxmin') &&
+          (x !== 'maxmin') &&
+          (x !== 'nexists') &&
+          (x.indexOf('quantile') == -1) &&
+          (x.indexOf('supremum') == -1) &&
+          (x.indexOf('infimum') == -1) &&
+          (x.indexOf('qedsymbol') == -1) &&
+          (x !== 'par') &&
+          (x !== 'covariance') &&
+          (x !== 'overline') &&
+          (x !== 'overbrace') &&
+          (x !== 'underline') &&
+          (x !== 'underbrace') &&
+          (x !== 'infty') &&
+          (x !== 'setminus') &&
+          (x !== 'notin') &&
+          (x !== 'int') &&
+          (x !== 'precsim') &&
+          (x !== 'Bigg') &&
+          (x !== 'bigg') &&
+          (x !== 'der') &&
+          (x !== 'rangle') &&
+          (x !== 'langle') &&
+          (x.indexOf('varepsilon') == -1) &&
+          (x !== 'vartheta') &&
+          (x !== 'footnotemark') &&
+          (x !== 'hypercube') &&
+          (x !== 'hypercycle') &&
+          (x !== 'asymp') &&
+          (x.indexOf('text') == -1) &&
+          (x.indexOf('brace') == -1) &&
+          (x.indexOf('matter') == -1) &&
+          (x.indexOf('space') == -1) &&
+          (x.indexOf('linewidth') == -1) &&
+          (x.indexOf('minipage') == -1) &&
+          (x.indexOf('matrix') == -1) &&
+          (x.indexOf('dots') == -1) &&
+          (x.indexOf('bigskip') == -1) &&
+          (x.indexOf('quad') == -1) &&
+          (x.indexOf('forall') == -1) &&
+          (x !== 'frac') &&
+          (x.indexOf('sqrt') == -1) &&
+          (x.indexOf('contents') == -1) &&
+          (x.indexOf('chaptermark') == -1) &&
+          (x !== 'citet') &&
+          (x !== 'citep') &&
+          (x.indexOf('arrow') == -1) &&
+          (x !== 'geq') &&
+          (x !== 'leq') &&
+          (x !== 'neq') &&
+          (x !== 'toc') &&
+          (x !== 'tex') &&
+          (x.indexOf('succsim') == -1) &&
+          (x.indexOf('subseteq') == -1) &&
+          (x.indexOf('&') == -1) &&
           (x.indexOf('%') == -1) &&
           (x.indexOf('_') == -1) &&
           (x.indexOf('+') == -1) &&
           (x.indexOf('-') == -1) &&
           (x.indexOf('=') == -1) &&
-          (x.indexOf('/') == -1) &&
-          (x.indexOf('$') == -1)
-        ) {
-        if (!this.dictionary.check(x.replace(/[^a-zA-Z']/g, ''))) {
-    	    bads[bads.length] = [i, i + words[word].length];
-    	  }
-    	  i += words[word].length + 1;
-      } else {
-        return bads
-      }
+          (x.indexOf('/') == -1)
+      ) {
+  	    bads[bads.length] = [i, i + words[j].length];
+  	  }
+  	  i += words[j].length + 1;
     }
     return bads
   }

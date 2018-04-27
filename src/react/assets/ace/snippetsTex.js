@@ -107,8 +107,8 @@ ace.define("ace/snippets/tex",["require","exports","module"],function(e,t,n){"us
 \nsnippet \\integral-volume\n	iiint_{\\mathit{V}}${1}\n\
 \nsnippet \\infinity\n	infty\n\
 \nsnippet \\left\\lbrace\n	left\\lbrace ${1:n} \\right\\rbrace\n\
-\nsnippet \\left(\n	left( ${1:n} \\right)\n\
-\nsnippet \\left[\n	left[ ${1:n} \\right]\n\
+\nsnippet \\left(\n	left( ${1:n} \\right\n\
+\nsnippet \\left[\n	left[ ${1:n} \\right\n\
 \nsnippet \\left|\n	left| ${1:n} \\right|\n\
 \nsnippet \\left| noright\n	left|_{${2:i=1}} ${1:n} \\right.\n\
 \nsnippet \\evaluated-left\n	left|_{${2:i=1}} ${1:n} \\right.\n\

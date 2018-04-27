@@ -96,11 +96,9 @@ function removeLines () {
       let packXwrisSkata = data.replace(
         'electron-prebuilt-compile', 'electron'
       ).replace(
-        '2.0.0-beta.5', '2.0.0-beta.7'
-      ).replace(
         '\"src/index.js\"', '\"src/index.min.js\"'
       ).replace(
-        '\"uglify-js\": \"^3.3.13\"', '\"uglify-es\": \"^3.3.9\"'
+        '\"uglify-js\": \"^3.3.22\"', '\"uglify-es\": \"^3.3.9\"'
       )
       fs.writeFileSync(__dirname + '/prod/package.json', packXwrisSkata)
     }

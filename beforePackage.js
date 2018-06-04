@@ -98,7 +98,7 @@ function removeLines () {
       ).replace(
         '\"src/index.js\"', '\"src/index.min.js\"'
       ).replace(
-        '\"uglify-js\": \"^3.3.22\"', '\"uglify-es\": \"^3.3.9\"'
+        '\"uglify-js\": \"^3.4.0\"', '\"uglify-es\": \"^3.3.9\"'
       )
       fs.writeFileSync(__dirname + '/prod/package.json', packXwrisSkata)
     }

@@ -63,6 +63,7 @@ export default class App extends React.Component {
     if (d !== null) {
       if (d !== '.') {
         if (path.extname(d) == '.tex') {
+          ipcRenderer.send('load-dictionary')
           this.setState({
             file: d,
             component: 'tex'

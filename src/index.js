@@ -83,7 +83,7 @@ const createWindow = async () => {
     backgroundColor: '#111',
     icon: nativeImage.createFromPath(__dirname + '/static/icon.png'),
     darkTheme: true,
-    show: true,
+    show: false,
     // frame: false,
     // resizable: false,
     webPreferences: {
@@ -129,8 +129,11 @@ const createWindow = async () => {
     mainWindow = null
   })
 
-  mainWindow.on('ready-to-show', () => {
-    mainWindow.focus()
+  mainWindow.once('ready-to-show', () => {
+  		mainWindow.show()
+  		setTimeout(() => {
+  				mainWindow.focus()
+  		}, 10)
   });
 
   mainWindow.on('focus', registerShortcuts)
@@ -142,7 +145,7 @@ const createWindow = async () => {
 
   mainWindow.on('minimize', (event) => {
     event.preventDefault()
-    mainWindow.hide()
+    mainWindow.minimize()
   })
 
   mainWindow.on('close', (event) => {

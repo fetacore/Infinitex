@@ -149,14 +149,11 @@ export default class Grid extends React.Component {
     }
   }
 
-  componentWillMount () {
+  componentDidMount () {
     let checkTex = shelljs.which('pdflatex')
     if (checkTex == null) {
       this.onNotification('InstallTeX')
     }
-  }
-
-  componentDidMount () {
     if (this.props.fileToOpen !== null) {
       let fp = this.props.fileToOpen
       ipcRenderer.send('openTexBibFile', fp)
@@ -1199,14 +1196,16 @@ note = ,\n\u007D\n'
     this.setState({
       texfilecontent: value,
     }, () => {
-      if (
-        (e.lines[0] == ' ') ||
-        ((e.lines[0] == '' && e.lines[1] == '')) ||
-        (e.lines[0].length !== 1) ||
-        (e.action == 'remove')
-      ) {
-        this.spellcheck()
-      }
+      setTimeout(() => {
+        if (
+          (e.lines[0] == ' ') ||
+          ((e.lines[0] == '' && e.lines[1] == '')) ||
+          (e.lines[0].length !== 1) ||
+          (e.action == 'remove')
+        ) {
+          this.spellcheck()
+        }
+      }, 10)
     })
   }
 

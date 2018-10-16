@@ -34,24 +34,17 @@ function removeStuff () {
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'entry' + fpresolver,
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'entryDev.js',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'ace' + fpresolver + 'chaos.js',
-    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'ace' + fpresolver + 'green.js',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'ace' + fpresolver + 'language_tools.js',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'ace' + fpresolver + 'light.js',
-    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'ace' + fpresolver + 'purple.js',
-    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'ace' + fpresolver + 'red.js',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'ace' + fpresolver + 'searchbox.js',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'ace' + fpresolver + 'snippetsTex.js',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'ace' + fpresolver + 'tex.js',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'texstarters' + fpresolver,
-    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'App.jsx',
-    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'Editor.jsx',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'Grid.jsx',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'InfiniTex.jsx',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'InfinitrConverters.js',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'static' + fpresolver + 'main.css',
-    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'static' + fpresolver + 'style.css',
-    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets'+ fpresolver + 'quill' + fpresolver + 'quill.snow.css',
-    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets'+ fpresolver + 'quill' + fpresolver + 'xcode.min.css'
+    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'static' + fpresolver + 'style.css'
   )
   removeLines()
 }
@@ -94,11 +87,9 @@ function removeLines () {
       alert(err)
     } else {
       let packXwrisSkata = data.replace(
-        'electron-prebuilt-compile', 'electron'
+        '\"electron-prebuilt-compile\": \"^3.0.2\"', '\"electron\": \"^4.0.0-beta.3\"'
       ).replace(
         '\"src/index.js\"', '\"src/index.min.js\"'
-      ).replace(
-        '\"uglify-js\": \"^3.4.0\"', '\"uglify-es\": \"^3.3.9\"'
       )
       fs.writeFileSync(__dirname + '/prod/package.json', packXwrisSkata)
     }

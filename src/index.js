@@ -130,10 +130,10 @@ const createWindow = async () => {
   })
 
   mainWindow.once('ready-to-show', () => {
-  		mainWindow.show()
-  		setTimeout(() => {
-  				mainWindow.focus()
-  		}, 10)
+		mainWindow.show()
+		setTimeout(() => {
+			mainWindow.focus()
+		}, 10)
   });
 
   mainWindow.on('focus', registerShortcuts)
@@ -160,7 +160,7 @@ const createWindow = async () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 // app.on('ready',createWindow);
-
+app.requestSingleInstanceLock();
 app.on('ready', createWindow)
 
 // Quit when all windows are closed.
@@ -415,18 +415,6 @@ ipcMain.on('notify', (event, arg) => {
   }
 })
 
-ipcMain.on('goToFuckinScience', (event, arg) => {
-  if (arg) {
-    event.sender.send('switchToScience', true)
-  }
-})
-
-ipcMain.on('goToFuckinSimple', (event, arg) => {
-  if (arg) {
-    event.sender.send('switchToSimple', true)
-  }
-})
-
 ipcMain.on('createTexBibFile', (event, [filepath, texdata, bibdata]) => {
   fs.writeFile(filepath, texdata, 'utf-8', (err) => {
     if (err) {
@@ -597,62 +585,6 @@ ipcMain.on('saveTexDialogThenCompile', (event) => {
     ]
   }, (fileName) => {
     event.sender.send('saveTexDialogThenCompileFilename', fileName)
-  })
-})
-
-ipcMain.on('saveSimpleEncrypted', (event) => {
-  dialog.showSaveDialog({
-    title: 'Save As',
-    defaultPath: app.getPath('desktop'),
-    filters: [
-      { name: 'cdraft', extensions: ['cdraft'] }
-    ]
-  }, (fileName) => {
-    if (fileName !== null) {
-      event.sender.send('saveSimpleEncryptedFilename', fileName)
-    } else {
-      let notification = new Notification({
-        title: 'Error',
-        body: 'You did not save the file',
-        silent: true,
-        icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
-      })
-      notification.show()
-    }
-  })
-})
-
-ipcMain.on('saveSimple', (event, thenClose = false) => {
-  dialog.showSaveDialog({
-    title: 'Save As',
-    defaultPath: app.getPath('desktop'),
-    filters: [
-      { name: 'draft', extensions: ['draft'] }
-    ]
-  }, (fileName) => {
-    if (fileName !== null) {
-      event.sender.send('saveSimpleFilename', [fileName, thenClose])
-    } else {
-      let notification = new Notification({
-        title: 'Error',
-        body: 'You did not save the file',
-        silent: true,
-        icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
-      })
-      notification.show()
-    }
-  })
-})
-
-ipcMain.on('openSimple', (event) => {
-  dialog.showOpenDialog({
-    title: 'Open an Existing Project',
-    defaultPath: app.getPath('desktop'),
-    filters: [
-      { name: 'draft', extensions: ['draft', 'cdraft'] }
-    ]
-  }, (fileNames) => {
-    event.sender.send('openSimpleFilename', fileNames)
   })
 })
 

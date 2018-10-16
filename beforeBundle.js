@@ -12,14 +12,11 @@ if (process.platform == 'win32') {
 var css2 = fs.readFileSync(__dirname + '/node_modules/react-grid-layout/css/styles.css')
 var css3 = fs.readFileSync(__dirname + '/node_modules/react-resizable/css/styles.css')
 var css4 = fs.readFileSync(__dirname + '/node_modules/react-pdf/dist/Page/AnnotationLayer.css')
-var css5 = fs.readFileSync(__dirname + '/src/react/assets/quill/quill.snow.css')
-var css6 = fs.readFileSync(__dirname + '/src/react/assets/quill/xcode.min.css')
 var css7 = fs.readFileSync(__dirname + '/src/static/main.css')
 
 var worker = fs.readFileSync(__dirname + '/node_modules/pdfjs-dist/build/pdf.worker.min.js')
-var poly = fs.readFileSync(__dirname + '/node_modules/babel-polyfill/dist/polyfill.min.js')
 
-fs.writeFileSync(__dirname + '/src/static/style.css', css2 + css3 + css4 + css5 + css6 + css7)
+fs.writeFileSync(__dirname + '/src/static/style.css', css2 + css3 + css4 + css7)
 compressor.minify({
   compressor: 'clean-css',
   input: __dirname + '/src/static/style.css',
@@ -34,4 +31,3 @@ shelljs.cp('-R', __dirname + fpresolver + 'node_modules' + fpresolver + 'pdfjs-d
 shelljs.mkdir('-p', __dirname + fpresolver + 'src' + fpresolver + 'entry')
 
 fs.writeFileSync(__dirname + '/src/react/reactPdf/pdf.worker.min.js', worker)
-fs.writeFileSync(__dirname + '/src/static/polyfill.min.js', poly)

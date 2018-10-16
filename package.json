@@ -1,17 +1,17 @@
 {
   "name": "InfiniTex",
   "productName": "InfiniTex",
-  "version": "0.9.14",
+  "version": "0.9.15",
   "description": "A new age editor for academics who seek freedom and people with cryptography needs in rich text environments.",
   "main": "src/index.js",
   "scripts": {
-    "start": "electron .",
-    "preminify": "node ./beforeBundle.js",
-    "minify": "browserify ./src/entryDev.js -g [ envify --NODE_ENV production --BABEL_ENV production ] -g uglifyify -t [ babelify --presets [ env --targets [ electron ] react ] --plugins transform-async-to-generator ] -p common-shakeify --full-path=false --exclude electron --exclude shelljs -o ./src/entry/bundle.js",
+    "start": "node ./beforeBundle.js && electron .",
+    "minify:worker": "browserify ./src/react/spell.js -g [ envify --NODE_ENV production --BABEL_ENV production ] -g uglifyify -t [ babelify --presets [ @babel/preset-env --targets [ electron ] ] ] --full-path=false -o ./src/react/spell_bundle.js && uglifyjs --compress drop_console,hoist_funs,toplevel,unsafe --mangle toplevel=true -- ./src/react/spell_bundle.js > ./src/react/spell.min.js && rm -f ./src/react/spell_bundle.js",
+    "minify": "browserify ./src/entryDev.js -g [ envify --NODE_ENV production --BABEL_ENV production ] -g uglifyify -t [ babelify --presets [ @babel/preset-env --targets [ electron ] @babel/preset-react ] ] --full-path=false --exclude electron --exclude shelljs -o ./src/entry/bundle.js",
     "postminify": "uglifyjs --compress drop_console,hoist_funs,toplevel,unsafe --mangle toplevel=true -- ./src/entry/bundle.js > ./src/react/inf.min.js",
-    "package:minify": "npm run minify && node ./beforePackage.js && cd prod && yarn && electron-builder --dir",
+    "package:minify": "yarn minify && node ./beforePackage.js && cd prod && yarn && electron-builder --dir",
     "package": "node ./beforePackage.js && cd prod && yarn && electron-builder --dir",
-    "dist:minify": "npm run minify && node ./beforePackage.js && cd prod && yarn && electron-builder",
+    "dist:minify": "yarn minify && node ./beforePackage.js && cd prod && yarn && electron-builder",
     "dist": "node ./beforePackage.js && cd prod && yarn && electron-builder"
   },
   "build": {
@@ -85,13 +85,20 @@
       ]
     },
     "remoteBuild": false,
-    "fileAssociations": {
-      "ext": [
-        "tex",
-        "draft",
-        "cdraft"
-      ]
-    },
+    "fileAssociations": [
+      {
+        "name": "Document",
+        "ext": "tex"
+      },
+      {
+        "name": "Document",
+        "ext": "draft"
+      },
+      {
+        "name": "Document",
+        "ext": "cdraft"
+      }
+    ],
     "forceCodeSigning": false,
     "afterPack": "../beforeDist.js"
   },
@@ -106,44 +113,37 @@
   "license": "GPL-3.0",
   "dependencies": {
     "electron-compile": "^6.4.2",
-    "electron-updater": "^2.21.10",
-    "katex": "^0.10.0-alpha",
+    "electron-updater": "^3.1.2",
+    "katex": "^0.10.0-rc.1",
     "shelljs": "^0.8.2"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-plugin-transform-es2015-classes": "^6.24.1",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-minify": "^0.3.0",
-    "babel-preset-react": "^6.24.1",
-    "babelify": "^8.0.0",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babelify": "^10.0.0",
     "brace": "^0.11.1",
-    "browserify": "^16.2.2",
-    "common-shakeify": "^0.5.0",
-    "electron-builder": "20.14.7",
+    "browserify": "^16.2.3",
+    "electron-builder": "^20.28.4",
     "electron-devtools-installer": "^2.2.4",
-    "electron-prebuilt-compile": "^2.0.2",
-    "electron-reload": "^1.2.2",
+    "electron-prebuilt-compile": "^3.0.2",
+    "electron-reload": "^1.2.5",
     "envify": "^4.1.0",
-    "jssoup": "^0.0.8",
-    "material-ui": "^0.20.1",
-    "node-minify": "^2.4.2",
+    "jssoup": "^0.0.9",
+    "material-ui": "^0.20.2",
+    "node-minify": "^3.5.0",
     "pdfjs-dist": "^2.0.402",
-    "quill": "^1.3.6",
-    "react": "^16.4.0",
-    "react-ace": "^6.1.1",
-    "react-dom": "^16.4.0",
+    "react": "^16.5.2",
+    "react-ace": "^6.2.0",
+    "react-dom": "^16.5.2",
     "react-grid-layout": "^0.16.6",
-    "react-hot-loader": "^4.2.0",
+    "react-hot-loader": "^4.3.11",
     "react-pdf": "^3.0.5",
-    "react-quill": "^1.2.7",
     "react-resizable": "^1.7.5",
-    "react-transition-group": "^2.3.1",
-    "request": "^2.87.0",
+    "react-transition-group": "^2.5.0",
+    "request": "^2.88.0",
     "typo-js": "^1.0.3",
-    "uglify-js": "^3.4.0",
-    "uglifyify": "^5.0.0"
+    "uglify-js": "^3.4.9",
+    "uglifyify": "^5.0.1"
   }
 }

@@ -51,9 +51,6 @@ import JSSoup from 'jssoup'
 import { Document, Page } from 'react-pdf'
 import './assets/ace/chaos.js'
 import './assets/ace/light.js'
-import './assets/ace/red.js'
-import './assets/ace/green.js'
-import './assets/ace/purple.js'
 import { mathOneLiner, reverseMathOneLiner } from './InfinitrConverters.js'
 import { startTex, startBib } from './assets/texstarters/start.js'
 import { thesisTex, thesisBib } from './assets/texstarters/thesis.js'
@@ -479,7 +476,6 @@ You can refer to the graph as \\ref{figure:nickname}\n'
   }
 
   spellcheck () {
-    document.body.style.cursor = 'wait'
     let session = this.refs.mainEditor.editor.getSession();
     for (let i in this.markers_present) {
       session.removeMarker(this.markers_present[i]);
@@ -504,7 +500,6 @@ You can refer to the graph as \\ref{figure:nickname}\n'
   	} catch(ex) {
       console.log(ex);
     }
-    document.body.style.cursor = 'pointer'
   }
 
   misspelled (line) {
@@ -663,10 +658,6 @@ You can refer to the graph as \\ref{figure:nickname}\n'
         }
       }
     })
-  }
-
-  goToSimple () {
-    ipcRenderer.send('goToFuckinSimple', true)
   }
 
   onDocumentLoadSuccess (nPages) {
@@ -1197,15 +1188,14 @@ note = ,\n\u007D\n'
       texfilecontent: value,
     }, () => {
       setTimeout(() => {
-        if (
-          (e.lines[0] == ' ') ||
-          ((e.lines[0] == '' && e.lines[1] == '')) ||
-          (e.lines[0].length !== 1) ||
-          (e.action == 'remove')
-        ) {
-          this.spellcheck()
+        switch (e.lines[0] == ' ' || (e.lines[0] == '' && e.lines[1] == '') || e.lines[0].length !== 1 || e.action == 'remove') {
+          case true:
+            this.spellcheck();
+            break;
+          default:
+            break;
         }
-      }, 10)
+      }, 1)
     })
   }
 
@@ -2347,10 +2337,9 @@ note = ,\n\u007D\n'
         <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
         <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.editorLeftClickWithLiteratureDisplay(infIconPageNavigation)} />
         <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5})} />
-        <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
         {themeMenu}
-        <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
-        <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
+        <MenuItem value={5} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
+        <MenuItem value={6} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
       </IconMenu>
       editorLeft =
       <Paper
@@ -2380,10 +2369,9 @@ note = ,\n\u007D\n'
         <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
         <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.editorLeftClickWithoutLiteratureDisplay(infIconPageNavigation)} />
         <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5})} />
-        <MenuItem value={5} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => this.goToSimple()} />
         {themeMenu}
-        <MenuItem value={6} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
-        <MenuItem value={7} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
+        <MenuItem value={5} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
+        <MenuItem value={6} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
       </IconMenu>
       if (this.state.preview) {
         if (this.state.split) {
@@ -3439,24 +3427,17 @@ note = ,\n\u007D\n'
           })
         }}
       />
-    <MenuItem value={4} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 2, networkFeatures: true, split: false, openPopover: false})} />
+      <MenuItem value={4} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 2, networkFeatures: true, split: false, openPopover: false})} />
       <MenuItem value={5} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true, split: false, openPopover: false})} />
-      <MenuItem value={6} primaryText='Switch to Simple' style={{color: '#fff'}} onClick={() => {
-          this.goToSimple()
-          this.setState({
-            openPopover: false
-          })
-        }}
-      />
       {themeMenu}
-      <MenuItem value={8} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => {
+      <MenuItem value={7} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => {
           this.openLatexHelp()
           this.setState({
             openPopover: false
           })
         }}
       />
-      <MenuItem value={9} primaryText='Close Project' style={{color: '#fff'}} onClick={() => {
+      <MenuItem value={8} primaryText='Close Project' style={{color: '#fff'}} onClick={() => {
           this.closeProject()
           this.setState({
             openPopover: false

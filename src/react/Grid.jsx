@@ -141,7 +141,9 @@ export default class Grid extends React.Component {
       areYouSureDialogDisplay: false,
       areYouSureTemplateDialogDisplay: false,
       packageDialog: false,
-      packages: startTex.slice(0, startTex.indexOf('\\begin{document}') + 16)
+      packages: startTex.slice(0, startTex.indexOf('\\begin{document}') + 16),
+      // For updates
+      downloadProgress: 0
     }
   }
 
@@ -362,6 +364,12 @@ You can refer to the graph as \\ref{figure:nickname}\n'
         }
       }
     })
+    ipcRenderer.on('update-ready', (event) => {
+      this.setState({
+        networkFeatures: true,
+        networkPageIndex: 6
+      })
+    })
     window.onbeforeunload = (event) => {
       if (this.state.filepath != null) {
         dialog.showMessageBox(
@@ -480,6 +488,15 @@ You can refer to the graph as \\ref{figure:nickname}\n'
     } else {
       return true;
     }
+    if (this.state.downloadProgress !== nextState.downloadProgress) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  sendUpdateToMain () {
+    ipcRenderer.send('update-goddammit');
   }
 
   spellcheck () {
@@ -510,7 +527,6 @@ You can refer to the graph as \\ref{figure:nickname}\n'
   }
 
   misspelled (line) {
-
     let content = line.replace(/citet\{.*\}|citep\{.*\}|label\{.*\}|ref\{.*\}|bibliography\{.*\}|\{|\}|\(|\)|\,|\.|\?|\"|\:|\^|\/|\\\\|\\|\-|\'|\|/g, " ")
   	let words = content.split(' ')
     let last = words.length - 1
@@ -1607,7 +1623,7 @@ note = ,\n\u007D\n'
       themeMenu =
       <MenuItem
         primaryText="Dark Theme"
-        style={{color: '#fff'}}
+        style={{color: letterColor}}
         checked={true}
         onClick={(e) => this.themeChooser('Light')}
       />
@@ -1615,7 +1631,7 @@ note = ,\n\u007D\n'
       themeMenu =
       <MenuItem
         primaryText="White Theme"
-        style={{color: '#fff'}}
+        style={{color: letterColor}}
         checked={true}
         onClick={(e) => this.themeChooser('Default')}
       />
@@ -2155,7 +2171,7 @@ note = ,\n\u007D\n'
           thickness={9}
           color={loadingPDFCircleColor}
           style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
-      />
+        />
       </div>
     } else if (this.state.networkPageIndex == 1) {
       infIconPageNavigation = 2
@@ -2257,11 +2273,22 @@ note = ,\n\u007D\n'
           }}
         />
       </div>
+    } else if (this.state.networkPageIndex == 6) {
+      infIconPageNavigation = 0
+      networkstuff =
+      <div>
+        <RaisedButton
+          onClick={() => this.sendUpdateToMain()}
+          label='Quit and Update'
+          buttonStyle={buttonStyles}
+          style={{width: '90%', marginTop: '30%'}}
+        />
+      </div>
     } else if (this.state.networkPageIndex == 7) {
       infIconPageNavigation = 0
       networkstuff =
       <div>
-        <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => {
+        <MenuItem value={1} primaryText='Compile Pdf' style={{color: letterColor}} onClick={() => {
             this.setState({
               networkFeatures: false
             }, () => {
@@ -2269,7 +2296,7 @@ note = ,\n\u007D\n'
             })
           }}
         />
-        <MenuItem value={2} primaryText='Open Project' style={{color: '#fff'}} onClick={() => {
+        <MenuItem value={2} primaryText='Open Project' style={{color: letterColor}} onClick={() => {
             this.setState({
               networkFeatures: false
             }, () => {
@@ -2277,7 +2304,7 @@ note = ,\n\u007D\n'
             })
           }}
         />
-        <MenuItem value={3} primaryText='Create Project' style={{color: '#fff'}} onClick={() => {
+        <MenuItem value={3} primaryText='Create Project' style={{color: letterColor}} onClick={() => {
             this.setState({
               networkFeatures: false
             }, () => {
@@ -2285,10 +2312,10 @@ note = ,\n\u007D\n'
             })
           }}
         />
-        <MenuItem value={4} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 2, split: false})} />
-        <MenuItem value={5} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, split: false})} />
+        <MenuItem value={4} primaryText='Search Books' style={{color: letterColor}} onClick={() => this.setState({networkPageIndex: 2, split: false})} />
+        <MenuItem value={5} primaryText='Search Papers' style={{color: letterColor}} onClick={() => this.setState({networkPageIndex: 5, split: false})} />
         {themeMenu}
-        <MenuItem value={7} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => {
+        <MenuItem value={7} primaryText='Help with LaTeX' style={{color: letterColor}} onClick={() => {
             this.setState({
               networkFeatures: false
             }, () => {
@@ -2296,7 +2323,7 @@ note = ,\n\u007D\n'
             })
           }}
         />
-        <MenuItem value={8} primaryText='Close Project' style={{color: '#fff'}} onClick={() => {
+        <MenuItem value={8} primaryText='Close Project' style={{color: letterColor}} onClick={() => {
             this.setState({
               networkFeatures: false
             }, () => {
@@ -2305,34 +2332,7 @@ note = ,\n\u007D\n'
           }}
         />
       </div>
-    } else {
-      infIconPageNavigation = 3
-      networkstuff =
-      <div>
-        <LinearProgress
-          mode='determinate'
-          value={this.state.downloadProgress}
-          min={0}
-          max={100}
-          color={loadingPDFCircleColor}
-          style={{marginLeft: 0, marginRight: 0, marginTop: '30%'}}
-        />
-        <TextField
-          value={'Downloading Updates'}
-          id='Pare ta arxidia Material UI'
-          disabled
-          inputStyle={{
-            fontSize: '12pt',
-            textAlign: 'center',
-            color: letterColor
-          }}
-          style={{
-            width: '90%'
-          }}
-        />
-      </div>
     }
-
 
     let texEditorHeight = null
     let separateTexBibHeight = 0
@@ -2411,23 +2411,28 @@ note = ,\n\u007D\n'
         </div>
       </Paper>
     } else {
-      logoIconDiv =
-      <IconMenu
-        iconButtonElement={
-          <img style={{width: 130, marginTop: 30, cursor: 'pointer'}} src={logosrc} />
-        }
-        anchorOrigin={{horizontal: 'left', vertical: 'top'}}
-        targetOrigin={{horizontal: 'left', vertical: 'top'}}
-        value={0}
-      >
-        <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
-        <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
-        <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.editorLeftClickWithoutLiteratureDisplay(infIconPageNavigation)} />
-        <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5})} />
-        {themeMenu}
-        <MenuItem value={5} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
-        <MenuItem value={6} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
-      </IconMenu>
+      if (this.state.networkPageIndex == 7) {
+        logoIconDiv =
+        <img style={{width: 130, marginTop: 30, cursor: 'pointer'}} src={logosrc} onClick={() => this.setState({networkFeatures: false})} />
+      } else {
+        logoIconDiv =
+        <IconMenu
+          iconButtonElement={
+            <img style={{width: 130, marginTop: 30, cursor: 'pointer'}} src={logosrc} />
+          }
+          anchorOrigin={{horizontal: 'left', vertical: 'top'}}
+          targetOrigin={{horizontal: 'left', vertical: 'top'}}
+          value={0}
+        >
+          <MenuItem value={1} primaryText='Open Project' style={{color: '#fff'}} onClick={() => this.onOpenProjectClick()} />
+          <MenuItem value={2} primaryText='Create Project' style={{color: '#fff'}} onClick={() => this.onCreateProjectClick()} />
+          <MenuItem value={3} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.editorLeftClickWithoutLiteratureDisplay(infIconPageNavigation)} />
+          <MenuItem value={4} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5})} />
+          {themeMenu}
+          <MenuItem value={5} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => this.openLatexHelp()} />
+          <MenuItem value={6} primaryText='Close Project' style={{color: '#fff'}} onClick={() => this.closeProject()} />
+        </IconMenu>
+      }
       if (this.state.preview) {
         if (this.state.split) {
           layout = [

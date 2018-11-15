@@ -180,18 +180,14 @@ autoUpdater.on('error', (err) => {
 // autoUpdater.on('download-progress', (e, progressObj) => {
 //   tray.setToolTip('Downloaded: ' + progressObj.percent+'% with speed:' + progressObj.bytesPerSecond * 1024 * 1024+'MB/s')
 // })
-autoUpdater.on('update-downloaded', (info) => {
-  notification = new Notification({
-    title: 'Updater',
-    body: 'Update downloaded. Press here to quit and install!',
-    icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
-  })
-  notification.show()
-  notification.on('click', () => {
-    app.isQuiting = true
-    autoUpdater.quitAndInstall()
-  })
+autoUpdater.on('update-downloaded', (event, info) => {
+  mainWindow.webContents.send('update-ready')
 });
+
+ipcMain.on('update-goddammit', (event) => {
+  app.isQuiting = true
+  autoUpdater.quitAndInstall()
+})
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.

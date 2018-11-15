@@ -13,6 +13,7 @@ export default class App extends React.Component {
       width: window.innerWidth,
       height: window.innerHeight,
       file: null,
+      wait: true
     }
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
     this.drag = this.drag.bind(this)
@@ -22,7 +23,21 @@ export default class App extends React.Component {
   componentDidMount () {
     this.updateWindowDimensions()
     ipcRenderer.send('load-dictionary')
-    this.openFileWithApp()
+    let d = ipcRenderer.sendSync('get-file-data')
+    if (d !== null && d !== '.' && path.extname(d) === '.tex') {
+      this.setState({
+        file: d,
+      }, () => {
+        ipcRenderer.send('openTexBibFile', d)
+        this.setState({
+          wait: false
+        })
+      })
+    } else {
+      this.setState({
+        wait: false
+      })
+    }
     window.addEventListener('resize', this.updateWindowDimensions)
     window.addEventListener('dragover', this.drag, false)
     window.addEventListener('drop', this.drop, false)
@@ -38,19 +53,6 @@ export default class App extends React.Component {
     this.setState({ width: window.innerWidth, height: window.innerHeight })
   }
 
-  openFileWithApp () {
-    let d = ipcRenderer.sendSync('get-file-data')
-    if (d !== null) {
-      if (d !== '.') {
-        if (path.extname(d) == '.tex') {
-          this.setState({
-            file: d
-          })
-        }
-      }
-    }
-  }
-
   drag (event) {
     event.preventDefault()
     return false
@@ -62,22 +64,25 @@ export default class App extends React.Component {
   }
 
   render () {
+    let comp = null;
+    if (!this.state.wait) {
+      comp =
+      <CSSTransition
+        key={1}
+        classNames='networkstuff'
+        timeout={{ enter: 450, exit: 450 }}
+	    >
+        <Grid
+          width={this.state.width}
+          height={this.state.height}
+          fileToOpen={this.state.file}
+				/>
+      </CSSTransition>
+    }
 	  return (
       <div>
         <TransitionGroup>
-          <CSSTransition
-            key={1}
-            classNames='networkstuff'
-            timeout={{ enter: 450, exit: 450 }}
-    	    >
-            <div>
-              <Grid
-                width={this.state.width}
-                height={this.state.height}
-                fileToOpen={this.state.file}
-    					/>
-            </div>
-          </CSSTransition>
+          {comp}
         </TransitionGroup>
       </div>
     )

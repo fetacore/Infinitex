@@ -1,31 +1,12 @@
 const fs = require('fs')
 const path = require('path')
 const shelljs = require('shelljs')
-var UglifyJS = require("uglify-es");
+var compressor = require('node-minify')
 
 if (process.platform == 'win32') {
   var fpresolver = '\\'
 } else {
   var fpresolver = '/'
-}
-
-var uglifyOptions = {
-  ecma: 6,
-  compress: {
-    drop_console: true,
-    passes: 2
-  },
-  mangle: true,
-  output: {
-    beautify: false,
-  }
-};
-
-function copyPasteStuff () {
-  shelljs.cp('-R', __dirname + fpresolver + 'src' + fpresolver, __dirname + fpresolver + 'prod' + fpresolver)
-  shelljs.cp(__dirname + fpresolver + 'package.json', __dirname + fpresolver + 'prod' + fpresolver)
-  shelljs.cp(__dirname + fpresolver + 'yarn.lock', __dirname + fpresolver + 'prod' + fpresolver)
-  removeStuff()
 }
 
 function removeStuff () {
@@ -40,13 +21,13 @@ function removeStuff () {
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'ace' + fpresolver + 'snippetsTex.js',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'ace' + fpresolver + 'tex.js',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'assets' + fpresolver + 'texstarters' + fpresolver,
+    __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'App.jsx',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'Grid.jsx',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'InfiniTex.jsx',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'react' + fpresolver + 'InfinitrConverters.js',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'static' + fpresolver + 'main.css',
     __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'static' + fpresolver + 'style.css'
   )
-  removeLines()
 }
 
 function removeLines () {
@@ -59,6 +40,8 @@ function removeLines () {
       ).replace(
         'require(\'electron-reload\')(__dirname)}', ''
       ).replace(
+        'file://${__dirname}/index.html', 'file://${__dirname}/index.min.html'
+      ).replace(
         '// Open the DevTools.', ''
       ).replace(
         'if (isDevMode) {', ''
@@ -68,6 +51,17 @@ function removeLines () {
         '// devTools', 'devTools'
       )
       fs.writeFileSync(__dirname + '/prod/src/index.js', indexXwrisSkata)
+      compressor.minify({
+        compressor: 'uglify-es',
+        input: __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'index.js',
+        output: __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'index.min.js',
+        options: {
+          warnings: true, // pass true to display compressor warnings.
+          mangle: true, // pass false to skip mangling names.
+          compress: true
+        }
+      })
+      fs.unlinkSync(__dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'index.js')
     }
   })
   fs.readFile(__dirname + '/prod/src/index.html', 'utf-8', (err, data) => {
@@ -80,6 +74,12 @@ function removeLines () {
         '<script src=\"entryDev.js\"></script>', ''
       )
       fs.writeFileSync(__dirname + '/prod/src/index.html', htmlXwrisSkata)
+      compressor.minify({
+        compressor: 'html-minifier',
+        input: __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'index.html',
+        output: __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'index.min.html'
+      })
+      fs.unlinkSync(__dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'index.html')
     }
   })
   fs.readFile(__dirname + '/prod/package.json', 'utf-8', (err, data) => {
@@ -87,34 +87,21 @@ function removeLines () {
       alert(err)
     } else {
       let packXwrisSkata = data.replace(
-        '\"electron-prebuilt-compile\": \"^3.0.2\"', '\"electron\": \"^4.0.0-beta.3\"'
+        '\"electron-prebuilt-compile\": \"^3.0.6\"', '\"electron\": \"^4.0.0-beta.7\"'
       ).replace(
         '\"src/index.js\"', '\"src/index.min.js\"'
       )
       fs.writeFileSync(__dirname + '/prod/package.json', packXwrisSkata)
     }
   })
-  fixIndex()
+  removeStuff();
 }
 
-function fixIndex () {
-  fs.readFile(__dirname + '/prod/src/index.js', 'utf-8', (err, data) => {
-    if (err) {
-      alert(err)
-    } else {
-      let mini = UglifyJS.minify(data, uglifyOptions);
-      fs.writeFile(__dirname + '/prod/src/index.min.js', mini.code, (err) => {
-        if (err) {
-          alert(err)
-        } else {
-          shelljs.rm('-rf',
-            __dirname + fpresolver + 'prod' + fpresolver + 'src' + fpresolver + 'index.js'
-          )
-        }
-      })
-
-    }
-  })
+function copyPasteStuff () {
+  shelljs.cp('-R', __dirname + fpresolver + 'src' + fpresolver, __dirname + fpresolver + 'prod' + fpresolver)
+  shelljs.cp(__dirname + fpresolver + 'package.json', __dirname + fpresolver + 'prod' + fpresolver)
+  shelljs.cp(__dirname + fpresolver + 'yarn.lock', __dirname + fpresolver + 'prod' + fpresolver)
+  removeLines()
 }
 
 shelljs.mkdir('-p', __dirname + fpresolver + 'prod' + fpresolver)

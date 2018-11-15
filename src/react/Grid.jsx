@@ -62,6 +62,7 @@ const {
   app,
   shell,
   process,
+  dialog,
   Menu
 } = require('electron').remote
 const { remote, ipcRenderer } = require('electron')
@@ -140,9 +141,7 @@ export default class Grid extends React.Component {
       areYouSureDialogDisplay: false,
       areYouSureTemplateDialogDisplay: false,
       packageDialog: false,
-      packages: startTex.slice(0, startTex.indexOf('\\begin{document}') + 16),
-      openPopover: false,
-      openPopoverAnchor: null
+      packages: startTex.slice(0, startTex.indexOf('\\begin{document}') + 16)
     }
   }
 
@@ -152,10 +151,8 @@ export default class Grid extends React.Component {
       this.onNotification('InstallTeX')
     }
     if (this.props.fileToOpen !== null) {
-      let fp = this.props.fileToOpen
-      ipcRenderer.send('openTexBibFile', fp)
       this.setState({
-        filepath: fp
+        filepath: this.props.fileToOpen
       }, () => {
         if (this.state.preview) {
           if (shelljs.test('-e', this.state.filepath.replace('.tex', '.pdf'))) {
@@ -365,6 +362,26 @@ You can refer to the graph as \\ref{figure:nickname}\n'
         }
       }
     })
+    window.onbeforeunload = (event) => {
+      if (this.state.filepath != null) {
+        dialog.showMessageBox(
+          {
+            type: 'question',
+            buttons: ['Yes', 'No'],
+            default: 1,
+            title: 'Quit',
+            message: 'Are you sure you want to quit?',
+            icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
+          }, (event, res) => {
+            if (res == 1) {
+              event.preventDefault()
+            } else {
+              window.close()
+            }
+          }
+        )
+      }
+    }
   }
 
   componentWillUnmount () {
@@ -378,16 +395,6 @@ You can refer to the graph as \\ref{figure:nickname}\n'
       return true
     }
     if (nextState.pageIndex !== prevState.pageIndex) {
-      return false
-    } else {
-      return false
-    }
-    if (nextState.openPopover == true) {
-      return false
-    } else {
-      return false
-    }
-    if (nextState.openPopoverAnchor == true) {
       return false
     } else {
       return false
@@ -1235,8 +1242,8 @@ note = ,\n\u007D\n'
   openPopoverMenu (event) {
     event.preventDefault()
     this.setState({
-      openPopover: true,
-      openPopoverAnchor: event.currentTarget
+      networkFeatures: true,
+      networkPageIndex: 7
     })
   }
 
@@ -1246,7 +1253,7 @@ note = ,\n\u007D\n'
     if (arg == 'loginchat') {
       contextMenuTemplate = [
         {
-          label: 'Toggle Networking',
+          label: 'Toggle Features',
           click: () => {
             this.setState({networkFeatures: false})
           }
@@ -1376,7 +1383,7 @@ note = ,\n\u007D\n'
       if (!this.state.networkFeatures) {
         contextMenuTemplate.push(
 					{type: 'separator'},
-          {label: 'Open Expansion',
+          {label: 'Open Features',
             click: () => this.setState({networkFeatures: true})
           }
 				)
@@ -1521,7 +1528,7 @@ note = ,\n\u007D\n'
     setTimeout(() => {
       this.setState({
         theme: name,
-        openPopover: false
+        networkFeatures: false
       })
     }, 100)
   }
@@ -1719,7 +1726,7 @@ note = ,\n\u007D\n'
       onClick={this.openPopoverMenu.bind(this)}
     />
     const bottomButton1 = <BottomNavigationItem
-      label='Expansion On'
+      label='Features On'
       icon={networkOnIcon}
       key='b1'
       onClick={() => {
@@ -1731,7 +1738,7 @@ note = ,\n\u007D\n'
       }}
     />
     const bottomButton1NoNetwork = <BottomNavigationItem
-      label='Expansion Off'
+      label='Features Off'
       icon={networkOffIcon}
       key='b1NN'
       onClick={() => {
@@ -1743,7 +1750,7 @@ note = ,\n\u007D\n'
       }}
     />
     const bottomButton1NoNetworkSplit = <BottomNavigationItem
-      label='Expansion Off'
+      label='Features Off'
       icon={networkOffIcon}
       key='b1NNS'
       onClick={() => {
@@ -2247,6 +2254,54 @@ note = ,\n\u007D\n'
           }}
           style={{
             width: '90%'
+          }}
+        />
+      </div>
+    } else if (this.state.networkPageIndex == 7) {
+      infIconPageNavigation = 0
+      networkstuff =
+      <div>
+        <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => {
+            this.setState({
+              networkFeatures: false
+            }, () => {
+              this.compileText()
+            })
+          }}
+        />
+        <MenuItem value={2} primaryText='Open Project' style={{color: '#fff'}} onClick={() => {
+            this.setState({
+              networkFeatures: false
+            }, () => {
+              this.onOpenProjectClick()
+            })
+          }}
+        />
+        <MenuItem value={3} primaryText='Create Project' style={{color: '#fff'}} onClick={() => {
+            this.setState({
+              networkFeatures: false
+            }, () => {
+              this.onCreateProjectClick()
+            })
+          }}
+        />
+        <MenuItem value={4} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 2, split: false})} />
+        <MenuItem value={5} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, split: false})} />
+        {themeMenu}
+        <MenuItem value={7} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => {
+            this.setState({
+              networkFeatures: false
+            }, () => {
+              this.openLatexHelp()
+            })
+          }}
+        />
+        <MenuItem value={8} primaryText='Close Project' style={{color: '#fff'}} onClick={() => {
+            this.setState({
+              networkFeatures: false
+            }, () => {
+              this.closeProject()
+            })
           }}
         />
       </div>
@@ -3394,58 +3449,6 @@ note = ,\n\u007D\n'
         saved everything or your changes will be lost!
     </Dialog>
 
-    const popOverMenu =
-    <Popover
-      open={this.state.openPopover}
-      anchorEl={this.state.openPopoverAnchor}
-      anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-      targetOrigin={{horizontal: 'left', vertical: 'top'}}
-      onRequestClose={() => this.setState({ openPopover: false})}
-      canAutoPosition={false}
-      style={{
-        width: '20%'
-      }}
-    >
-      <MenuItem value={1} primaryText='Compile Pdf' style={{color: '#fff'}} onClick={() => {
-          this.compileText()
-          this.setState({
-            openPopover: false
-          })
-        }}
-      />
-      <MenuItem value={2} primaryText='Open Project' style={{color: '#fff'}} onClick={() => {
-          this.onOpenProjectClick()
-          this.setState({
-            openPopover: false
-          })
-        }}
-      />
-      <MenuItem value={3} primaryText='Create Project' style={{color: '#fff'}} onClick={() => {
-          this.onCreateProjectClick()
-          this.setState({
-            openPopover: false
-          })
-        }}
-      />
-      <MenuItem value={4} primaryText='Search Books' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 2, networkFeatures: true, split: false, openPopover: false})} />
-      <MenuItem value={5} primaryText='Search Papers' style={{color: '#fff'}} onClick={() => this.setState({networkPageIndex: 5, networkFeatures: true, split: false, openPopover: false})} />
-      {themeMenu}
-      <MenuItem value={7} primaryText='Help with LaTeX' style={{color: '#fff'}} onClick={() => {
-          this.openLatexHelp()
-          this.setState({
-            openPopover: false
-          })
-        }}
-      />
-      <MenuItem value={8} primaryText='Close Project' style={{color: '#fff'}} onClick={() => {
-          this.closeProject()
-          this.setState({
-            openPopover: false
-          })
-        }}
-      />
-    </Popover>
-
 	  return (
       <div style={{width: width - 20, height: height, backgroundColor: generalBackgroundColor}}>
         {mathEditorDialog}
@@ -3456,7 +3459,6 @@ note = ,\n\u007D\n'
         {citationDialog}
         {areYouSureTemplateDialog}
         {areYouSureDialog}
-        {popOverMenu}
         <ReactGridLayout
           className='layout'
           layout={layout}

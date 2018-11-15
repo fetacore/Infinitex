@@ -21,8 +21,6 @@ const isDevMode = process.execPath.match(/[\\/]electron/);
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 let notification
-let tray
-let trayContextMenu
 
 const registerShortcuts = async () => {
   globalShortcut.register('CommandOrControl+O', (event) => {
@@ -100,27 +98,6 @@ const createWindow = async () => {
   if (isDevMode) {
     mainWindow.webContents.openDevTools()}
 
-  tray = new Tray(__dirname + '/static/infty_white.png')
-  tray.setImage(nativeImage.createFromPath(__dirname + '/static/icon.png'))
-  tray.on('click', (e) => {
-    if (mainWindow.isFocused()) {
-      mainWindow.hide()
-    } else {
-      mainWindow.show()
-    }
-  })
-  trayContextMenu = Menu.buildFromTemplate([
-    { label: 'Show', click: () => mainWindow.show() },
-    { type: 'separator' },
-    { label: 'Quit', click:  () => {
-        app.isQuiting = true
-        app.quit()
-      }
-    }
-  ])
-  tray.setToolTip('Infinitex')
-  tray.setContextMenu(trayContextMenu)
-
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows
@@ -131,9 +108,7 @@ const createWindow = async () => {
 
   mainWindow.once('ready-to-show', () => {
 		mainWindow.show()
-		setTimeout(() => {
-			mainWindow.focus()
-		}, 10)
+		mainWindow.focus()
   });
 
   mainWindow.on('focus', registerShortcuts)
@@ -146,14 +121,6 @@ const createWindow = async () => {
   mainWindow.on('minimize', (event) => {
     event.preventDefault()
     mainWindow.minimize()
-  })
-
-  mainWindow.on('close', (event) => {
-    if(!app.isQuiting){
-      event.preventDefault()
-      mainWindow.hide()
-    }
-    return false
   })
 }
 // This method will be called when Electron has finished
@@ -188,18 +155,6 @@ autoUpdater.on('update-available', (info) => {
     icon: nativeImage.createFromPath(__dirname + '/static/infty_white.png')
   })
   notification.show()
-  let trayContextMenu = Menu.buildFromTemplate([
-    {label: 'Updating..'},
-    { label: 'Show', click: () => mainWindow.show() },
-    { type: 'separator' },
-    { label: 'Quit', click:  () => {
-        app.isQuiting = true
-        app.quit()
-      }
-    }
-  ])
-  tray.setToolTip('Infinitex new updates arriving')
-  tray.setContextMenu(trayContextMenu)
 })
 autoUpdater.on('update-not-available', (info) => {
   notification = new Notification({
@@ -222,9 +177,9 @@ autoUpdater.on('error', (err) => {
     fs.writeFileSync(app.getPath('desktop')+'/infinitex-error.txt', err, 'utf-8')
   })
 })
-autoUpdater.on('download-progress', (e, progressObj) => {
-  tray.setToolTip('Downloaded: ' + progressObj.percent+'% with speed:' + progressObj.bytesPerSecond * 1024 * 1024+'MB/s')
-})
+// autoUpdater.on('download-progress', (e, progressObj) => {
+//   tray.setToolTip('Downloaded: ' + progressObj.percent+'% with speed:' + progressObj.bytesPerSecond * 1024 * 1024+'MB/s')
+// })
 autoUpdater.on('update-downloaded', (info) => {
   notification = new Notification({
     title: 'Updater',
@@ -234,17 +189,8 @@ autoUpdater.on('update-downloaded', (info) => {
   notification.show()
   notification.on('click', () => {
     app.isQuiting = true
-    tray.destroy()
     autoUpdater.quitAndInstall()
   })
-  let trayContextMenu = Menu.buildFromTemplate([
-    {label: 'Click to quit and update', click: () => {
-      app.isQuiting = true
-      tray.destroy()
-      autoUpdater.quitAndInstall()
-    }}
-  ])
-  tray.setContextMenu(trayContextMenu)
 });
 
 // In this file you can include the rest of your app's specific main process
